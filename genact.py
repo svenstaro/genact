@@ -89,9 +89,9 @@ class ActivityGenerator(object):
     def activity_download(self):
         download_progress = 0
         file_size = random.randint(100000, 1000000)
-        ip = str(random.randint(1,255)) + "." + str(random.randint(1,255)) + "." + str(random.randint(1,255)) + "." + str(random.randint(1,255))
+        ip = str(random.randint(1,255)) + "." + str(random.randint(0,255)) + "." + str(random.randint(0,255)) + "." + str(random.randint(1,255))
         port = str(random.choice([21,22,80,443,25652,1337]))
-        print("Connecting to " + ip + " on port " + port + " ...");
+        print("Connecting to {} on port {} ...".format(ip,port));
         print("File size: {}".
                 format(ActivityGenerator.human_readable_size(file_size)))
         download_speed = random.randint(6000, 200000) # bytes per second
