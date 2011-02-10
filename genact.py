@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
 
+import os
 import random
 import sys
 import time
 
+
+TERMINAL_SIZE = (25, 80)
+if os.name == "posix":
+    TERMINAL_SIZE = rows, columns = os.popen('stty size', 'r').read().split()
 
 class ActivityGenerator(object):
     def __init__(self):
@@ -15,6 +20,14 @@ class ActivityGenerator(object):
     def do_random_activity(self):
         choice = random.choice(self.activities)
         choice()
+
+    def draw_header(self, message, width = TERMINAL_SIZE[1],
+                    centered = True, rows = 3, fill_char = "*"):
+        for i in range(rows):
+            if i == int(rows / 2):
+                print("{0:{2}^{1}}".format(" "+message+" ", width, fill_char))
+            else:
+                print("{1:{1}^{0}}".format(width, fill_char))
 
     def activity_initialize(self):
         print("Initializing core system")
@@ -36,7 +49,7 @@ class ActivityGenerator(object):
         dumps = ["dumping memory map", "memory dump:",
                  "Dumping memory addresses", "memory image"]
         choice = random.choice(dumps)
-        print(choice)
+        self.draw_header(choice)
         start_time = time.time()
         while(time.time() - start_time < duration):
             for i in range(columns):
@@ -64,5 +77,6 @@ class ActivityGenerator(object):
 running = True
 actgen = ActivityGenerator()
 while running:
-    actgen.do_random_activity()
+    #actgen.do_random_activity()
+    actgen.activity_memory_dump()
     running = False
