@@ -27,10 +27,29 @@ class ActivityGenerator(object):
             if i == int(rows / 2):
                 print("{0:{2}^{1}}".format(" "+message+" ", width, fill_char))
             else:
-                print("{1:{1}^{0}}".format(width, fill_char))
+                print("{0:{0}^{1}}".format(fill_char, width))
+
+    def draw_progress(self, width = 30, duration = 5, fill_char = "="):
+        start_time = time.time()
+        spinner_statuses = ["|", "/", "-", "\\"]
+        spinner_pos = 0
+        time_delta = time.time() - start_time
+        while(time_delta < duration):
+            time_delta = time.time() - start_time
+            print("\r{0:{0}^{1}}{2}".format(fill_char,
+                                        int((width / duration) * time_delta),
+                                        spinner_statuses[spinner_pos]), end="")
+            if spinner_pos >= len(spinner_statuses) - 1:
+                spinner_pos = 0
+            else:
+                spinner_pos += 1
+            sys.stdout.flush()
+            time.sleep(duration / width)
 
     def activity_initialize(self):
-        print("Initializing core system")
+        print("{0: <30}".format("Initializing core system"), end="")
+        self.draw_progress()
+        print()
 
     def activity_dump_log(self):
         logs = ["kernel", "system", "user", "message", "error"]
@@ -54,12 +73,8 @@ class ActivityGenerator(object):
         while(time.time() - start_time < duration):
             for i in range(columns):
                 address = random.randint(0, pow(2, bits) - 1)
-                if bits == 16:
-                    print("0x%04X" % (address), end=" ")
-                if bits == 32:
-                    print("0x%08X" % (address), end=" ")
-                if bits == 64:
-                    print("0x%16X" % (address), end=" ")
+                print("{0:0<#{1}{2}}".format(address, int((bits / 4) + 2), "x"),
+                                             end=" ")
                 sys.stdout.flush()
                 time.sleep(delay / columns)
             print()
@@ -78,5 +93,5 @@ running = True
 actgen = ActivityGenerator()
 while running:
     #actgen.do_random_activity()
-    actgen.activity_memory_dump()
+    actgen.activity_initialize()
     running = False
