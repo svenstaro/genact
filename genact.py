@@ -87,11 +87,45 @@ class ActivityGenerator(object):
         print("netstat")
 
     def activity_download(self):
-        print("download")
+        download_progress = 0
+        file_size = random.randint(100000, 1000000)
+        ip = str(random.randint(1,255)) + "." + str(random.randint(1,255)) + "." + str(random.randint(1,255)) + "." + str(random.randint(1,255))
+        port = str(random.choice([21,22,80,443,25652,1337]))
+        print("Connecting to " + ip + " on port " + port + " ...");
+        print("File size: {}".
+                format(ActivityGenerator.human_readable_size(file_size)))
+        download_speed = random.randint(6000, 200000) # bytes per second
+        received_size = 0
+        delay = 0.2
+        width = 40
+        done = False
+        while not done:
+            if received_size > file_size:
+                received_size = file_size
+            speed = download_speed * (1 + random.randint(-1000,1000) / 10000.0)
+            i = int(received_size / file_size * width)
+            print("\r{0: >6.1%} [{2: <40}] {1: >10}/s".format(
+                received_size / file_size,
+                ActivityGenerator.human_readable_size(speed),
+                "=" * i), end="")
+            sys.stdout.flush()
+            if received_size >= file_size:
+                done = True
+            received_size += speed * delay
+            time.sleep(delay)
+        print("\nDownload finished.")
+
+    def human_readable_size(size):
+        names = ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
+        for name in names:
+            size /= 1024
+            if size < 1024:
+                return '{0:.1f} {1}'.format(size, name)
+        return "huge!"
 
 running = True
 actgen = ActivityGenerator()
 while running:
     #actgen.do_random_activity()
-    actgen.activity_initialize()
+    actgen.activity_download()
     running = False
