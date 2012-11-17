@@ -65,15 +65,15 @@ class ActivityGenerator(object):
         password = random.choice(passlist)
         hashval = (hashlib.sha256(password.encode('utf-8')))
         self.draw_header("SHA-Rainb0w")    
-        print(("SHA-HASH value: "), hashval, "\nExtracting Rainbowtable: ")      
+        print(("SHA-HASH value: "), hashval, "\nExtracting Rainbowtable: ")
         self.draw_progress()
         print("\nBegin matching:")
-        trys = random.randint(15, 45) 
+        trys = random.randint(45, 125) 
         rev = 0
         while rev < trys:
-            print("    ", hex(random.randint(0,(16**12))))
+            print("    ", hex(random.randint(17592186044416,(16**12))))
             rev = rev + 1
-            time.sleep(random.randint(0,10)/10.0)
+            time.sleep(random.randint(0,10)/150.0)
         print("\nMatch found:", hashval, "== '", password,"'")
         
     def activity_configure(self):
@@ -147,4 +147,5 @@ running = True
 actgen = ActivityGenerator()
 while running:
     actgen.do_random_activity()
+    #actgen.activity_bfhash()
     running = False
