@@ -4,7 +4,8 @@ import os
 import random
 import sys
 import time
-
+import hashlib
+import time
 
 TERMINAL_SIZE = (25, 80)
 if os.name == "posix":
@@ -15,7 +16,8 @@ class ActivityGenerator(object):
         self.activities = [self.activity_initialize, self.activity_dump_log,
                            self.activity_configure, self.activity_compile,
                            self.activity_memory_dump, self.activity_backtrace,
-                           self.activity_netstat, self.activity_download]
+                           self.activity_netstat, self.activity_download, self.activity_download, 
+                           self.activity_bfhash]
 
     def do_random_activity(self):
         choice = random.choice(self.activities)
@@ -56,7 +58,24 @@ class ActivityGenerator(object):
         choice = random.choice(logs)
         if choice == "kernel":
             print("Dumping system log")
-
+            
+    def activity_bfhash(self):
+        passlist = ['password', 'welcome', 'qwerty', 'monkey', 'jesus', 
+                    'love', 'money', 'freedom', 'ninja'] #top10 2012 yahoo hack 
+        password = random.choice(passlist)
+        hashval = (hashlib.sha256(password.encode('utf-8')))
+        self.draw_header("SHA-Rainb0w")    
+        print(("SHA-HASH value: "), hashval, "\nExtracting Rainbowtable: ")
+        self.draw_progress()
+        print("\nBegin matching:")
+        trys = random.randint(45, 125) 
+        rev = 0
+        while rev < trys:
+            print("    ", hex(random.randint(17592186044416,(16**12))))
+            rev = rev + 1
+            time.sleep(random.randint(0,10)/150.0)
+        print("\nMatch found:", hashval, "== '", password,"'")
+        
     def activity_configure(self):
         print("config")
 
@@ -85,7 +104,7 @@ class ActivityGenerator(object):
 
     def activity_netstat(self):
         print("netstat")
-
+	
     def activity_download(self):
         download_progress = 0
         file_size = random.randint(100000, 1000000)
@@ -123,9 +142,10 @@ class ActivityGenerator(object):
                 return '{0:.1f} {1}'.format(size, name)
         return "huge!"
 
+
 running = True
 actgen = ActivityGenerator()
 while running:
-    #actgen.do_random_activity()
-    actgen.activity_download()
+    actgen.do_random_activity()
+    #actgen.activity_bfhash()
     running = False
