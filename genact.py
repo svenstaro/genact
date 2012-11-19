@@ -63,18 +63,26 @@ class ActivityGenerator(object):
         passlist = ['password', 'welcome', 'qwerty', 'monkey', 'jesus', 
                     'love', 'money', 'freedom', 'ninja'] #top10 2012 yahoo hack 
         password = random.choice(passlist)
-        hashval = (hashlib.sha256(password.encode('utf-8')))
+        hashval = list((hashlib.sha256(password.encode('utf-8'))).hexdigest())
         self.draw_header("SHA-Rainb0w")    
-        print(("SHA-HASH value: "), hashval, "\nExtracting Rainbowtable: ")
-        self.draw_progress()
-        print("\nBegin matching:")
-        trys = random.randint(45, 125) 
-        rev = 0
-        while rev < trys:
-            print("    ", hex(random.randint(17592186044416,(16**12))))
-            rev = rev + 1
-            time.sleep(random.randint(0,10)/150.0)
-        print("\nMatch found:", hashval, "== '", password,"'")
+        print("SHA-HASH value: ", "".join(hashval))
+        print("Extracting Rainbow Table: ")
+        #self.draw_progress()
+        print("Begin matching:")
+        match = list(" " * 64)
+        while match != hashval: 
+            m = list(match)
+            first = True
+            for i in range(64):
+                if m[i] == " ":
+                    m[i] = random.choice("0123456789abcdef")
+                    if m[i] == hashval[i] and first:
+                        first = False
+                        match[i] = m[i]
+
+            print("\r " + "".join(m), end = "")
+            time.sleep(0.1)
+        print("\nMatch found: " + "".join(hashval) + " is '" + password + "'")
         
     def activity_configure(self):
         print("config")
@@ -145,7 +153,8 @@ class ActivityGenerator(object):
 
 running = True
 actgen = ActivityGenerator()
-while running:
-    actgen.do_random_activity()
-    #actgen.activity_bfhash()
-    running = False
+if debug:
+    actgen.activity_bfhash()
+else:
+    while running:
+        actgen.do_random_activity()
