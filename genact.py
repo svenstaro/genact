@@ -5,7 +5,8 @@ import random
 import sys
 import time
 import argparse
-
+import hashlib
+import time
 
 TERMINAL_SIZE = (25, 80)
 if os.name == "posix":
@@ -17,7 +18,7 @@ class ActivityGenerator(object):
                            self.activity_configure, self.activity_compile,
                            self.activity_memory_dump, self.activity_backtrace,
                            self.activity_netstat, self.activity_download,
-                           self.activity_boot]
+                           self.activity_boot, self.activity_bfhash]
         self.activity_names = []
         for activity in self.activities:
             self.activity_names.append(activity.__name__.replace("activity_", ""))
@@ -166,6 +167,31 @@ class ActivityGenerator(object):
         if choice == "kernel":
             print("Dumping system log")
 
+    def activity_bfhash(self):
+        passlist = ['password', 'welcome', 'qwerty', 'monkey', 'jesus',
+                    'love', 'money', 'freedom', 'ninja'] #top10 2012 yahoo hack 
+        password = random.choice(passlist)
+        hashval = list((hashlib.sha256(password.encode('utf-8'))).hexdigest())
+        self.draw_header("SHA-Rainb0w")
+        print("SHA-HASH value: ", "".join(hashval))
+        print("Extracting Rainbow Table: ")
+        #self.draw_progress()
+        print("Begin matching:")
+        match = list(" " * 64)
+        while match != hashval:
+            m = list(match)
+            first = True
+            for i in range(64):
+                if m[i] == " ":
+                    m[i] = random.choice("0123456789abcdef")
+                    if m[i] == hashval[i] and first:
+                        first = False
+                        match[i] = m[i]
+
+            print("\r " + "".join(m), end = "")
+            time.sleep(0.1)
+        print("\nMatch found: " + "".join(hashval) + " is '" + password + "'")
+
     def activity_configure(self):
         print("config")
 
@@ -242,4 +268,4 @@ if __name__ == "__main__":
     while running:
         choice = random.choice(activities if activities else actgen.activities)
         choice()
-        running = False
+        #running = False
