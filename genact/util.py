@@ -5,6 +5,9 @@ TERMINAL_SIZE = (25, 80)
 if os.name == "posix":
     TERMINAL_SIZE = rows, columns = os.popen('stty size', 'r').read().split()
 
+def lerp(t, a, b):
+    return t * (b - a) + a
+
 def human_readable_filesize(size):
     names = ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
     for name in names:

@@ -1,13 +1,22 @@
 from genact.module import Module
+from genact.util import draw_header
 import time, random
 
 class BootlogModule(Module):
-    __modulename__ = "bootlog"
+    modulename = "bootlog"
+    title = "Dumping bootlog"
 
     def run(self):
         lines = bootlog.splitlines()
-        while(lines):
-            print(lines.pop())
+        random.shuffle(lines)
+
+        #count = random.randint(0, len(lines))
+        count = random.randint(10, 30)
+
+        lines = lines[:count]
+
+        for line in lines:
+            print(line)
             time.sleep(random.uniform(0.01, 0.4))
 
 bootlog = """PMAP: PCID enabled

@@ -7,7 +7,8 @@ delay = 0.2
 ports = [21, 22, 80, 81, 443, 25652, 1337]
 
 class DownloadModule(Module):
-    __modulename__ = "download"
+    modulename = "download"
+    title = "Download manager"
 
     def run(self):
         # Generate random download figures

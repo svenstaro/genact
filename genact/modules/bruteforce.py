@@ -5,7 +5,8 @@ import time, random, hashlib
 passwords = ['password', 'welcome', 'qwerty', 'monkey', 'jesus', 'love', 'money', 'freedom', 'ninja'] #top10 2012 yahoo hack
 
 class BruteforceModule(Module):
-    __modulename__ = "bruteforce"
+    modulename = "bruteforce"
+    title = "Brute forcing Password SHA-256 hash"
 
     def run(self):
         password = random.choice(passwords)

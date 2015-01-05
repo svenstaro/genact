@@ -10,11 +10,13 @@ duration = 5
 delay = 0.2
 
 class DumpModule(Module):
-    __modulename__ = "dump"
+    modulename = "dump"
+
+    @property
+    def title(self):
+        return random.choice(dumps)
 
     def run(self):
-        draw_header(random.choice(dumps))
-
         start_time = time.time()
         while(time.time() - start_time < duration):
             for i in range(columns):
