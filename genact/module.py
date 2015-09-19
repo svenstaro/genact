@@ -19,6 +19,7 @@ class MetaModule(type):
 
 class Module(metaclass=MetaModule):
     modulename = None
+    description = ""
 
     def run(self):
         pass

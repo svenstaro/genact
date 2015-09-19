@@ -1,10 +1,12 @@
 from genact.module import Module
-from genact.util import draw_header
+from colorama import Fore
 import time, random
+from genact.util import dprint
 
 class BootlogModule(Module):
-    modulename = "bootlog"
-    title = "Dumping bootlog"
+    modulename  = "bootlog"
+    description = "random output of an example bootlog"
+    title       = "Dumping bootlog"
 
     def run(self):
         lines = bootlog.splitlines()
@@ -16,7 +18,11 @@ class BootlogModule(Module):
         lines = lines[:count]
 
         for line in lines:
-            print(line)
+            if random.random() < 0.4:
+                color = random.choice([Fore.BLUE, Fore.RED, Fore.GREEN, Fore.YELLOW])
+                print(color, end="")
+            dprint(line,end="")
+            print(Fore.RESET)
             time.sleep(random.uniform(0.01, 0.4))
 
 bootlog = """PMAP: PCID enabled

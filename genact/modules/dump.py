@@ -1,28 +1,27 @@
 from genact.module import Module
-from genact.util import draw_header
 import time, random, sys
+from genact.util import dprint
 
-dumps = ["dumping memory map", "memory dump:", "Dumping memory addresses", "memory image"]
+titles = ["Dumping memory map", "Memory dump", "Dumping memory addresses", "Memory image"]
 columns = 8
 format = "hex"
 bits = 32
 duration = 5
-delay = 0.2
+delay = 0.4
 
 class DumpModule(Module):
-    modulename = "dump"
+    modulename  = "dump"
+    description = "dump random registers of memory in hex format"
 
     @property
     def title(self):
-        return random.choice(dumps)
+        return random.choice(titles)
 
     def run(self):
-        start_time = time.time()
-        while(time.time() - start_time < duration):
-            for i in range(columns):
-                address = random.randint(0, pow(2, bits) - 1)
-                print("{0:0<#{1}{2}}".format(address, int((bits / 4) + 2), "x"), end=" ")
-                sys.stdout.flush()
-                time.sleep(delay / columns)
-            print()
-            time.sleep(delay)
+        for i in range(random.randint(4, 6)):
+            data = [random.randint(0, pow(2, bits) - 1) for i in range(columns)]
+            # data = [i*3 for i in range(columns)]
+            data = map(lambda n: "{:0>#10x}".format(n), data)
+            data = " ".join(data)
+            dprint(data, chunksize=11, delay=0.1)
+            time.sleep(0.5)

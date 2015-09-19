@@ -1,10 +1,11 @@
-from genact.util import draw_progress, draw_header, lerp
+from genact.util import draw_progress, lerp
 from genact.module import Module
 from random import random
 
 class InitializeModule(Module):
-    modulename = "initialize"
-    title = "Initializing core system"
+    modulename  = "initialize"
+    description = "a few progress bars for various 'initialization' tasks"
+    title       = "Initializing core system"
 
     def run(self):
         draw_progress("Loading libraries", "done", duration=lerp(random(), 1.0, 2.0))

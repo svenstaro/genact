@@ -1,5 +1,5 @@
 from genact.module import Module
-from genact.util import draw_header, human_readable_filesize
+from genact.util import human_readable_filesize
 import time, random, sys
 
 width = 60
@@ -7,8 +7,9 @@ delay = 0.2
 ports = [21, 22, 80, 81, 443, 25652, 1337]
 
 class DownloadModule(Module):
-    modulename = "download"
-    title = "Download manager"
+    modulename  = "download"
+    description = "progress bar for downloading a file from the internet"
+    title       = "Download manager"
 
     def run(self):
         # Generate random download figures
