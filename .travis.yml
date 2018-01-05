@@ -20,8 +20,15 @@ matrix:
     - osx
 
 before_install:
-  - set -e
+  # - set -e
   - rustup self update
+  - rustup component add rust-std
+  # - |
+  #    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+  #     command curl -sSL https://rvm.io/mpapis.asc | gpg --import -;
+  #     rvm get stable
+  #    fi
+
 
 install:
   - if [[ -n $TARGET ]]; then rustup target add $TARGET; fi
