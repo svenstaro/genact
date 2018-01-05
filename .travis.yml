@@ -11,7 +11,7 @@ matrix:
       os: linux
     - env: TARGET=x86_64-pc-windows-gnu
       os: linux
-    - env: TARGET=x86_64-pc-windows-gnu
+    - env: TARGET=x86_64-apple-darwin
       os: osx
 
   os:
@@ -23,7 +23,7 @@ before_install:
   - rustup self update
 
 install:
-  - rustup install $TARGET
+  - rustup target add $TARGET
 
 script:
   - cargo build --release --target $TARGET
