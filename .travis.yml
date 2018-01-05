@@ -1,9 +1,10 @@
 language: rust
+cache: cargo
 rust:
   - stable
   - beta
   - nightly
-cache: cargo
+
 
 matrix:
   include:
@@ -23,10 +24,11 @@ before_install:
   - rustup self update
 
 install:
-  - rustup target add $TARGET
+  - [ -n $TARGET ] && rustup target add $TARGET
 
 script:
-  - cargo build --release --target $TARGET
+  - [ -n $TARGET ] && cargo build --verbose --release --target $TARGET
+  - [ -z $TARGET ] && cargo build --verbose
 
 deploy:
   provider: releases
