@@ -24,11 +24,10 @@ before_install:
   - rustup self update
 
 install:
-  - [ -n $TARGET ] && rustup target add $TARGET
+  - if [[ -n $TARGET ]]; then rustup target add $TARGET; fi
 
 script:
-  - [ -n $TARGET ] && cargo build --verbose --release --target $TARGET
-  - [ -z $TARGET ] && cargo build --verbose
+  - if [[ -n $TARGET ]]; then cargo build --verbose --release --target $TARGET; else cargo build --verbose; fi
 
 deploy:
   provider: releases
