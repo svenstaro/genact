@@ -1,0 +1,10 @@
+[package]
+name = "genact"
+version = "0.1.0"
+authors = ["Sven-Hendrik Haase <svenstaro@gmail.com>"]
+
+[dependencies]
+clap = "2.29"
+console = "0.5"
+indicatif = "0.8"
+rand = "0.4"
