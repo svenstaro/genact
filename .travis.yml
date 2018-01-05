@@ -37,3 +37,4 @@ deploy:
   on:
     tags: true
     condition: $TRAVIS_RUST_VERSION = stable
+    condition: -n $TARGET
