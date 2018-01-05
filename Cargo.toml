@@ -1,10 +1,17 @@
 [package]
 name = "genact"
+description = "A nonsense activity generator"
 version = "0.1.0"
+repository = "https://github.com/svenstaro/genact"
 authors = ["Sven-Hendrik Haase <svenstaro@gmail.com>"]
+license = "MIT"
+readme = "README.md"
 
 [dependencies]
 clap = "2.29"
 console = "0.5"
 indicatif = "0.8"
 rand = "0.4"
+
+[profile.release]
+lto = true

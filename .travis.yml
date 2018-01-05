@@ -1,0 +1,39 @@
+language: rust
+rust:
+  - stable
+  - beta
+  - nightly
+cache: cargo
+
+matrix:
+  include:
+    - env: TARGET=x86_64-unknown-linux-musl
+      os: linux
+    - env: TARGET=x86_64-pc-windows-gnu
+      os: linux
+    - env: TARGET=x86_64-pc-windows-gnu
+      os: osx
+
+  os:
+    - linux
+    - osx
+
+before_install:
+  - set -e
+  - rustup self update
+
+install:
+  - rustup install $TARGET
+
+script:
+  - cargo build --release --target $TARGET
+
+deploy:
+  provider: releases
+  api_key:
+    secure: "n1OCiCjupkVieqsepGBOk6oxGcU89n9z0lQWWMAtBKREIEL1fnqt7A4z9FC1LV9UiAwvcvMHI8As5TA/7sV6jiWFuNOqu5HurX/n7cXlAuVWx00gCtWZ7Fh14ipVIDr2W52Mj/5qw1LSW19g8+9nLF1xO2YLrNpiaQX+V6Ypf04="
+  file: target/$TARGET/genact*
+  skip_cleanup: true
+  on:
+    tags: true
+    condition: $TRAVIS_RUST_VERSION = stable
