@@ -22,7 +22,6 @@ matrix:
 before_install:
   # - set -e
   - rustup self update
-  - rustup component add rust-std
   # - |
   #    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
   #     command curl -sSL https://rvm.io/mpapis.asc | gpg --import -;
@@ -31,7 +30,7 @@ before_install:
 
 
 install:
-  - if [[ -n $TARGET ]]; then rustup target add $TARGET; fi
+  - if [[ -n $TARGET && $TARGET != x86_64-apple-darwin ]]; then rustup target add $TARGET; fi
 
 script:
   - if [[ -n $TARGET ]]; then cargo build --verbose --release --target $TARGET; else cargo build --verbose; fi
