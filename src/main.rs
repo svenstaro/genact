@@ -4,12 +4,15 @@ extern crate console;
 
 use clap::{Arg, App};
 use rand::{thread_rng, Rng};
+use std::process;
 
 mod bootlog;
+mod cargo;
 
 fn main() {
     let modules = vec![
         "bootlog",
+        "cargo",
         // "bruteforce",
         // "download",
         // "dump",
@@ -44,6 +47,7 @@ fn main() {
         for module in &modules {
             println!("  {}", module);
         }
+        process::exit(0);
     }
 
     let modules_to_run: Vec<&str> = if app.is_present("modules") {
@@ -54,11 +58,11 @@ fn main() {
         modules
     };
 
-    println!("{:?}", modules_to_run);
     let mut rng = thread_rng();
     loop {
         match rng.choose(&modules_to_run).unwrap() {
             &"bootlog" => bootlog::run(),
+            &"cargo" => cargo::run(),
             _ => panic!("Unknown module!"),
         }
     }

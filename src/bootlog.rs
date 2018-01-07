@@ -1,5 +1,4 @@
 use rand::{thread_rng, Rng};
-use rand::distributions::{IndependentSample, Range};
 use std::{thread, time};
 use console::style;
 
@@ -7,14 +6,12 @@ pub fn run() {
     let bootlog = include_str!("../data/bootlog.txt");
 
     let mut rng = thread_rng();
-    let between = Range::new(10, 30);
-    let line_count = between.ind_sample(&mut rng);
+    let line_count = rng.gen_range(10, 30);
     let lines: Vec<&str> = bootlog.lines().collect();
 
     for _ in 1..line_count {
         let choice = rng.choose(&lines).unwrap_or(&"");
-        let sleep_range = Range::new(10, 100);
-        let sleep_length = time::Duration::from_millis(sleep_range.ind_sample(&mut rng));
+        let sleep_length = time::Duration::from_millis(rng.gen_range(10, 100));
 
         let is_error = rng.gen_weighted_bool(100);
         if is_error {
