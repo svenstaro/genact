@@ -20,7 +20,7 @@ pub fn run() {
     let package_list: Vec<&str> = packages.lines().collect();
 
     let mut rng = thread_rng();
-    let packages_count = rng.gen_range(1, 10);
+    let packages_count = rng.gen_range(10, 100);
     let mut chosen_packages = HashMap::new();
 
     while chosen_packages.len() < packages_count {
