@@ -8,10 +8,16 @@ license = "MIT"
 readme = "README.md"
 
 [dependencies]
-clap = "2.29"
-console = "0.5"
-indicatif = "0.8"
+# pbr = "*"
+# ansi_term = "*"
+# term-painter = "*"
+
+# console = "0.5"
+# indicatif = "0.8"
 rand = "0.4"
+
+[target.'cfg(not(target_os = "emscripten"))'.dependencies]
+clap = "2.29"
 
 [profile.release]
 lto = true

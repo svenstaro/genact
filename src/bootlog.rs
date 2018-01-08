@@ -1,6 +1,6 @@
 use rand::{thread_rng, Rng};
 use std::{thread, time};
-use console::style;
+// use console::style;
 
 pub fn run() {
     let bootlog = include_str!("../data/bootlog.txt");
@@ -15,13 +15,13 @@ pub fn run() {
 
         let is_error = rng.gen_weighted_bool(100);
         if is_error {
-            println!("{}", style(format!("ERROR: {}", choice)).red());
+            // println!("{}", style(format!("ERROR: {}", choice)).red());
         } else {
             let has_bold_word = rng.gen_weighted_bool(10);
             if has_bold_word {
                 let mut words: Vec<String> = choice.split_whitespace().map(|x| String::from(x)).collect();
-                words[0] = format!("{}", style(&words[0]).bold());
-                println!("{}", words.join(" "));
+                // words[0] = format!("{}", style(&words[0]).bold());
+                // println!("{}", words.join(" "));
             } else {
                 println!("{}", choice);
             }
