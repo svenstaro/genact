@@ -3,7 +3,7 @@ use rand::distributions::{ChiSquared, IndependentSample};
 use std::{thread, time};
 use std::time::Instant;
 use std::collections::HashMap;
-// use console::style;
+use yansi::Paint;
 
 fn gen_package(packages: &Vec<&str>, mut rng: &mut ThreadRng) -> (String, String) {
     let chi = ChiSquared::new(1.0);
@@ -35,16 +35,16 @@ pub fn run() {
         for (package_name, package_version) in &chosen_packages {
             let sleep_length = time::Duration::from_millis(rng.gen_range(100, 2000));
 
-            // println!("{stage:>12} {package_name} v{package_version}",
-            //          stage=style(stage).green().bold(),
-            //          package_name=package_name,
-            //          package_version=package_version);
+            println!("{stage:>12} {package_name} v{package_version}",
+                     stage=Paint::green(stage).bold(),
+                     package_name=package_name,
+                     package_version=package_version);
             thread::sleep(sleep_length);
         }
     }
     let elapsed = now.elapsed();
     let seconds = elapsed.as_secs() as f32 + elapsed.subsec_nanos() as f32 / 1_000_000_000.0;
-    // println!("{stage:>12} release [optimized] target(s) in {seconds:.2} secs",
-    //          stage=style("Finished").green().bold(),
-    //          seconds=seconds);
+    println!("{stage:>12} release [optimized] target(s) in {seconds:.2} secs",
+             stage=Paint::green("Finished").bold(),
+             seconds=seconds);
 }

@@ -2,9 +2,10 @@
 extern crate clap;
 
 extern crate rand;
-// extern crate console;
+extern crate yansi;
 
 use rand::{thread_rng, Rng};
+use yansi::Paint;
 
 #[cfg(not(target_os = "emscripten"))]
 use clap::{Arg, App};
@@ -57,6 +58,8 @@ mod bootlog;
 mod cargo;
 
 fn main() {
+    Paint::enable_windows_ascii();
+
     let all_modules = vec![
         "bootlog",
         "cargo",

@@ -8,12 +8,8 @@ license = "MIT"
 readme = "README.md"
 
 [dependencies]
-# pbr = "*"
-# ansi_term = "*"
-# term-painter = "*"
-
-# console = "0.5"
-# indicatif = "0.8"
+pbr = "*"
+yansi = "0.3"
 rand = "0.4"
 
 [target.'cfg(not(target_os = "emscripten"))'.dependencies]
