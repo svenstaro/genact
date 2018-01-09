@@ -1,11 +1,19 @@
 #[cfg(not(target_os = "emscripten"))]
 extern crate clap;
 
+extern crate pbr;
+
+#[cfg(target_os = "emscripten")]
+extern crate emscripten_sys;
+
 extern crate rand;
 extern crate yansi;
 
+use pbr::ProgressBar;
+
 use rand::{thread_rng, Rng};
 use yansi::Paint;
+use std::{thread, time};
 
 #[cfg(not(target_os = "emscripten"))]
 use clap::{Arg, App};
@@ -79,6 +87,25 @@ fn main() {
 
     let mut rng = thread_rng();
     loop {
+        // let count = 1000;
+        // let mut pb = ProgressBar::new(count);
+        // pb.format("╢▌▌░╟");
+        // for _ in 0..count {
+        //     pb.inc();
+        //     #[cfg(not(target_os = "emscripten"))]
+        //     thread::sleep(time::Duration::from_millis(200));
+        //
+        //     #[cfg(target_os = "emscripten")]
+        //     unsafe {
+        //         emscripten_sys::emscripten_sleep(200u32);
+        //         // For some reason, we actually have to manually print a newline here even if we
+        //         // flush it manually in order to get it to draw anything at all. This is really
+        //         // weird but I'll figure it out some other time.
+        //         println!();
+        //     }
+        // }
+        // pb.finish_print("done");
+
         let choice: &str = &rng.choose(&modules_to_run).unwrap();
         match choice {
             "bootlog" => bootlog::run(),

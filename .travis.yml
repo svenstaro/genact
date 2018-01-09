@@ -12,12 +12,28 @@ addons:
 
 matrix:
   include:
-    - env: TARGET=x86_64-unknown-linux-musl BIN_NAME=genact PROPER_NAME=genact-linux
+    - env:
+      - TARGET=x86_64-unknown-linux-musl
+      - BIN_NAME=genact
+      - PROPER_NAME=genact-linux
       os: linux
-    - env: TARGET=x86_64-pc-windows-gnu BIN_NAME=genact.exe PROPER_NAME=genact-win.exe RUSTFLAGS="-C linker=x86_64-w64-mingw32-gcc"
+    - env:
+      - TARGET=x86_64-pc-windows-gnu
+      - BIN_NAME=genact.exe
+      - PROPER_NAME=genact-win.exe
+      - RUSTFLAGS="-C linker=x86_64-w64-mingw32-gcc"
       os: linux
-    - env: TARGET=x86_64-apple-darwin BIN_NAME=genact PROPER_NAME=genact-osx
+    - env:
+      - TARGET=x86_64-apple-darwin
+      - BIN_NAME=genact
+      - PROPER_NAME=genact-osx
       os: osx
+    - env:
+      - TARGET=wasm32-unknown-emscripten
+      - BIN_NAME=genact
+      - PROPER_NAME=genact-web
+      - EMMAKEN_CFLAGS="-s ASYNCIFY=1"
+      os: linux
 
   os:
     - linux
@@ -25,12 +41,14 @@ matrix:
 
 before_install:
   - rustup self update
+  - if [[ $TARGET == "wasm32-unknown-emscripten" ]]; then cargo install cargo-web; fi
 
 install:
   - if [[ -n $TARGET && $TARGET != "x86_64-apple-darwin" ]]; then rustup target add $TARGET; fi
 
 script:
-  - if [[ -n $TARGET ]]; then cargo build --verbose --release --target $TARGET; else cargo build --verbose; fi
+  - if [[ -n $TARGET && $TARGET != "wasm32-unknown-emscripten" ]]; then cargo build --verbose --release --target $TARGET; else cargo build --verbose; fi
+  - if [[ $TARGET == "wasm32-unknown-emscripten" ]]; then cargo web build --verbose --release --target-webasm-emscripten; fi
 
 before_deploy:
   - cp -a target/$TARGET/release/$BIN_NAME $PROPER_NAME

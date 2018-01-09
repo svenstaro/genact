@@ -5,6 +5,9 @@ use std::time::Instant;
 use std::collections::HashMap;
 use yansi::Paint;
 
+#[cfg(target_os = "emscripten")]
+use emscripten_sys;
+
 fn gen_package(packages: &Vec<&str>, mut rng: &mut ThreadRng) -> (String, String) {
     let chi = ChiSquared::new(1.0);
     let package_version = format!("{major:.0}.{minor:.0}.{patch:.0}",
@@ -39,7 +42,15 @@ pub fn run() {
                      stage=Paint::green(stage).bold(),
                      package_name=package_name,
                      package_version=package_version);
+
+            #[cfg(not(target_os = "emscripten"))]
             thread::sleep(sleep_length);
+
+            #[cfg(target_os = "emscripten")]
+            unsafe {
+                let sleep_millis: u32 = sleep_length.subsec_nanos() / 1_000_000;
+                emscripten_sys::emscripten_sleep(sleep_millis);
+            }
         }
     }
     let elapsed = now.elapsed();
