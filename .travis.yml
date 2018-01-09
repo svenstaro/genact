@@ -5,12 +5,16 @@ rust:
   - beta
   - nightly
 
+addons:
+  apt:
+    packages:
+      - mingw-w64
 
 matrix:
   include:
     - env: TARGET=x86_64-unknown-linux-musl BIN_NAME=genact PROPER_NAME=genact-linux
       os: linux
-    - env: TARGET=x86_64-pc-windows-gnu BIN_NAME=genact.exe PROPER_NAME=genact-win.exe
+    - env: TARGET=x86_64-pc-windows-gnu BIN_NAME=genact.exe PROPER_NAME=genact-win.exe RUSTFLAGS="-C linker=x86_64-w64-mingw32-gcc"
       os: linux
     - env: TARGET=x86_64-apple-darwin BIN_NAME=genact PROPER_NAME=genact-osx
       os: osx
