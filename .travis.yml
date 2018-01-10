@@ -69,6 +69,8 @@ deploy:
     skip_cleanup: true
     github_token:
       secure: "n1OCiCjupkVieqsepGBOk6oxGcU89n9z0lQWWMAtBKREIEL1fnqt7A4z9FC1LV9UiAwvcvMHI8As5TA/7sV6jiWFuNOqu5HurX/n7cXlAuVWx00gCtWZ7Fh14ipVIDr2W52Mj/5qw1LSW19g8+9nLF1xO2YLrNpiaQX+V6Ypf04="
+    on:
+      branch: rust-rewrite
     # on:
     #   tags: true
     #   condition: $TRAVIS_RUST_VERSION = stable
