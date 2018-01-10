@@ -49,7 +49,7 @@ install:
 script:
   - if [[ -n $TARGET && $TARGET != "wasm32-unknown-emscripten" ]]; then cargo build --verbose --release --target $TARGET; else cargo build --verbose; fi
   - if [[ $TARGET == "wasm32-unknown-emscripten" ]]; then cargo web build --verbose --release --target-webasm-emscripten; fi
-    cp target/wasm32-unknown-emscripten/release/genact.{js,wasm} webstuff/
+  - cp target/wasm32-unknown-emscripten/release/genact.{js,wasm} webstuff/
 
 before_deploy:
   - cp -a target/$TARGET/release/$BIN_NAME $PROPER_NAME
