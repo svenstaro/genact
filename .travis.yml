@@ -41,18 +41,18 @@ matrix:
 
 before_install:
   - rustup self update
-  - if [[ $TARGET == "wasm32-unknown-emscripten" ]]; then cargo install --force cargo-web; fi
+  - if [[ $TARGET = "wasm32-unknown-emscripten" ]]; then cargo install --force cargo-web; fi
 
 install:
   - if [[ -n $TARGET && $TARGET != "x86_64-apple-darwin" ]]; then rustup target add $TARGET; fi
 
 script:
   - if [[ -n $TARGET && $TARGET != "wasm32-unknown-emscripten" ]]; then cargo build --verbose --release --target $TARGET; else cargo build --verbose; fi
-  - if [[ $TARGET == "wasm32-unknown-emscripten" ]]; then cargo web build --verbose --release --target-webasm-emscripten; fi
+  - if [[ $TARGET = "wasm32-unknown-emscripten" ]]; then cargo web build --verbose --release --target-webasm-emscripten; fi
 
 before_deploy:
   - if [[ -n $TARGET && $TARGET != "wasm32-unknown-emscripten" ]]; then cp -a target/$TARGET/release/$BIN_NAME $PROPER_NAME; fi
-  - if [[ $TARGET == "wasm32-unknown-emscripten" ]]; then cp target/wasm32-unknown-emscripten/release/genact.{js,wasm} webstuff/; fi
+  - if [[ $TARGET = "wasm32-unknown-emscripten" ]]; then cp target/wasm32-unknown-emscripten/release/genact.{js,wasm} webstuff/; fi
 
 deploy:
   - provider: releases
@@ -74,4 +74,4 @@ deploy:
     # on:
     #   tags: true
     #   condition: $TRAVIS_RUST_VERSION = stable
-    #   condition: $TARGET == "wasm32-unknown-emscripten"
+    #   condition: $TARGET = "wasm32-unknown-emscripten"
