@@ -9,7 +9,7 @@ pub fn run() {
     let bootlog = include_str!("../data/bootlog.txt");
 
     let mut rng = thread_rng();
-    let line_count = rng.gen_range(10, 30);
+    let line_count = rng.gen_range(20, 100);
     let lines: Vec<&str> = bootlog.lines().collect();
 
     for _ in 1..line_count {
