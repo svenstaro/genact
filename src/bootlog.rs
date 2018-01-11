@@ -1,9 +1,7 @@
 use rand::{thread_rng, Rng};
-use std::{thread, time};
 use yansi::Paint;
 
-#[cfg(target_os = "emscripten")]
-use emscripten_sys;
+use utils;
 
 pub fn run() {
     let bootlog = include_str!("../data/bootlog.txt");
@@ -14,7 +12,7 @@ pub fn run() {
 
     for _ in 1..line_count {
         let choice = rng.choose(&lines).unwrap_or(&"");
-        let sleep_length = time::Duration::from_millis(rng.gen_range(10, 1000));
+        let sleep_length = rng.gen_range(10, 1000);
 
         let is_error = rng.gen_weighted_bool(100);
         if is_error {
@@ -30,13 +28,6 @@ pub fn run() {
             }
         }
 
-        #[cfg(not(target_os = "emscripten"))]
-        thread::sleep(sleep_length);
-
-        #[cfg(target_os = "emscripten")]
-        unsafe {
-            let sleep_millis: u32 = sleep_length.subsec_nanos() / 1_000_000;
-            emscripten_sys::emscripten_sleep(sleep_millis);
-        }
+        utils::sleep(sleep_length);
     }
 }

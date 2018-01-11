@@ -1,11 +1,11 @@
 #[cfg(not(target_os = "emscripten"))]
 extern crate clap;
 
-extern crate pbr;
-
 #[cfg(target_os = "emscripten")]
 extern crate emscripten_sys;
 
+extern crate chrono;
+extern crate pbr;
 extern crate rand;
 extern crate yansi;
 
@@ -13,10 +13,14 @@ use pbr::ProgressBar;
 
 use rand::{thread_rng, Rng};
 use yansi::Paint;
-use std::{thread, time};
 
 #[cfg(not(target_os = "emscripten"))]
 use clap::{Arg, App};
+
+mod bootlog;
+mod cargo;
+mod cryptomining;
+mod utils;
 
 #[cfg(not(target_os = "emscripten"))]
 fn parse_args(all_modules: Vec<&str>) -> Vec<String> {
@@ -62,15 +66,13 @@ fn parse_args(all_modules: Vec<&str>) -> Vec<String> {
     }
 }
 
-mod bootlog;
-mod cargo;
-
 fn main() {
     Paint::enable_windows_ascii();
 
     let all_modules = vec![
         "bootlog",
         "cargo",
+        "cryptomining",
         // "bruteforce",
         // "download",
         // "dump",
@@ -110,6 +112,7 @@ fn main() {
         match choice {
             "bootlog" => bootlog::run(),
             "cargo" => cargo::run(),
+            "cryptomining" => cryptomining::run(),
             _ => panic!("Unknown module!"),
         }
     }

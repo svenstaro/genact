@@ -1,12 +1,10 @@
 use rand::{thread_rng, Rng, ThreadRng};
 use rand::distributions::{ChiSquared, IndependentSample};
-use std::{thread, time};
 use std::time::Instant;
 use std::collections::HashMap;
 use yansi::Paint;
 
-#[cfg(target_os = "emscripten")]
-use emscripten_sys;
+use utils;
 
 fn gen_package(packages: &Vec<&str>, mut rng: &mut ThreadRng) -> (String, String) {
     let chi = ChiSquared::new(1.0);
@@ -36,21 +34,14 @@ pub fn run() {
     let now = Instant::now();
     for stage in vec!["Downloading", "Compiling"] {
         for (package_name, package_version) in &chosen_packages {
-            let sleep_length = time::Duration::from_millis(rng.gen_range(100, 2000));
+            let sleep_length = rng.gen_range(100, 2000);
 
             println!("{stage:>12} {package_name} v{package_version}",
                      stage=Paint::green(stage).bold(),
                      package_name=package_name,
                      package_version=package_version);
 
-            #[cfg(not(target_os = "emscripten"))]
-            thread::sleep(sleep_length);
-
-            #[cfg(target_os = "emscripten")]
-            unsafe {
-                let sleep_millis: u32 = sleep_length.subsec_nanos() / 1_000_000;
-                emscripten_sys::emscripten_sleep(sleep_millis);
-            }
+            utils::sleep(sleep_length);
         }
     }
     let elapsed = now.elapsed();
