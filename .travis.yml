@@ -61,9 +61,10 @@ deploy:
     file: $PROPER_NAME
     skip_cleanup: true
     on:
+      branch: master
       tags: true
       condition: $TRAVIS_RUST_VERSION = stable
-      condition: -n $TARGET
+      condition: $TARGET != "wasm32-unknown-emscripten"
   - provider: pages
     local_dir: ${TRAVIS_BUILD_DIR}/webstuff
     skip_cleanup: true
@@ -73,3 +74,4 @@ deploy:
       branch: master
       tags: true
       condition: $TRAVIS_RUST_VERSION = stable
+      condition: $TARGET = "wasm32-unknown-emscripten"
