@@ -9,19 +9,27 @@ use utils;
 
 pub fn run() {
     let mut rng = thread_rng();
-    let line_count = rng.gen_range(30, 200);
+    let line_count = rng.gen_range(300, 1000);
 
     // How often to receive a new job.
     let new_job_every_n_lines = rng.gen_range(20, 50);
     let mut remaining_until_new_job = new_job_every_n_lines;
 
+    // Base value for how many MH/s a GPU gets.
     let approximate_mhs_per_gpu = rng.gen_range(1.0, 99.0);
     let num_gpus = rng.gen_range(1, 8);
+
+    // How often a solution will be found.
+    let solution_found_every_n_lines = rng.gen_range(80, 200);
+    let mut remaining_until_next_solution = solution_found_every_n_lines;
+
+    // How many solutions have already been found.
+    let mut num_solutions_found = 0;
 
     let now = Instant::now();
 
     for _ in 1..line_count {
-        let sleep_length = 200;
+        let sleep_length = 300;
 
         let time = Paint::purple(Local::now().format("%H:%M:%S"));
 
@@ -29,16 +37,39 @@ pub fn run() {
             remaining_until_new_job = new_job_every_n_lines;
             let info = Paint::cyan("ℹ").bold();
 
-            println!("{info:>3}  {time}{separator}{stratum}  Received new job #{jobhex}  seed: #{seedhex}  target: #{targethex}",
+            println!("{info:>3}  {time}{separator}{source:<13}Received new job #{jobhex}  seed: #{seedhex}  target: #{targethex}",
                      info=info,
                      time=time,
                      separator=Paint::black("|"),
-                     stratum=Paint::blue("stratum"),
+                     source=Paint::blue("stratum"),
                      jobhex=utils::rand_hex_string(8),
                      seedhex=utils::rand_hex_string(32),
                      targethex=utils::rand_hex_string(24));
+        } else if remaining_until_next_solution == 0 {
+            remaining_until_next_solution = solution_found_every_n_lines;
+            num_solutions_found += 1;
+            let info = Paint::cyan("ℹ").bold();
+
+            println!("{info:>3}  {time}{separator}{source:<13}Solution found; Submitted to stratum.buttcoin.org",
+                     info=info,
+                     time=time,
+                     separator=Paint::black("|"),
+                     source=Paint::blue("CUDA0"));
+            println!("{info:>3}  {time}{separator}{source:<13}Nonce: 0x{noncehex}",
+                     info=info,
+                     time=time,
+                     separator=Paint::black("|"),
+                     source=Paint::blue("CUDA0"),
+                     noncehex=utils::rand_hex_string(16));
+            println!("{info:>3}  {time}{separator}{source:<13}{accepted}",
+                     info=info,
+                     time=time,
+                     separator=Paint::black("|"),
+                     source=Paint::blue("stratum"),
+                     accepted=Paint::green("Accepted."));
         } else {
             remaining_until_new_job -= 1;
+            remaining_until_next_solution -= 1;
             let info = Paint::green("m");
 
             let normal = Normal::new(0.0, 0.2);
@@ -52,16 +83,17 @@ pub fn run() {
             let speed = format!("Speed {mhs:>6.2} Mh/s", mhs=Paint::cyan(total_mhs).bold());
             let duration = Duration::from_std(now.elapsed()).expect("Couldn't make chrono::Duration from std::time::Duration!");
             let elapsed = format!("{hours:02}:{minutes:02}", hours=duration.num_hours(), minutes=duration.num_minutes());
-            println!("{info:>3}  {time}{separator}{cryptominer}  {speed}    {gpus}  [A0+0:R0+0:F0] Time: {elapsed}",
+            println!("{info:>3}  {time}{separator}{source:<13}{speed}    {gpus}  [A{solutions}+0:R0+0:F0] Time: {elapsed}",
                      info=info,
                      time=time,
                      separator=Paint::black("|"),
-                     cryptominer=Paint::blue("cryptominer"),
+                     source=Paint::blue("cryptominer"),
                      speed=speed,
                      gpus=gpus,
+                     solutions=num_solutions_found,
                      elapsed=elapsed);
-        };
 
             utils::sleep(sleep_length);
+        }
     }
 }
