@@ -1,3 +1,5 @@
+/// Module that pretends to run cargo to install rust packages.
+
 use rand::{thread_rng, Rng, ThreadRng};
 use rand::distributions::{ChiSquared, IndependentSample};
 use std::time::Instant;
@@ -18,14 +20,14 @@ fn gen_package(packages: &Vec<&str>, mut rng: &mut ThreadRng) -> (String, String
 
 pub fn run() {
     let packages = include_str!("../data/packages.txt");
-    let package_list: Vec<&str> = packages.lines().collect();
+    let pacakges_list: Vec<&str> = packages.lines().collect();
 
     let mut rng = thread_rng();
-    let packages_count = rng.gen_range(10, 100);
+    let num_packages = rng.gen_range(10, 100);
     let mut chosen_packages = HashMap::new();
 
-    while chosen_packages.len() < packages_count {
-        let (package_name, package_version) = gen_package(&package_list, &mut rng);
+    while chosen_packages.len() < num_packages {
+        let (package_name, package_version) = gen_package(&pacakges_list, &mut rng);
         if !chosen_packages.contains_key(&package_name) {
             chosen_packages.insert(package_name, package_version);
         }

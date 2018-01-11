@@ -38,7 +38,7 @@ dependencies = [
  "cexpr 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "cfg-if 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "clang-sys 0.16.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "clap 2.29.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "clap 2.29.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "env_logger 0.4.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "lazy_static 0.2.11 (registry+https://github.com/rust-lang/crates.io-index)",
  "log 0.3.9 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -93,7 +93,7 @@ dependencies = [
 
 [[package]]
 name = "clap"
-version = "2.29.0"
+version = "2.29.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "ansi_term 0.10.2 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -141,7 +141,7 @@ name = "genact"
 version = "0.1.1"
 dependencies = [
  "chrono 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "clap 2.29.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "clap 2.29.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "emscripten-sys 0.3.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "pbr 1.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "rand 0.4.2 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -507,7 +507,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum cfg-if 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)" = "d4c819a1287eb618df47cc647173c5c4c66ba19d888a6e50d605672aed3140de"
 "checksum chrono 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)" = "7c20ebe0b2b08b0aeddba49c609fe7957ba2e33449882cb186a180bc60682fa9"
 "checksum clang-sys 0.16.0 (registry+https://github.com/rust-lang/crates.io-index)" = "5f4f6aa0c4cfa318cd4d2940afae57e48b94d44d3aced603501df24f3c2a414f"
-"checksum clap 2.29.0 (registry+https://github.com/rust-lang/crates.io-index)" = "110d43e343eb29f4f51c1db31beb879d546db27998577e5715270a54bcf41d3f"
+"checksum clap 2.29.1 (registry+https://github.com/rust-lang/crates.io-index)" = "8f4a2b3bb7ef3c672d7c13d15613211d5a6976b6892c598b0fcb5d40765f19c2"
 "checksum emscripten-sys 0.3.2 (registry+https://github.com/rust-lang/crates.io-index)" = "6039295dbe09aac8b9a836f427b5663306d20c00df750a485c5fac9634733639"
 "checksum env_logger 0.4.3 (registry+https://github.com/rust-lang/crates.io-index)" = "3ddf21e73e016298f5cb37d6ef8e8da8e39f91f9ec8b0df44b7deb16a9f8cd5b"
 "checksum fuchsia-zircon 0.3.3 (registry+https://github.com/rust-lang/crates.io-index)" = "2e9763c69ebaae630ba35f74888db465e49e259ba1bc0eda7d06f4a067615d82"

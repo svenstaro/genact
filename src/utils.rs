@@ -1,5 +1,8 @@
-use rand::{thread_rng, Rng};
+/// Module containing random utilities.
+
+use rand::{ThreadRng, Rng};
 use std::{thread, time};
+use std::cmp;
 
 #[cfg(target_os = "emscripten")]
 use emscripten_sys;
@@ -17,9 +20,16 @@ pub fn sleep(length: u64) {
     }
 }
 
-pub fn rand_hex_string(length: usize) -> String {
+pub fn rand_hex_string(rng: &mut ThreadRng, length: usize) -> String {
     const HEX_CHARS: &[u8] = b"0123456789abcdef";
-    let mut rng = thread_rng();
     let hex_string: String = (0..length).map(|_| (*rng.choose(HEX_CHARS).unwrap() as char)).collect();
     hex_string
+}
+
+/// Return a String containing `n` random concatenated elements from `list`.
+///
+/// If `n` >= `list.len()` then `list.len()` will be used instead of `n`.
+pub fn get_random_n_from_list_into_string(rng: &mut ThreadRng, list: Vec<&str>, n: usize) -> String {
+    (0..cmp::min(n, list.len()))
+        .fold(String::new(), |acc, _| acc + " " + &rng.choose(&list).unwrap())
 }

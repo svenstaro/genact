@@ -1,3 +1,5 @@
+/// Module that pretends to mine a cryptocurrency.
+
 use rand::{thread_rng, Rng};
 use rand::distributions::{Normal, IndependentSample};
 use std::time::Instant;
@@ -9,7 +11,7 @@ use utils;
 
 pub fn run() {
     let mut rng = thread_rng();
-    let line_count = rng.gen_range(300, 1000);
+    let num_lines = rng.gen_range(300, 1000);
 
     // How often to receive a new job.
     let new_job_every_n_lines = rng.gen_range(20, 50);
@@ -28,7 +30,7 @@ pub fn run() {
 
     let now = Instant::now();
 
-    for _ in 1..line_count {
+    for _ in 1..num_lines {
         let sleep_length = 300;
 
         let time = Paint::purple(Local::now().format("%H:%M:%S"));
@@ -42,9 +44,9 @@ pub fn run() {
                      time=time,
                      separator=Paint::black("|"),
                      source=Paint::blue("stratum"),
-                     jobhex=utils::rand_hex_string(8),
-                     seedhex=utils::rand_hex_string(32),
-                     targethex=utils::rand_hex_string(24));
+                     jobhex=utils::rand_hex_string(&mut rng, 8),
+                     seedhex=utils::rand_hex_string(&mut rng, 32),
+                     targethex=utils::rand_hex_string(&mut rng, 24));
         } else if remaining_until_next_solution == 0 {
             remaining_until_next_solution = solution_found_every_n_lines;
             num_solutions_found += 1;
@@ -60,7 +62,7 @@ pub fn run() {
                      time=time,
                      separator=Paint::black("|"),
                      source=Paint::blue("CUDA0"),
-                     noncehex=utils::rand_hex_string(16));
+                     noncehex=utils::rand_hex_string(&mut rng, 16));
             println!("{info:>3}  {time}{separator}{source:<13}{accepted}",
                      info=info,
                      time=time,

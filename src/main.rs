@@ -1,3 +1,7 @@
+/// genact - A nonsense activity generator
+///
+/// Main module.
+
 #[cfg(not(target_os = "emscripten"))]
 extern crate clap;
 
@@ -19,6 +23,7 @@ use clap::{Arg, App};
 
 mod bootlog;
 mod cargo;
+mod cc;
 mod cryptomining;
 mod utils;
 
@@ -73,6 +78,7 @@ fn main() {
         "bootlog",
         "cargo",
         "cryptomining",
+        "cc",
         // "bruteforce",
         // "download",
         // "dump",
@@ -113,6 +119,7 @@ fn main() {
             "bootlog" => bootlog::run(),
             "cargo" => cargo::run(),
             "cryptomining" => cryptomining::run(),
+            "cc" => cc::run(),
             _ => panic!("Unknown module!"),
         }
     }
