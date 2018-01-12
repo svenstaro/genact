@@ -35,7 +35,7 @@ pub fn run() {
         let mut ascii_repr = String::new();
         for val in values {
             let ascii_val = u8::from_str_radix(&val, 16).unwrap_or('.' as u8) as char;
-            if ascii_val as usize >= 0x21 && ascii_val as usize <= 0x7e {
+            if utils::is_printable_ascii(ascii_val as usize) {
                 ascii_repr.push(ascii_val);
             } else {
                 ascii_repr.push('.');

@@ -33,3 +33,8 @@ pub fn get_random_n_from_list_into_string(rng: &mut ThreadRng, list: Vec<&str>, 
     (0..cmp::min(n, list.len()))
         .fold(String::new(), |acc, _| acc + " " + &rng.choose(&list).unwrap())
 }
+
+/// Return `true` if the given `a` is printable ASCII and `false` if it isn't.
+pub fn is_printable_ascii(a: usize) -> bool {
+    a >= 0x21 && a <= 0x7e
+}
