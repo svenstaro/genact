@@ -1,5 +1,9 @@
 language: rust
-cache: cargo
+cache:
+  - cargo
+  - directories:
+    - /home/travis/.local/share/cargo-web/emscripten
+
 rust:
   - stable
   - beta
