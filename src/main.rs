@@ -25,6 +25,7 @@ mod bootlog;
 mod cargo;
 mod cc;
 mod cryptomining;
+mod memdump;
 mod utils;
 
 #[cfg(not(target_os = "emscripten"))]
@@ -79,9 +80,9 @@ fn main() {
         "cargo",
         "cryptomining",
         "cc",
+        "memdump",
         // "bruteforce",
         // "download",
-        // "dump",
         // "initialize",
         // "botnet",
         // "heartbeat",
@@ -120,6 +121,7 @@ fn main() {
             "cargo" => cargo::run(),
             "cryptomining" => cryptomining::run(),
             "cc" => cc::run(),
+            "memdump" => memdump::run(),
             _ => panic!("Unknown module!"),
         }
     }
