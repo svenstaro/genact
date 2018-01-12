@@ -2,3 +2,17 @@
 
 [![Build Status](https://travis-ci.org/svenstaro/genact.svg?branch=master)](https://travis-ci.org/svenstaro/genact)
 [![license](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/svenstaro/genact/blob/master/LICENSE)
+
+## Installation
+
+You don't have to isntall anything! For your convenience, prebuilt binaries for Linux, OSX and Windows are provided [here](https://github.com/svenstaro/genact/releases) that should run without any dependencies. Additionally, there is a web version at http://svenstaro.github.io/genact/
+
+## Compiling
+
+Just clone it like usual and `cargo run` to get output:
+
+    git clone https://github.com/svenstaro/genact.git
+    cd genact
+    cargo run
+
+You can do this using any Rust version.
