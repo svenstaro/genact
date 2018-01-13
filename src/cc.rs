@@ -59,7 +59,7 @@ pub fn run() {
     ];
 
     let mut rng = thread_rng();
-    let num_cfiles = rng.gen_range(10, 20);
+    let num_cfiles = rng.gen_range(100, 1000);
     let mut chosen_files: Vec<&str> = vec![];
 
     // Choose a random package name to be our final linking target.
