@@ -12,8 +12,8 @@ build-apple:
 
 .PHONY: build-web
 build-web:
-	EMMAKEN_CFLAGS="-s ASYNCIFY=1" cargo build --target wasm32-unknown-emscripten --release
+	cargo web build --target-webasm-emscripten --use-system-emscripten --release
 
 .PHONY: run-web
 run-web:
-	EMMAKEN_CFLAGS="-s ASYNCIFY=1" cargo web start --target-wasm-emscripten --use-system-emscripten --release
+	cargo web start --target-webasm-emscripten --use-system-emscripten --release

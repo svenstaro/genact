@@ -16,3 +16,14 @@ Just clone it like usual and `cargo run` to get output:
     cargo run
 
 You can do this using any Rust version.
+
+## Running
+
+To see a list of all avilable options, you can run
+
+    ./genact -h
+
+In the web version, you can run specific modules by providing them as `?module`
+parameters like this:
+
+    http://svenstaro.github.io/genact?module=cc&module=memdump

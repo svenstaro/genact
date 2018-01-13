@@ -7,6 +7,7 @@ use std::cmp;
 #[cfg(target_os = "emscripten")]
 use emscripten_sys;
 
+/// Sleep for `length` milliseconds.
 pub fn sleep(length: u64) {
     let sleep_length = time::Duration::from_millis(length);
 

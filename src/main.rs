@@ -8,10 +8,15 @@ extern crate clap;
 #[cfg(target_os = "emscripten")]
 extern crate emscripten_sys;
 
+#[cfg(target_os = "emscripten")]
+#[macro_use]
+extern crate stdweb;
+
 extern crate chrono;
 extern crate pbr;
 extern crate rand;
 extern crate yansi;
+extern crate url;
 
 use pbr::ProgressBar;
 
@@ -21,10 +26,17 @@ use yansi::Paint;
 #[cfg(not(target_os = "emscripten"))]
 use clap::{Arg, App};
 
+#[cfg(target_os = "emscripten")]
+use stdweb::web;
+
+#[cfg(target_os = "emscripten")]
+use url::Url;
+
 mod bootlog;
 mod cargo;
 mod cc;
 mod cryptomining;
+mod download;
 mod memdump;
 mod utils;
 
@@ -80,47 +92,48 @@ fn main() {
         "cargo",
         "cryptomining",
         "cc",
+        "download",
         "memdump",
         // "bruteforce",
-        // "download",
         // "initialize",
         // "botnet",
         // "heartbeat",
     ];
 
+    let mut modules_to_run: Vec<String> = vec![];
+
     #[cfg(not(target_os = "emscripten"))]
-    let modules_to_run = parse_args(all_modules);
+    {
+        modules_to_run = parse_args(all_modules);
+    }
 
     #[cfg(target_os = "emscripten")]
-    let modules_to_run: Vec<String> = all_modules.iter().map(|x| x.to_string()).collect();
+    {
+        stdweb::initialize();
+        let location = web::document().location().unwrap();
+        let parsed_url = Url::parse(&location.href()).unwrap();
+        let pairs = parsed_url.query_pairs();
+        let filtered = pairs.filter(|&(ref x, _)| x == "module");
+        for (_, query_val) in filtered {
+            let actual_val = &&*query_val;
+            if all_modules.contains(actual_val) {
+                modules_to_run.push(actual_val.to_string());
+            }
+        }
+        if modules_to_run.is_empty() {
+            modules_to_run = all_modules.iter().map(|x| x.to_string()).collect();
+        }
+    }
 
     let mut rng = thread_rng();
     loop {
-        // let count = 1000;
-        // let mut pb = ProgressBar::new(count);
-        // pb.format("╢▌▌░╟");
-        // for _ in 0..count {
-        //     pb.inc();
-        //     #[cfg(not(target_os = "emscripten"))]
-        //     thread::sleep(time::Duration::from_millis(200));
-        //
-        //     #[cfg(target_os = "emscripten")]
-        //     unsafe {
-        //         emscripten_sys::emscripten_sleep(200u32);
-        //         // For some reason, we actually have to manually print a newline here even if we
-        //         // flush it manually in order to get it to draw anything at all. This is really
-        //         // weird but I'll figure it out some other time.
-        //         println!();
-        //     }
-        // }
-        // pb.finish_print("done");
-
         let choice: &str = &rng.choose(&modules_to_run).unwrap();
         match choice {
             "bootlog" => bootlog::run(),
             "cargo" => cargo::run(),
             "cryptomining" => cryptomining::run(),
             "cc" => cc::run(),
+            "download" => download::run(),
             "memdump" => memdump::run(),
             _ => panic!("Unknown module!"),
         }
