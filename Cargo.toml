@@ -5,7 +5,6 @@ version = "0.2.2"
 repository = "https://github.com/svenstaro/genact"
 authors = ["Sven-Hendrik Haase <svenstaro@gmail.com>"]
 license = "MIT"
-license-file = "LICENSE"
 readme = "README.md"
 keywords = ["fake", "nonsense", "useless"]
 categories = ["command-line-utilities", "command-line-interface"]
