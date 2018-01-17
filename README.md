@@ -29,8 +29,6 @@ It's compatible with Linux, OSX, Windows 10 (it needs a recent Windows 10 to get
 
 ## Running
 
-After downloading a release 
-
 To see a list of all available options, you can run
 
     ./genact -h
