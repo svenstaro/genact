@@ -24,6 +24,27 @@ You can do this using any Rust version.
 To see a list of all avilable options, you can run
 
     ./genact -h
+    
+or
+
+    cargo run -- -h
+    
+The help:
+
+    genact 0.2.1
+    Sven-Hendrik Haase <svenstaro@gmail.com>
+    A nonsense activity generator
+    
+    USAGE:
+        genact [FLAGS] [OPTIONS]
+
+    FLAGS:
+        -h, --help            Prints help information
+        -l, --list-modules    List available modules
+        -V, --version         Prints version information
+
+    OPTIONS:
+        -m, --modules <MODULE>...    Run only these modules [values: bootlog, cargo, cryptomining, cc, download, memdump]
 
 In the web version, you can run specific modules by providing them as `?module`
 parameters like this:
