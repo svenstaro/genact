@@ -33,7 +33,7 @@ pub fn run() {
         // Print the ascii values.
         let mut ascii_repr = String::new();
         for val in values {
-            let ascii_val = u8::from_str_radix(&val, 16).unwrap_or('.' as u8) as char;
+            let ascii_val = u8::from_str_radix(&val, 16).unwrap_or(b'.') as char;
             if is_printable_ascii(ascii_val as u64) {
                 ascii_repr.push(ascii_val);
             } else {
