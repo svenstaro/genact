@@ -27,7 +27,7 @@ You can do this using any Rust version.
 
 ## Running
 
-To see a list of all avilable options, you can run
+To see a list of all available options, you can run
 
     ./genact -h
     
