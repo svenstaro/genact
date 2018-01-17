@@ -69,9 +69,9 @@ pub fn rand_hex_string(rng: &mut ThreadRng, length: u64) -> String {
 /// Return a String containing `n` random concatenated elements from `list`.
 ///
 /// If `n` >= `list.len()` then `list.len()` will be used instead of `n`.
-pub fn get_random_n_from_list_into_string(rng: &mut ThreadRng, list: Vec<&str>, n: u64) -> String {
+pub fn get_random_n_from_list_into_string(rng: &mut ThreadRng, list: &[&str], n: u64) -> String {
     (0..cmp::min(n, list.len() as u64))
-        .fold(String::new(), |acc, _| acc + " " + &rng.choose(&list).unwrap())
+        .fold(String::new(), |acc, _| acc + " " + rng.choose(list).unwrap())
 }
 
 /// Return `true` if the given `a` is printable ASCII and `false` if it isn't.

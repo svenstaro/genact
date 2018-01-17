@@ -20,8 +20,8 @@ pub fn run() {
         } else {
             let has_bold_word = rng.gen_weighted_bool(10);
             if has_bold_word {
-                let mut words: Vec<String> = choice.split_whitespace().map(|x| String::from(x)).collect();
-                words[0] = format!("{}", Paint::new((&words[0])).bold());
+                let mut words: Vec<String> = choice.split_whitespace().map(String::from).collect();
+                words[0] = format!("{}", Paint::new(&words[0]).bold());
                 dprint(format!("{}", words.join(" ")), 5);
             } else {
                 dprint(format!("{}", choice), 5);

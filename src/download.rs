@@ -12,8 +12,8 @@ use utils::TermWriter;
 use utils::csleep;
 use CFILES_LIST;
 
-pub fn gen_file_name(files: &Vec<&str>, extension: &str, rng: &mut ThreadRng) -> String {
-    let chosen_file = rng.choose(&files).unwrap_or(&"");
+pub fn gen_file_name(files: &[&str], extension: &str, rng: &mut ThreadRng) -> String {
+    let chosen_file = rng.choose(files).unwrap_or(&"");
     let path = Path::new(&chosen_file).with_extension(extension);
     path.file_name().unwrap().to_str().unwrap().to_string()
 }
@@ -21,13 +21,13 @@ pub fn gen_file_name(files: &Vec<&str>, extension: &str, rng: &mut ThreadRng) ->
 pub fn run() {
     let mut rng = thread_rng();
 
-    const EXTENSIONS: &'static [&'static str] = &[
+    const EXTENSIONS: &[&str] = &[
         "iso", "zip", "rar", "tar.gz",
         "tar.bz2", "tar.xz", "deb", "rpm", "exe"];
 
     // We'll use the same extension for all files of this whole run to make things seem more
     // realistic.
-    let extension = rng.choose(&EXTENSIONS).unwrap_or(&".wat");
+    let extension = rng.choose(EXTENSIONS).unwrap_or(&".wat");
 
     // Choose speed. We'll choose an approximate speed that we'll vary a little bit.
     // Download speed in bytes per second.
@@ -56,7 +56,7 @@ pub fn run() {
         #[cfg(not(target_os = "emscripten"))]
         let mut pb = ProgressBar::new(file_bytes);
         pb.set_units(Units::Bytes);
-        pb.message(&format!("{} ", gen_file_name(&CFILES_LIST, &extension, &mut rng)));
+        pb.message(&format!("{} ", gen_file_name(&CFILES_LIST, extension, &mut rng)));
         for _ in 0..cycles {
             pb.add(bytes_per_sleep);
             csleep(sleep_millis);

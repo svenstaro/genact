@@ -142,7 +142,7 @@ fn main() {
 
     let mut rng = thread_rng();
     loop {
-        let choice: &str = &rng.choose(&modules_to_run).unwrap();
+        let choice: &str = rng.choose(&modules_to_run).unwrap();
         match choice {
             "bootlog" => bootlog::run(),
             "cargo" => cargo::run(),

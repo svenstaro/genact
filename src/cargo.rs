@@ -9,13 +9,13 @@ use yansi::Paint;
 use utils::csleep;
 use PACKAGES_LIST;
 
-fn gen_package(packages: &Vec<&str>, mut rng: &mut ThreadRng) -> (String, String) {
+fn gen_package(packages: &[&str], mut rng: &mut ThreadRng) -> (String, String) {
     let chi = ChiSquared::new(1.0);
     let package_version = format!("{major:.0}.{minor:.0}.{patch:.0}",
                           major=10.0 * chi.ind_sample(&mut rng),
                           minor=10.0 * chi.ind_sample(&mut rng),
                           patch=10.0 * chi.ind_sample(&mut rng));
-    let package_name = rng.choose(&packages).unwrap_or(&"");
+    let package_name = rng.choose(packages).unwrap_or(&"");
     (package_name.to_string(), package_version.to_string())
 }
 
@@ -27,13 +27,11 @@ pub fn run() {
 
     while chosen_packages.len() < num_packages {
         let (package_name, package_version) = gen_package(&PACKAGES_LIST, &mut rng);
-        if !chosen_packages.contains_key(&package_name) {
-            chosen_packages.insert(package_name, package_version);
-        }
+        chosen_packages.entry(package_name).or_insert(package_version);
     }
 
     let now = Instant::now();
-    for stage in vec!["Downloading", "Compiling"] {
+    for stage in &["Downloading", "Compiling"] {
         for (package_name, package_version) in &chosen_packages {
             let sleep_length = rng.gen_range(100, 2000);
 
