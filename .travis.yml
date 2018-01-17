@@ -70,6 +70,7 @@ deploy:
       tags: true
       condition: $TRAVIS_RUST_VERSION = stable
       condition: $TARGET != "wasm32-unknown-emscripten"
+      condition: -n $TARGET
   - provider: pages
     local_dir: ${TRAVIS_BUILD_DIR}/static
     skip_cleanup: true
@@ -80,3 +81,4 @@ deploy:
       tags: true
       condition: $TRAVIS_RUST_VERSION = stable
       condition: $TARGET = "wasm32-unknown-emscripten"
+      condition: -n $TARGET
