@@ -3,7 +3,7 @@
 use rand::{thread_rng, Rng};
 use yansi::Paint;
 
-use utils;
+use utils::{dprint, csleep};
 use BOOTLOG_LIST;
 
 pub fn run() {
@@ -16,18 +16,19 @@ pub fn run() {
 
         let is_error = rng.gen_weighted_bool(100);
         if is_error {
-            println!("{}", Paint::red(format!("ERROR: {}", choice)));
+            dprint(format!("{}", Paint::red(format!("ERROR: {}", choice))), 10);
         } else {
             let has_bold_word = rng.gen_weighted_bool(10);
             if has_bold_word {
                 let mut words: Vec<String> = choice.split_whitespace().map(|x| String::from(x)).collect();
                 words[0] = format!("{}", Paint::new((&words[0])).bold());
-                println!("{}", words.join(" "));
+                dprint(format!("{}", words.join(" ")), 5);
             } else {
-                println!("{}", choice);
+                dprint(format!("{}", choice), 5);
             }
         }
 
-        utils::sleep(sleep_length);
+        println!();
+        csleep(sleep_length);
     }
 }

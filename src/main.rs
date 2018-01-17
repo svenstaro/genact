@@ -137,7 +137,7 @@ fn main() {
 
     #[cfg(target_os = "emscripten")]
     {
-        utils::sleep(10);
+        utils::csleep(10);
     }
 
     let mut rng = thread_rng();

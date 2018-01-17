@@ -6,7 +6,7 @@ use std::time::Instant;
 use std::collections::HashMap;
 use yansi::Paint;
 
-use utils;
+use utils::csleep;
 use PACKAGES_LIST;
 
 fn gen_package(packages: &Vec<&str>, mut rng: &mut ThreadRng) -> (String, String) {
@@ -42,7 +42,7 @@ pub fn run() {
                      package_name=package_name,
                      package_version=package_version);
 
-            utils::sleep(sleep_length);
+            csleep(sleep_length);
         }
     }
     let elapsed = now.elapsed();

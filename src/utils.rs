@@ -1,16 +1,22 @@
 /// Module containing random utilities.
 
 use rand::{ThreadRng, Rng};
-use std::{thread, time};
+use std::time;
+#[cfg(not(target_os = "emscripten"))]
+use std::thread;
 use std::cmp;
+#[cfg(target_os = "emscripten")]
+use std::io;
 use std::io::Write;
+#[cfg(not(target_os = "emscripten"))]
 use std::io::stdout;
+use std::str;
 
 #[cfg(target_os = "emscripten")]
 use emscripten_sys;
 
-/// Sleep for `length` milliseconds.
-pub fn sleep(length: u64) {
+/// A cross-platform sleep for `length` milliseconds that also handles web stuff.
+pub fn csleep(length: u64) {
     let sleep_length = time::Duration::from_millis(length as u64);
 
     #[cfg(not(target_os = "emscripten"))]
@@ -47,7 +53,7 @@ pub fn dprint<S: Into<String>>(s: S, delay: u64) {
         }
 
         if delay > 0 {
-            self::sleep(delay);
+            self::csleep(delay);
         }
     }
 }
@@ -71,4 +77,24 @@ pub fn get_random_n_from_list_into_string(rng: &mut ThreadRng, list: Vec<&str>, 
 /// Return `true` if the given `a` is printable ASCII and `false` if it isn't.
 pub fn is_printable_ascii(a: u64) -> bool {
     a >= 0x21 && a <= 0x7e
+}
+
+
+#[cfg(target_os = "emscripten")]
+pub struct TermWriter;
+
+#[cfg(target_os = "emscripten")]
+impl Write for TermWriter {
+    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
+        let n = buf.len();
+        let s = str::from_utf8(&buf).unwrap();
+        js! {
+            window.term.write(@{s});
+        }
+        Ok(n)
+    }
+
+    fn flush(&mut self) -> io::Result<()> {
+        Ok(())
+    }
 }

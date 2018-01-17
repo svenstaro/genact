@@ -7,7 +7,7 @@ use yansi::Paint;
 use chrono::prelude::*;
 use chrono::Duration;
 
-use utils;
+use utils::{rand_hex_string, csleep};
 
 pub fn run() {
     let mut rng = thread_rng();
@@ -44,9 +44,9 @@ pub fn run() {
                      time=time,
                      separator=Paint::black("|"),
                      source=Paint::blue("stratum"),
-                     jobhex=utils::rand_hex_string(&mut rng, 8),
-                     seedhex=utils::rand_hex_string(&mut rng, 32),
-                     targethex=utils::rand_hex_string(&mut rng, 24));
+                     jobhex=rand_hex_string(&mut rng, 8),
+                     seedhex=rand_hex_string(&mut rng, 32),
+                     targethex=rand_hex_string(&mut rng, 24));
         } else if remaining_until_next_solution == 0 {
             remaining_until_next_solution = solution_found_every_n_lines;
             num_solutions_found += 1;
@@ -62,7 +62,7 @@ pub fn run() {
                      time=time,
                      separator=Paint::black("|"),
                      source=Paint::blue("CUDA0"),
-                     noncehex=utils::rand_hex_string(&mut rng, 16));
+                     noncehex=rand_hex_string(&mut rng, 16));
             println!("{info:>3}  {time}{separator}{source:<13}{accepted}",
                      info=info,
                      time=time,
@@ -95,7 +95,7 @@ pub fn run() {
                      solutions=num_solutions_found,
                      elapsed=elapsed);
 
-            utils::sleep(sleep_length);
+            csleep(sleep_length);
         }
     }
 }
