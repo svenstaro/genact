@@ -22,9 +22,9 @@ pub fn run() {
         // Print the values in two columns.
         for (n, val) in values.iter().enumerate() {
             if n == 8 {
-                dprint(" ", 25);
+                dprint(" ", 10);
             }
-            dprint(format!("{} ", val), 25);
+            dprint(format!("{} ", val), 10);
             let val_delay = rng.gen_range(20, 40);
             stdout().flush().unwrap();
             csleep(val_delay);
