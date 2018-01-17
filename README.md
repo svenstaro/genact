@@ -7,6 +7,8 @@
 
 You don't have to isntall anything! For your convenience, prebuilt binaries for Linux, OSX and Windows are provided [here](https://github.com/svenstaro/genact/releases) that should run without any dependencies. Additionally, there is a web version at http://svenstaro.github.io/genact/
 
+It's compatible with Linux, OSX, Windows 10 (it needs a recent Windows 10 to get ANSI support) and most modern web browsers.
+
 ## Compiling
 
 Just clone it like usual and `cargo run` to get output:
