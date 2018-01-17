@@ -55,7 +55,7 @@ fn parse_args(all_modules: Vec<&str>) -> Vec<String> {
     use std::process;
 
     let app = App::new("genact")
-        .version("0.2.1")
+        .version("0.2.2")
         .author("Sven-Hendrik Haase <svenstaro@gmail.com>")
         .about("A nonsense activity generator")
         .arg(
