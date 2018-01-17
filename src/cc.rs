@@ -44,8 +44,8 @@ pub fn run() {
     const FLAGS_OPT: &[&str] = &["-O0", "-O1", "-O2", "-O3", "-Og", "-Os"];
     const FLAGS_WARN_BASE: &[&str] = &["-Wall", "-Wall -Wextra"];
     const FLAGS_WARN: &[&str] = &[
-        "-Wno-unused-variable", "-Wno-sign-compare", "-Wno-unknown-pragmas", "-Wno-parantheses",
-        "-Wundef", "-Write-strings", "-Wold-style-definition",
+        "-Wno-unused-variable", "-Wno-sign-compare", "-Wno-unknown-pragmas", "-Wno-parentheses",
+        "-Wundef", "-Wwrite-strings", "-Wold-style-definition",
     ];
     const FLAGS_F: &[&str] = &[
         "-fsigned-char", "-funroll-loops", "-fgnu89-inline", "-fPIC"];
