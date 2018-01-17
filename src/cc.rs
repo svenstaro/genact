@@ -4,6 +4,7 @@ use rand::{ThreadRng, thread_rng, Rng};
 use std::path::Path;
 
 use utils;
+use CFILES_LIST;
 
 /// Generate a `String` containing all of the `file_list`'s file's parents as -I flags
 fn generate_includes(file_list: &Vec<&str>) -> String {
@@ -13,7 +14,7 @@ fn generate_includes(file_list: &Vec<&str>) -> String {
         if let Some(dir) = path.parent() {
             if let Some(dir_str) = dir.to_str() {
                 if !include_flags.contains(&dir_str) {
-                    include_flags.push(&path.to_str().unwrap());
+                    include_flags.push(&dir_str);
                 }
             }
         }
@@ -22,7 +23,7 @@ fn generate_includes(file_list: &Vec<&str>) -> String {
 }
 
 /// Generate a list of `n` random linker flags given a list of `candidates`.
-fn generate_linker_flags(rng: &mut ThreadRng, candidates: &Vec<&str>, n: usize) -> String {
+fn generate_linker_flags(rng: &mut ThreadRng, candidates: &Vec<&str>, n: u64) -> String {
     let mut libraries = vec![];
     for _ in 0..n {
         let candidate = rng.choose(&candidates).unwrap();
@@ -34,9 +35,6 @@ fn generate_linker_flags(rng: &mut ThreadRng, candidates: &Vec<&str>, n: usize) 
 }
 
 pub fn run() {
-    let cfiles = include_str!("../data/cfiles.txt");
-    let cfiles_list: Vec<&str> = cfiles.lines().collect();
-
     let packages = include_str!("../data/packages.txt");
     let packages_list: Vec<&str> = packages.lines().collect();
 
@@ -68,7 +66,7 @@ pub fn run() {
     let compiler = rng.choose(&COMPILERS).unwrap();
 
     while chosen_files.len() < num_cfiles {
-        let cfile = rng.choose(&cfiles_list).unwrap();
+        let cfile = rng.choose(&CFILES_LIST).unwrap();
         if !chosen_files.contains(&cfile) {
             chosen_files.push(cfile);
         }
@@ -79,17 +77,17 @@ pub fn run() {
 
     // Pick a bunch of warning flags.
     let warn = rng.choose(&FLAGS_WARN_BASE).unwrap().to_string();
-    let num_additional_warn_flags = rng.gen_range(0, FLAGS_WARN.len());
+    let num_additional_warn_flags = rng.gen_range(0, FLAGS_WARN.len()) as u64;
     let warn_additional = utils::get_random_n_from_list_into_string(
         &mut rng, FLAGS_WARN.to_vec(), num_additional_warn_flags);
     let warn_final = warn + &warn_additional;
 
     // Pick a bunch of f flags
-    let num_f_flags = rng.gen_range(0, FLAGS_F.len());
+    let num_f_flags = rng.gen_range(0, FLAGS_F.len()) as u64;
     let f = utils::get_random_n_from_list_into_string(&mut rng, FLAGS_F.to_vec(), num_f_flags);
 
     // Pick a bunch of architecture flags.
-    let num_arch_flags = rng.gen_range(0, FLAGS_ARCH.len());
+    let num_arch_flags = rng.gen_range(0, FLAGS_ARCH.len()) as u64;
     let arch = utils::get_random_n_from_list_into_string(
         &mut rng, FLAGS_ARCH.to_vec(), num_arch_flags);
 
@@ -102,7 +100,7 @@ pub fn run() {
 
     // Pick a bunch of defs
     let defs = rng.choose(&FLAGS_DEF_BASE).unwrap().to_string();
-    let num_def_flags = rng.gen_range(0, FLAGS_DEF.len());
+    let num_def_flags = rng.gen_range(0, FLAGS_DEF.len()) as u64;
     let defs_additional = utils::get_random_n_from_list_into_string(&mut rng, FLAGS_DEF.to_vec(), num_def_flags);
     let defs_final = defs + &defs_additional;
 

@@ -17,8 +17,8 @@ extern crate pbr;
 extern crate rand;
 extern crate yansi;
 extern crate url;
-
-use pbr::ProgressBar;
+#[macro_use]
+extern crate lazy_static;
 
 use rand::{thread_rng, Rng};
 use yansi::Paint;
@@ -39,6 +39,16 @@ mod cryptomining;
 mod download;
 mod memdump;
 mod utils;
+
+static BOOTLOG: &str = include_str!("../data/bootlog.txt");
+static CFILES: &str = include_str!("../data/cfiles.txt");
+static PACKAGES: &str = include_str!("../data/packages.txt");
+
+lazy_static! {
+    static ref BOOTLOG_LIST: Vec<&'static str> = BOOTLOG.lines().collect();
+    static ref CFILES_LIST: Vec<&'static str> = CFILES.lines().collect();
+    static ref PACKAGES_LIST: Vec<&'static str> = PACKAGES.lines().collect();
+}
 
 #[cfg(not(target_os = "emscripten"))]
 fn parse_args(all_modules: Vec<&str>) -> Vec<String> {
@@ -123,6 +133,11 @@ fn main() {
         if modules_to_run.is_empty() {
             modules_to_run = all_modules.iter().map(|x| x.to_string()).collect();
         }
+    }
+
+    #[cfg(target_os = "emscripten")]
+    {
+        utils::sleep(10);
     }
 
     let mut rng = thread_rng();

@@ -4,16 +4,14 @@ use rand::{thread_rng, Rng};
 use yansi::Paint;
 
 use utils;
+use BOOTLOG_LIST;
 
 pub fn run() {
-    let bootlog = include_str!("../data/bootlog.txt");
-
     let mut rng = thread_rng();
     let num_lines = rng.gen_range(50, 200);
-    let lines: Vec<&str> = bootlog.lines().collect();
 
     for _ in 1..num_lines {
-        let choice = rng.choose(&lines).unwrap_or(&"");
+        let choice = rng.choose(&BOOTLOG_LIST).unwrap_or(&"");
         let sleep_length = rng.gen_range(10, 1000);
 
         let is_error = rng.gen_weighted_bool(100);

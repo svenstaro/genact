@@ -16,6 +16,7 @@
         var term = new Terminal({
             scrollback: 0
         });
+        window.term = term;
         term.open(document.getElementById('terminal'));
         var Module = {
             print: (text) => {

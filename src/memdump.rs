@@ -1,7 +1,6 @@
 /// Module that dumps some random memory locations in a slightly cool fashion.
 
 use rand::{thread_rng, Rng};
-use yansi::Paint;
 use std::io::Write;
 use std::io::stdout;
 
@@ -35,7 +34,7 @@ pub fn run() {
         let mut ascii_repr = String::new();
         for val in values {
             let ascii_val = u8::from_str_radix(&val, 16).unwrap_or('.' as u8) as char;
-            if utils::is_printable_ascii(ascii_val as usize) {
+            if utils::is_printable_ascii(ascii_val as u64) {
                 ascii_repr.push(ascii_val);
             } else {
                 ascii_repr.push('.');

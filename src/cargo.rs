@@ -7,6 +7,7 @@ use std::collections::HashMap;
 use yansi::Paint;
 
 use utils;
+use PACKAGES_LIST;
 
 fn gen_package(packages: &Vec<&str>, mut rng: &mut ThreadRng) -> (String, String) {
     let chi = ChiSquared::new(1.0);
@@ -19,15 +20,13 @@ fn gen_package(packages: &Vec<&str>, mut rng: &mut ThreadRng) -> (String, String
 }
 
 pub fn run() {
-    let packages = include_str!("../data/packages.txt");
-    let pacakges_list: Vec<&str> = packages.lines().collect();
 
     let mut rng = thread_rng();
     let num_packages = rng.gen_range(10, 100);
     let mut chosen_packages = HashMap::new();
 
     while chosen_packages.len() < num_packages {
-        let (package_name, package_version) = gen_package(&pacakges_list, &mut rng);
+        let (package_name, package_version) = gen_package(&PACKAGES_LIST, &mut rng);
         if !chosen_packages.contains_key(&package_name) {
             chosen_packages.insert(package_name, package_version);
         }
