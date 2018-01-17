@@ -1,0 +1,81 @@
+language: rust
+cache:
+  - cargo
+  - directories:
+    - /home/travis/.local/share/cargo-web/emscripten
+
+rust:
+  - stable
+  - beta
+  - nightly
+
+addons:
+  apt:
+    packages:
+      - mingw-w64
+
+matrix:
+  include:
+    - env:
+      - TARGET=x86_64-unknown-linux-musl
+      - BIN_NAME=genact
+      - PROPER_NAME=genact-linux
+      os: linux
+    - env:
+      - TARGET=x86_64-pc-windows-gnu
+      - BIN_NAME=genact.exe
+      - PROPER_NAME=genact-win.exe
+      - RUSTFLAGS="-C linker=x86_64-w64-mingw32-gcc"
+      os: linux
+    - env:
+      - TARGET=x86_64-apple-darwin
+      - BIN_NAME=genact
+      - PROPER_NAME=genact-osx
+      os: osx
+    - env:
+      - TARGET=wasm32-unknown-emscripten
+      - BIN_NAME=genact
+      - PROPER_NAME=genact-web
+      - EMMAKEN_CFLAGS="-s ASYNCIFY=1"
+      os: linux
+
+  os:
+    - linux
+    - osx
+
+before_install:
+  - rustup self update
+  - if [[ $TARGET = "wasm32-unknown-emscripten" ]]; then cargo install --force cargo-web; fi
+
+install:
+  - if [[ -n $TARGET && $TARGET != "x86_64-apple-darwin" ]]; then rustup target add $TARGET; fi
+
+script:
+  - if [[ -n $TARGET && $TARGET != "wasm32-unknown-emscripten" ]]; then cargo build --verbose --release --target $TARGET; else cargo build --verbose; fi
+  - if [[ $TARGET = "wasm32-unknown-emscripten" ]]; then cargo web build --verbose --release --target-webasm-emscripten; fi
+
+before_deploy:
+  - if [[ -n $TARGET && $TARGET != "wasm32-unknown-emscripten" ]]; then cp -a target/$TARGET/release/$BIN_NAME $PROPER_NAME; fi
+  - if [[ $TARGET = "wasm32-unknown-emscripten" ]]; then cp target/wasm32-unknown-emscripten/release/genact.{js,wasm} static/; fi
+
+deploy:
+  - provider: releases
+    api_key:
+      secure: "n1OCiCjupkVieqsepGBOk6oxGcU89n9z0lQWWMAtBKREIEL1fnqt7A4z9FC1LV9UiAwvcvMHI8As5TA/7sV6jiWFuNOqu5HurX/n7cXlAuVWx00gCtWZ7Fh14ipVIDr2W52Mj/5qw1LSW19g8+9nLF1xO2YLrNpiaQX+V6Ypf04="
+    file: $PROPER_NAME
+    skip_cleanup: true
+    on:
+      branch: master
+      tags: true
+      condition: $TRAVIS_RUST_VERSION = stable
+      condition: $TARGET != "wasm32-unknown-emscripten"
+  - provider: pages
+    local_dir: ${TRAVIS_BUILD_DIR}/static
+    skip_cleanup: true
+    github_token:
+      secure: "n1OCiCjupkVieqsepGBOk6oxGcU89n9z0lQWWMAtBKREIEL1fnqt7A4z9FC1LV9UiAwvcvMHI8As5TA/7sV6jiWFuNOqu5HurX/n7cXlAuVWx00gCtWZ7Fh14ipVIDr2W52Mj/5qw1LSW19g8+9nLF1xO2YLrNpiaQX+V6Ypf04="
+    on:
+      branch: master
+      tags: true
+      condition: $TRAVIS_RUST_VERSION = stable
+      condition: $TARGET = "wasm32-unknown-emscripten"
