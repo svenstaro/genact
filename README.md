@@ -50,3 +50,7 @@ In the web version, you can run specific modules by providing them as `?module`
 parameters like this:
 
     http://svenstaro.github.io/genact?module=cc&module=memdump
+
+## Contributing
+
+If you want to add a cool module just implement it, lint it with clippy and make a pull request with a screenshot. I will probably accept it.
