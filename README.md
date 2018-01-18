@@ -27,10 +27,6 @@ It's compatible with Linux, OSX, Windows 10 (it needs a recent Windows 10 to get
 
 **On Windows**: Download `genact-win.exe` from [the releases page](https://github.com/svenstaro/genact/releases) and double click it.
 
-**On Docker**: Alternatively, you can use the provided `Dockerfile` and run
-
-    docker build . -t svenstaro/genact
-
 **With Cargo**: If you have a somewhat recent version of Rust and Cargo installed, you can run
 
     cargo install genact
@@ -47,7 +43,7 @@ or
 
 or (on Docker)
 
-    docker run -it --rm svenstaro/genact
+    docker run -it --rm svenstaro/genact -h
 
 The help:
 
