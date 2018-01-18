@@ -3,6 +3,7 @@
 /// Main module.
 
 #[cfg(not(target_os = "emscripten"))]
+#[macro_use]
 extern crate clap;
 
 #[cfg(target_os = "emscripten")]
@@ -54,10 +55,10 @@ lazy_static! {
 fn parse_args(all_modules: Vec<&str>) -> Vec<String> {
     use std::process;
 
-    let app = App::new("genact")
-        .version("0.2.2")
-        .author("Sven-Hendrik Haase <svenstaro@gmail.com>")
-        .about("A nonsense activity generator")
+    let app = App::new(crate_name!())
+        .version(crate_version!())
+        .author(crate_authors!())
+        .about(crate_description!())
         .arg(
             Arg::with_name("list")
             .short("l")
@@ -110,7 +111,7 @@ fn main() {
         // "heartbeat",
     ];
 
-    let mut modules_to_run: Vec<String> = vec![];
+    let modules_to_run: Vec<String>;
 
     #[cfg(not(target_os = "emscripten"))]
     {
@@ -120,6 +121,7 @@ fn main() {
     #[cfg(target_os = "emscripten")]
     {
         stdweb::initialize();
+        let mut temp_modules = vec![];
         let location = web::document().location().unwrap();
         let parsed_url = Url::parse(&location.href()).unwrap();
         let pairs = parsed_url.query_pairs();
@@ -127,11 +129,13 @@ fn main() {
         for (_, query_val) in filtered {
             let actual_val = &&*query_val;
             if all_modules.contains(actual_val) {
-                modules_to_run.push(actual_val.to_string());
+                temp_modules.push(actual_val.to_string());
             }
         }
-        if modules_to_run.is_empty() {
+        if temp_modules.is_empty() {
             modules_to_run = all_modules.iter().map(|x| x.to_string()).collect();
+        } else {
+            modules_to_run = temp_modules;
         }
     }
 
