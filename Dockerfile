@@ -9,4 +9,4 @@ ADD . $APP_HOME
 
 RUN ["cargo", "build", "--release"]
 
-CMD ["./target/release/genact"]
+ENTRYPOINT ["./target/release/genact"]
