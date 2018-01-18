@@ -108,7 +108,7 @@ pub fn run() {
 
     // Compile everything.
     for cfile in &chosen_files {
-        println!("{compiler} -c {opt} {warn}{f}{arch}{includes}{defs} -o {output_file}",
+        println!("{compiler} -c {opt} {warn}{f}{arch} {includes}{defs} -o {output_file}",
                  compiler=compiler,
                  opt=opt,
                  warn=warn_final,
