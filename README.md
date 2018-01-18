@@ -19,12 +19,12 @@ It's compatible with Linux, OSX, Windows 10 (it needs a recent Windows 10 to get
 
     chmod +x genact-linux
     ./genact-linux
-    
+
 **On OSX**: Download `genact-osx` from [the releases page](https://github.com/svenstaro/genact/releases) and run
 
     chmod +x genact-osx
     ./genact-osx
-    
+
 **On Windows**: Download `genact-win.exe` from [the releases page](https://github.com/svenstaro/genact/releases) and double click it.
 
 **On Docker**: Alternatively, you can use the provided `Dockerfile` and run `docker build . -t svenstaro/genact`.
@@ -34,21 +34,21 @@ It's compatible with Linux, OSX, Windows 10 (it needs a recent Windows 10 to get
 To see a list of all available options, you can run
 
     ./genact -h
-    
+
 or
 
     cargo run -- -h
-    
+
 or (on Docker)
 
     docker run -it --rm svenstaro/genact
-    
+
 The help:
 
-    genact 0.2.1
+    genact 0.2.3
     Sven-Hendrik Haase <svenstaro@gmail.com>
     A nonsense activity generator
-    
+
     USAGE:
         genact [FLAGS] [OPTIONS]
 
@@ -74,3 +74,12 @@ You should have a recent version of rust and cargo installed. You don't need nig
 ## Contributing
 
 If you want to add a cool module just implement it, lint it with clippy and make a pull request with a screenshot. I will probably accept it.
+
+## Releasing
+
+This is mostly a note for me on how to release this thing:
+
+- Update versions in `README.md`, `static/index.html`, `Cargo.toml`.
+- `git commit` and `git tag -s`, `git push`.
+- `cargo publish`
+- Releases will automatically be deployed by Travis.
