@@ -1,4 +1,4 @@
-FROM rust:1.23.0-jessie
+FROM rust
 
 ENV APP_HOME /usr/src/app
 
