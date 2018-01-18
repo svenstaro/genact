@@ -40,10 +40,6 @@ matrix:
       - EMMAKEN_CFLAGS="-s ASYNCIFY=1"
       os: linux
 
-  os:
-    - linux
-    - osx
-
 before_install:
   - rustup self update
   - if [[ $TARGET = "wasm32-unknown-emscripten" ]]; then cargo install --force cargo-web; fi
@@ -53,7 +49,7 @@ install:
 
 script:
   - if [[ -n $TARGET && $TARGET != "wasm32-unknown-emscripten" ]]; then cargo build --verbose --release --target $TARGET; fi
-  - if [[ $TARGET = "wasm32-unknown-emscripten" ]]; then cargo web build --verbose --release --target-webasm-emscripten; fi
+  - if [[ $TARGET = "wasm32-unknown-emscripten" ]]; then travis_wait cargo web build --verbose --release --target-webasm-emscripten; fi
 
 before_deploy:
   - if [[ -n $TARGET && $TARGET != "wasm32-unknown-emscripten" ]]; then cp -a target/$TARGET/release/$BIN_NAME $PROPER_NAME && strip $PROPER_NAME && upx $PROPER_NAME; fi
