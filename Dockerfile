@@ -7,4 +7,6 @@ WORKDIR $APP_HOME
 
 ADD . $APP_HOME
 
-CMD ["cargo", "run"]
+RUN ["cargo", "build", "--release"]
+
+CMD ["./target/release/genact"]
