@@ -52,7 +52,7 @@ install:
   - if [[ -n $TARGET && $TARGET != "x86_64-apple-darwin" ]]; then rustup target add $TARGET; fi
 
 script:
-  - if [[ -n $TARGET && $TARGET != "wasm32-unknown-emscripten" ]]; then cargo build --verbose --release --target $TARGET; else cargo build --verbose; fi
+  - if [[ -n $TARGET && $TARGET != "wasm32-unknown-emscripten" ]]; then cargo build --verbose --release --target $TARGET; fi
   - if [[ $TARGET = "wasm32-unknown-emscripten" ]]; then cargo web build --verbose --release --target-webasm-emscripten; fi
 
 before_deploy:
