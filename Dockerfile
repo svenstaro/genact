@@ -1,4 +1,4 @@
-FROM rust
+FROM rust as builder
 
 ENV APP_HOME /usr/src/app
 
@@ -9,4 +9,6 @@ ADD . $APP_HOME
 
 RUN ["cargo", "build", "--release"]
 
-ENTRYPOINT ["./target/release/genact"]
+FROM bitnami/minideb
+COPY --from=builder /usr/src/app/target/release/genact /app/
+ENTRYPOINT ["/app/genact"]
