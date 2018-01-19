@@ -35,6 +35,7 @@ use url::Url;
 
 mod bootlog;
 mod cargo;
+mod composer;
 mod cc;
 mod cryptomining;
 mod download;
@@ -44,11 +45,13 @@ mod utils;
 static BOOTLOG: &str = include_str!("../data/bootlog.txt");
 static CFILES: &str = include_str!("../data/cfiles.txt");
 static PACKAGES: &str = include_str!("../data/packages.txt");
+static COMPOSERS: &str = include_str!("../data/composer.txt");
 
 lazy_static! {
     static ref BOOTLOG_LIST: Vec<&'static str> = BOOTLOG.lines().collect();
     static ref CFILES_LIST: Vec<&'static str> = CFILES.lines().collect();
     static ref PACKAGES_LIST: Vec<&'static str> = PACKAGES.lines().collect();
+    static ref COMPOSERS_LIST: Vec<&'static str> = COMPOSERS.lines().collect();
 }
 
 #[cfg(not(target_os = "emscripten"))]
@@ -105,6 +108,7 @@ fn main() {
         "cc",
         "download",
         "memdump",
+        "composer",
         // "bruteforce",
         // "initialize",
         // "botnet",
@@ -154,6 +158,7 @@ fn main() {
             "cc" => cc::run(),
             "download" => download::run(),
             "memdump" => memdump::run(),
+            "composer" => composer::run(),
             _ => panic!("Unknown module!"),
         }
     }
