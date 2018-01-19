@@ -1,12 +1,14 @@
-FROM rust
+FROM rust as builder
 
-ENV APP_HOME /usr/src/app
+ENV APP_HOME /usr/src/app/
 
-RUN mkdir -p $APP_HOME
+RUN rustup target add x86_64-unknown-linux-musl
+RUN apt-get update && apt-get install -y upx
+
+COPY . $APP_HOME
 WORKDIR $APP_HOME
+RUN make build-linux
 
-ADD . $APP_HOME
-
-RUN ["cargo", "build", "--release"]
-
-ENTRYPOINT ["./target/release/genact"]
+FROM scratch
+COPY --from=builder /usr/src/app/target/x86_64-unknown-linux-musl/release/genact /app/
+ENTRYPOINT ["/app/genact"]
