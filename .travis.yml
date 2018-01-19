@@ -37,7 +37,6 @@ matrix:
       - TARGET=wasm32-unknown-emscripten
       - BIN_NAME=genact
       - PROPER_NAME=genact-web
-      - EMMAKEN_CFLAGS="-s ASYNCIFY=1"
       os: linux
 
 before_install:
