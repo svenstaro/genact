@@ -60,7 +60,9 @@ The help:
         -V, --version         Prints version information
 
     OPTIONS:
-        -m, --modules <MODULE>...    Run only these modules [values: bootlog, cargo, cryptomining, cc, download, memdump]
+        -m, --modules <MODULE>...    Run only these modules [values: bootlog, cargo, cc, composer, cryptomining, download,
+                                     memdump]
+
 
 In the web version, you can run specific modules by providing them as `?module`
 parameters like this: https://svenstaro.github.io/genact?module=cc&module=memdump

@@ -104,11 +104,11 @@ fn main() {
     let all_modules = vec![
         "bootlog",
         "cargo",
-        "cryptomining",
         "cc",
+        "composer",
+        "cryptomining",
         "download",
         "memdump",
-        "composer",
         // "bruteforce",
         // "initialize",
         // "botnet",
