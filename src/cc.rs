@@ -1,10 +1,11 @@
 /// Module that pretends to run a C compiler.
 
-use rand::{ThreadRng, thread_rng, Rng};
+use rand::{thread_rng, Rng, ThreadRng};
 use std::path::Path;
 
-use utils::{get_random_n_from_list_into_string, csleep};
+use utils::{csleep, get_random_n_from_list_into_string};
 use CFILES_LIST;
+use parse_args::AppConfig;
 
 /// Generate a `String` containing all of the `file_list`'s file's parents as -I flags
 fn generate_includes(file_list: &[&str], max: u32, rng: &mut ThreadRng) -> String {
@@ -19,9 +20,12 @@ fn generate_includes(file_list: &[&str], max: u32, rng: &mut ThreadRng) -> Strin
             }
         }
     }
-    let limited_flags = (0..max).map(|_| *rng.choose(&include_flags).unwrap())
+    let limited_flags = (0..max)
+        .map(|_| *rng.choose(&include_flags).unwrap())
         .collect::<Vec<&str>>();
-    limited_flags.iter().fold(String::new(), |acc, &x| acc + "-I" + x + " ")
+    limited_flags
+        .iter()
+        .fold(String::new(), |acc, &x| acc + "-I" + x + " ")
 }
 
 /// Generate a list of `n` random linker flags given a list of `candidates`.
@@ -33,10 +37,12 @@ fn generate_linker_flags(candidates: &[&str], n: u64, rng: &mut ThreadRng) -> St
             libraries.push(candidate);
         }
     }
-    libraries.iter().fold(String::new(), |acc, &x| acc + "-l" + x + " ")
+    libraries
+        .iter()
+        .fold(String::new(), |acc, &x| acc + "-l" + x + " ")
 }
 
-pub fn run() {
+pub fn run(appconfig: &AppConfig) {
     let packages = include_str!("../data/packages.txt");
     let packages_list: Vec<&str> = packages.lines().collect();
 
@@ -44,18 +50,25 @@ pub fn run() {
     const FLAGS_OPT: &[&str] = &["-O0", "-O1", "-O2", "-O3", "-Og", "-Os"];
     const FLAGS_WARN_BASE: &[&str] = &["-Wall", "-Wall -Wextra"];
     const FLAGS_WARN: &[&str] = &[
-        "-Wno-unused-variable", "-Wno-sign-compare", "-Wno-unknown-pragmas", "-Wno-parentheses",
-        "-Wundef", "-Wwrite-strings", "-Wold-style-definition",
+        "-Wno-unused-variable",
+        "-Wno-sign-compare",
+        "-Wno-unknown-pragmas",
+        "-Wno-parentheses",
+        "-Wundef",
+        "-Wwrite-strings",
+        "-Wold-style-definition",
     ];
-    const FLAGS_F: &[&str] = &[
-        "-fsigned-char", "-funroll-loops", "-fgnu89-inline", "-fPIC"];
-    const FLAGS_ARCH: &[&str] = &[
-        "-march=x86-64", "-mtune=generic", "-pipe",
-    ];
+    const FLAGS_F: &[&str] = &["-fsigned-char", "-funroll-loops", "-fgnu89-inline", "-fPIC"];
+    const FLAGS_ARCH: &[&str] = &["-march=x86-64", "-mtune=generic", "-pipe"];
     const FLAGS_DEF_BASE: &[&str] = &["-DDEBUG", "-DNDEBUG"];
     const FLAGS_DEF: &[&str] = &[
-        "-D_REENTRANT", "-DMATH_LOOP", "-D_LIBS_REENTRANT", "-DNAMESPACE=lib", "-DMODULE_NAME=lib",
-        "-DPIC", "-DSHARED",
+        "-D_REENTRANT",
+        "-DMATH_LOOP",
+        "-D_LIBS_REENTRANT",
+        "-DNAMESPACE=lib",
+        "-DMODULE_NAME=lib",
+        "-DPIC",
+        "-DSHARED",
     ];
 
     let mut rng = thread_rng();
@@ -80,8 +93,8 @@ pub fn run() {
     // Pick a bunch of warning flags.
     let warn = rng.choose(FLAGS_WARN_BASE).unwrap().to_string();
     let num_additional_warn_flags = rng.gen_range(0, FLAGS_WARN.len()) as u64;
-    let warn_additional = get_random_n_from_list_into_string(
-        &mut rng, FLAGS_WARN, num_additional_warn_flags);
+    let warn_additional =
+        get_random_n_from_list_into_string(&mut rng, FLAGS_WARN, num_additional_warn_flags);
     let warn_final = warn + &warn_additional;
 
     // Pick a bunch of f flags
@@ -90,8 +103,7 @@ pub fn run() {
 
     // Pick a bunch of architecture flags.
     let num_arch_flags = rng.gen_range(0, FLAGS_ARCH.len()) as u64;
-    let arch = get_random_n_from_list_into_string(
-        &mut rng, FLAGS_ARCH, num_arch_flags);
+    let arch = get_random_n_from_list_into_string(&mut rng, FLAGS_ARCH, num_arch_flags);
 
     // Get includes for the given files.
     let includes = generate_includes(&chosen_files, 20, &mut rng);
@@ -108,29 +120,37 @@ pub fn run() {
 
     // Compile everything.
     for cfile in &chosen_files {
-        println!("{compiler} -c {opt} {warn}{f}{arch} {includes}{defs} -o {output_file}",
-                 compiler=compiler,
-                 opt=opt,
-                 warn=warn_final,
-                 f=f,
-                 arch=arch,
-                 includes=includes,
-                 defs=defs_final,
-                 output_file=cfile.replace(".c", ".o"));
+        println!(
+            "{compiler} -c {opt} {warn}{f}{arch} {includes}{defs} -o {output_file}",
+            compiler = compiler,
+            opt = opt,
+            warn = warn_final,
+            f = f,
+            arch = arch,
+            includes = includes,
+            defs = defs_final,
+            output_file = cfile.replace(".c", ".o")
+        );
 
         let sleep_length = rng.gen_range(30, 200);
         csleep(sleep_length);
+
+        if appconfig.is_time_to_quit() {
+            return;
+        }
     }
 
     // Link everything together.
     let object_files = chosen_files
         .iter()
         .fold(String::new(), |acc, &x| acc + &x.replace(".c", ".o") + " ");
-    println!("{compiler} -o {output_file} {object_files}{linker_flags}",
-             compiler=compiler,
-             output_file=package,
-             object_files=object_files,
-             linker_flags=linker_flags);
+    println!(
+        "{compiler} -o {output_file} {object_files}{linker_flags}",
+        compiler = compiler,
+        output_file = package,
+        object_files = object_files,
+        linker_flags = linker_flags
+    );
 
     let sleep_length = rng.gen_range(300, 1000);
     csleep(sleep_length);

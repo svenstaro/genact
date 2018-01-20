@@ -20,6 +20,7 @@ rand = "0.4"
 chrono = "0.4"
 url = "1.6"
 lazy_static = "1.0"
+humantime = "1.0"
 
 [target.'cfg(not(target_os = "emscripten"))'.dependencies]
 clap = "2.29"

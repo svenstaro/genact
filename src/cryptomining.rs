@@ -8,8 +8,9 @@ use chrono::prelude::*;
 use chrono::Duration;
 
 use utils::{rand_hex_string, csleep};
+use parse_args::AppConfig;
 
-pub fn run() {
+pub fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
     let num_lines = rng.gen_range(300, 1000);
 
@@ -95,7 +96,11 @@ pub fn run() {
                      solutions=num_solutions_found,
                      elapsed=elapsed);
 
-            csleep(sleep_length);
+        }
+        csleep(sleep_length);
+
+        if appconfig.is_time_to_quit() {
+            return
         }
     }
 }
