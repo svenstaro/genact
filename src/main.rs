@@ -21,6 +21,7 @@ extern crate pbr;
 extern crate rand;
 extern crate url;
 extern crate yansi;
+extern crate regex;
 
 mod bootlog;
 mod cargo;
@@ -28,16 +29,13 @@ mod composer;
 mod cc;
 mod cryptomining;
 mod download;
+mod kernel_compile;
 mod memdump;
 mod utils;
 mod parse_args;
 
 use rand::{thread_rng, Rng};
 use yansi::Paint;
-
-#[cfg(target_os = "emscripten")]
-use utils::csleep;
-
 use parse_args::parse_args;
 
 static BOOTLOG: &str = include_str!("../data/bootlog.txt");
@@ -63,6 +61,7 @@ fn main() {
         "cryptomining",
         "download",
         "memdump",
+        "kernel_compile",
         // "bruteforce",
         // "initialize",
         // "botnet",
@@ -99,6 +98,7 @@ fn main() {
             "download" => download::run(&appconfig),
             "memdump" => memdump::run(&appconfig),
             "composer" => composer::run(&appconfig),
+            "kernel_compile" => kernel_compile::run(&appconfig),
             _ => panic!("Unknown module!"),
         }
         #[cfg(not(target_os = "emscripten"))]
