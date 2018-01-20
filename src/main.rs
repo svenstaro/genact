@@ -20,6 +20,7 @@ extern crate yansi;
 extern crate url;
 #[macro_use]
 extern crate lazy_static;
+extern crate regex;
 
 use rand::{thread_rng, Rng};
 use yansi::Paint;
@@ -39,6 +40,7 @@ mod composer;
 mod cc;
 mod cryptomining;
 mod download;
+mod kernel_compile;
 mod memdump;
 mod utils;
 
@@ -109,6 +111,7 @@ fn main() {
         "cryptomining",
         "download",
         "memdump",
+        "kernel_compile",
         // "bruteforce",
         // "initialize",
         // "botnet",
@@ -159,6 +162,7 @@ fn main() {
             "download" => download::run(),
             "memdump" => memdump::run(),
             "composer" => composer::run(),
+            "kernel_compile" => kernel_compile::run(),
             _ => panic!("Unknown module!"),
         }
     }
