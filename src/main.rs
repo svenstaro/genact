@@ -20,6 +20,7 @@ extern crate yansi;
 extern crate url;
 #[macro_use]
 extern crate lazy_static;
+extern crate regex;
 
 use rand::{thread_rng, Rng};
 use yansi::Paint;
@@ -47,14 +48,12 @@ static BOOTLOG: &str = include_str!("../data/bootlog.txt");
 static CFILES: &str = include_str!("../data/cfiles.txt");
 static PACKAGES: &str = include_str!("../data/packages.txt");
 static COMPOSERS: &str = include_str!("../data/composer.txt");
-static KERNEL: &str = include_str!("../data/kernel.txt");
 
 lazy_static! {
     static ref BOOTLOG_LIST: Vec<&'static str> = BOOTLOG.lines().collect();
     static ref CFILES_LIST: Vec<&'static str> = CFILES.lines().collect();
     static ref PACKAGES_LIST: Vec<&'static str> = PACKAGES.lines().collect();
     static ref COMPOSERS_LIST: Vec<&'static str> = COMPOSERS.lines().collect();
-    static ref KERNEL_LIST: Vec<&'static str> = KERNEL.lines().collect();
 }
 
 #[cfg(not(target_os = "emscripten"))]

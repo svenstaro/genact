@@ -1,21 +1,170 @@
 /// Module that pretends to build a Linux kernel
 
-use rand::{thread_rng, Rng};
+use rand::{thread_rng, Rng, ThreadRng};
+use regex::Regex;
 
 use utils::csleep;
-use KERNEL_LIST;
+use CFILES_LIST;
+
+
+/// Generate a build step for a header file
+fn gen_header(arch: &str, rng: &mut ThreadRng) -> String {
+    const RARE_CMDS: &[&str] = &[
+        "SYSTBL ",
+        "SYSHDR ",
+    ];
+
+    const CMDS: &[&str] = &[
+        "WRAP   ",
+        "CHK    ",
+        "UPD    ",
+    ];
+
+    let cmd = if rng.gen_weighted_bool(15) {
+        rng .choose(&RARE_CMDS).unwrap_or(&"")
+    } else {
+        rng.choose(&CMDS).unwrap_or(&"")
+    };
+
+    let cfile = rng.choose(&CFILES_LIST).unwrap_or(&"");
+    let mut file = format!("{}h", cfile[..cfile.len() - 1].to_owned());
+
+    if file.starts_with("arch") {
+        let re = Regex::new(r"arch/([a-z0-9_])+/").unwrap();
+        file = re.replace(&file, format!("arch/{}/", arch).as_str()).into_owned();
+    }
+
+    format!("  {} {}", cmd, file)
+}
+
+/// Generate a build step for an object file
+fn gen_object(arch: &str, rng: &mut ThreadRng) -> String {
+    const RARE_CMDS: &[&str] = &[
+        "HOSTCC ",
+        "AS     ",
+    ];
+
+    let cmd = if rng.gen_weighted_bool(15) {
+        rng.choose(&RARE_CMDS).unwrap_or(&"")
+    } else {
+        if rng.gen_weighted_bool(3) {
+            "AR     "
+        } else {
+            "CC     "
+        }
+    };
+
+    let cfile = rng.choose(&CFILES_LIST).unwrap_or(&"");
+    let mut file = format!("{}o", cfile[..cfile.len() - 1].to_owned());
+
+    if file.starts_with("arch") {
+        let re = Regex::new(r"arch/([a-z0-9_])+/").unwrap();
+        file = re.replace(&file, format!("arch/{}/", arch).as_str()).into_owned();
+    }
+
+    format!("  {} {}", cmd, file)
+}
+
+/// Generate a 'special' build step
+fn gen_special(arch: &str, rng: &mut ThreadRng) -> String {
+    const SPECIALS: &[&str] = &[
+        "HOSTLD  arch/x86/tools/relocs",
+        "HOSTLD  scripts/mod/modpost",
+        "MKELF   scripts/mod/elfconfig.h",
+        "LDS     arch/x86/entry/vdso/vdso32/vdso32.lds",
+        "LDS     arch/x86/kernel/vmlinux.lds",
+        "LDS     arch/x86/realmode/rm/realmode.lds",
+        "LDS     arch/x86/boot/compressed/vmlinux.lds",
+        "EXPORTS arch/x86/lib/lib-ksyms.o",
+        "EXPORTS lib/lib-ksyms.o",
+        "MODPOST vmlinux.o",
+        "SORTEX  vmlinux",
+        "SYSMAP  System.map",
+        "VOFFSET arch/x86/boot/compressed/../voffset.h",
+        "OBJCOPY arch/x86/entry/vdso/vdso32.so",
+        "OBJCOPY arch/x86/realmode/rm/realmode.bin",
+        "OBJCOPY arch/x86/boot/compressed/vmlinux.bin",
+        "OBJCOPY arch/x86/boot/vmlinux.bin",
+        "VDSO2C  arch/x86/entry/vdso/vdso-image-32.c",
+        "VDSO    arch/x86/entry/vdso/vdso32.so.dbg",
+        "RELOCS  arch/x86/realmode/rm/realmode.relocs",
+        "PASYMS  arch/x86/realmode/rm/pasyms.h",
+        "XZKERN  arch/x86/boot/compressed/vmlinux.bin.xz",
+        "MKPIGGY arch/x86/boot/compressed/piggy.S",
+        "DATAREL arch/x86/boot/compressed/vmlinux",
+        "ZOFFSET arch/x86/boot/zoffset.h",
+    ];
+
+    let mut special = rng.choose(&SPECIALS).unwrap_or(&"").to_string();
+    let re = Regex::new(r"arch/([a-z0-9_])+/").unwrap();
+    special = re.replace(&special, format!("arch/{}/", arch).as_str()).into_owned();
+
+    format!("  {}", special)
+}
+
+/// Generates a line from `make` output
+fn gen_line(arch: &str, rng: &mut ThreadRng) -> String {
+    if rng.gen_weighted_bool(50) {
+        gen_special(arch, rng)
+    } else {
+        if rng.gen_weighted_bool(10) {
+            gen_header(arch, rng)
+        } else {
+            gen_object(arch, rng)
+        }
+    }
+}
 
 pub fn run() {
     let mut rng = thread_rng();
     let num_lines = rng.gen_range(50, 500);
 
+    const ARCHES: &[&str] = &[
+        "alpha",
+        "arc",
+        "arm",
+        "arm64",
+        "blackfin",
+        "c6x",
+        "cris",
+        "frv",
+        "h8300",
+        "hexagon",
+        "ia64",
+        "m32r",
+        "m68k",
+        "metag",
+        "microblaze",
+        "mips",
+        "mn10300",
+        "nios2",
+        "openrisc",
+        "parisc",
+        "powerpc",
+        "s390",
+        "score",
+        "sh",
+        "sparc",
+        "tile",
+        "um",
+        "unicore32",
+        "x86",
+        "xtensa",
+    ];
+
+    let arch = rng.choose(&ARCHES).unwrap_or(&"x86");
+
     for _ in 1..num_lines {
-        let choice = rng.choose(&KERNEL_LIST).unwrap_or(&"");
+        let line = gen_line(arch, &mut rng);
         let sleep_length = rng.gen_range(10, 1000);
 
-        println!("{}", choice);
+        println!("{}", line);
         csleep(sleep_length);
     }
+
+    println!("BUILD   arch/{}/boot/bzImage", arch);
+
+    println!();
 
     let bytes: u32 = rng.gen_range(9000, 1000000);
     let padded_bytes: u32 = rng.gen_range(bytes, 1100000);
