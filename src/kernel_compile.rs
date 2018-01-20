@@ -68,36 +68,35 @@ fn gen_object(arch: &str, rng: &mut ThreadRng) -> String {
 /// Generate a 'special' build step
 fn gen_special(arch: &str, rng: &mut ThreadRng) -> String {
     const SPECIALS: &[&str] = &[
-        "HOSTLD  arch/x86/tools/relocs",
+        "HOSTLD  arch/ARCH/tools/relocs",
         "HOSTLD  scripts/mod/modpost",
         "MKELF   scripts/mod/elfconfig.h",
-        "LDS     arch/x86/entry/vdso/vdso32/vdso32.lds",
-        "LDS     arch/x86/kernel/vmlinux.lds",
-        "LDS     arch/x86/realmode/rm/realmode.lds",
-        "LDS     arch/x86/boot/compressed/vmlinux.lds",
-        "EXPORTS arch/x86/lib/lib-ksyms.o",
+        "LDS     arch/ARCH/entry/vdso/vdso32/vdso32.lds",
+        "LDS     arch/ARCH/kernel/vmlinux.lds",
+        "LDS     arch/ARCH/realmode/rm/realmode.lds",
+        "LDS     arch/ARCH/boot/compressed/vmlinux.lds",
+        "EXPORTS arch/ARCH/lib/lib-ksyms.o",
         "EXPORTS lib/lib-ksyms.o",
         "MODPOST vmlinux.o",
         "SORTEX  vmlinux",
         "SYSMAP  System.map",
-        "VOFFSET arch/x86/boot/compressed/../voffset.h",
-        "OBJCOPY arch/x86/entry/vdso/vdso32.so",
-        "OBJCOPY arch/x86/realmode/rm/realmode.bin",
-        "OBJCOPY arch/x86/boot/compressed/vmlinux.bin",
-        "OBJCOPY arch/x86/boot/vmlinux.bin",
-        "VDSO2C  arch/x86/entry/vdso/vdso-image-32.c",
-        "VDSO    arch/x86/entry/vdso/vdso32.so.dbg",
-        "RELOCS  arch/x86/realmode/rm/realmode.relocs",
-        "PASYMS  arch/x86/realmode/rm/pasyms.h",
-        "XZKERN  arch/x86/boot/compressed/vmlinux.bin.xz",
-        "MKPIGGY arch/x86/boot/compressed/piggy.S",
-        "DATAREL arch/x86/boot/compressed/vmlinux",
-        "ZOFFSET arch/x86/boot/zoffset.h",
+        "VOFFSET arch/ARCH/boot/compressed/../voffset.h",
+        "OBJCOPY arch/ARCH/entry/vdso/vdso32.so",
+        "OBJCOPY arch/ARCH/realmode/rm/realmode.bin",
+        "OBJCOPY arch/ARCH/boot/compressed/vmlinux.bin",
+        "OBJCOPY arch/ARCH/boot/vmlinux.bin",
+        "VDSO2C  arch/ARCH/entry/vdso/vdso-image-32.c",
+        "VDSO    arch/ARCH/entry/vdso/vdso32.so.dbg",
+        "RELOCS  arch/ARCH/realmode/rm/realmode.relocs",
+        "PASYMS  arch/ARCH/realmode/rm/pasyms.h",
+        "XZKERN  arch/ARCH/boot/compressed/vmlinux.bin.xz",
+        "MKPIGGY arch/ARCH/boot/compressed/piggy.S",
+        "DATAREL arch/ARCH/boot/compressed/vmlinux",
+        "ZOFFSET arch/ARCH/boot/zoffset.h",
     ];
 
-    let mut special = rng.choose(&SPECIALS).unwrap_or(&"").to_string();
-    let re = Regex::new(r"arch/([a-z0-9_])+/").unwrap();
-    special = re.replace(&special, format!("arch/{}/", arch).as_str()).into_owned();
+    let special = rng.choose(&SPECIALS).unwrap_or(&"").to_string();
+    let special = special.replace("ARCH", arch);
 
     format!("  {}", special)
 }
