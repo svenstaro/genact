@@ -55,7 +55,10 @@ script:
 
 before_deploy:
   # If this is a binary deployment...
-  - if [[ -n $TARGET && $TARGET != "asmjs-unknown-emscripten" ]]; then cp -a target/$TARGET/release/$BIN_NAME $PROPER_NAME && strip $PROPER_NAME && upx $PROPER_NAME; fi
+  - if [[ -n $TARGET && $TARGET != "asmjs-unknown-emscripten" ]]; then cp -a target/$TARGET/release/$BIN_NAME $PROPER_NAME && strip $PROPER_NAME; fi
+  - # Run upx on the binary if this is a deployment for Linux or Windows
+  - if [[ $TARGET = "x86_64-pc-windows-gnu" ]]; then upx $PROPER_NAME; fi
+  - if [[ $TARGET = "x86_64-unknown-linux-musl" ]]; then upx $PROPER_NAME; fi
     # If this is a web deployment...
   - if [[ $TARGET = "asmjs-unknown-emscripten" ]]; then cp target/asmjs-unknown-emscripten/release/genact.js static/; fi
 
