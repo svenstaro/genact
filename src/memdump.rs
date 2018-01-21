@@ -46,7 +46,7 @@ pub fn run(appconfig: &AppConfig) {
         let row_delay = rng.gen_range(100, 200);
         csleep(row_delay);
 
-        if appconfig.is_time_to_quit() {
+        if appconfig.should_exit() {
             return;
         }
         println!();

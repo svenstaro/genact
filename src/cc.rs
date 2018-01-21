@@ -135,7 +135,7 @@ pub fn run(appconfig: &AppConfig) {
         let sleep_length = rng.gen_range(30, 200);
         csleep(sleep_length);
 
-        if appconfig.is_time_to_quit() {
+        if appconfig.should_exit() {
             return;
         }
     }

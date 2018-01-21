@@ -160,7 +160,7 @@ pub fn run(appconfig: &AppConfig) {
         println!("{}", line);
         csleep(sleep_length);
 
-        if appconfig.is_time_to_quit() {
+        if appconfig.should_exit() {
             return;
         }
     }

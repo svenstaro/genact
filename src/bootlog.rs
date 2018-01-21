@@ -32,7 +32,7 @@ pub fn run(appconfig: &AppConfig) {
         println!();
         csleep(sleep_length);
 
-        if appconfig.is_time_to_quit() {
+        if appconfig.should_exit() {
             return;
         }
     }

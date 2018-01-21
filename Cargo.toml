@@ -25,6 +25,7 @@ regex = "0.2.5"
 
 [target.'cfg(not(target_os = "emscripten"))'.dependencies]
 clap = "2.29"
+ctrlc = "3.1"
 
 [target.'cfg(target_os = "emscripten")'.dependencies]
 emscripten-sys = "0.3"

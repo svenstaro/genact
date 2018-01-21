@@ -63,7 +63,7 @@ pub fn run(appconfig: &AppConfig) {
             pb.add(bytes_per_sleep);
             csleep(sleep_millis);
 
-            if appconfig.is_time_to_quit() {
+            if appconfig.should_exit() {
                 return;
             }
         }

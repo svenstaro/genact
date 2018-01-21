@@ -23,16 +23,24 @@ pub struct AppConfig {
 
 impl AppConfig {
     /// Check whether it's time to stop running.
-    pub fn is_time_to_quit(&self) -> bool {
+    pub fn should_exit(&self) -> bool {
+        // Check whether CTRL-C was pressed.
+        #[cfg(not(target_os = "emscripten"))]
+        {
+            use std::sync::atomic::Ordering;
+            use CTRLC_PRESSED;
+            if CTRLC_PRESSED.load(Ordering::SeqCst) {
+                return true;
+            }
+        }
+
+        // Check if maximum running time is exceeded.
         if let Some(ea) = self.exit_after {
             if self.started_at.elapsed() > *ea {
-                true
-            } else {
-                false
+                return true;
             }
-        } else {
-            false
         }
+        return false;
     }
 }
 

@@ -6,6 +6,9 @@
 #[macro_use]
 extern crate clap;
 
+#[cfg(not(target_os = "emscripten"))]
+extern crate ctrlc;
+
 #[cfg(target_os = "emscripten")]
 extern crate emscripten_sys;
 
@@ -50,6 +53,14 @@ lazy_static! {
     static ref COMPOSERS_LIST: Vec<&'static str> = COMPOSERS.lines().collect();
 }
 
+#[cfg(not(target_os = "emscripten"))]
+use std::sync::atomic::AtomicBool;
+
+#[cfg(not(target_os = "emscripten"))]
+lazy_static! {
+    static ref CTRLC_PRESSED: AtomicBool = AtomicBool::new(false);
+}
+
 fn main() {
     Paint::enable_windows_ascii();
 
@@ -85,6 +96,11 @@ fn main() {
             }
             process::exit(0);
         }
+
+        use std::sync::atomic::Ordering;
+        ctrlc::set_handler(move || {
+            CTRLC_PRESSED.store(true, Ordering::SeqCst);
+        }).expect("Error setting Ctrl-C handler");
     }
 
     let mut rng = thread_rng();
@@ -104,7 +120,8 @@ fn main() {
         #[cfg(not(target_os = "emscripten"))]
         {
             use std::process;
-            if appconfig.is_time_to_quit() {
+            if appconfig.should_exit() {
+                println!("Saving work to disk...");
                 process::exit(0);
             }
         }
