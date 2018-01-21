@@ -3,10 +3,11 @@
 use rand::{thread_rng, Rng};
 use yansi::Paint;
 
-use utils::{dprint, csleep};
+use parse_args::AppConfig;
+use utils::{csleep, dprint};
 use BOOTLOG_LIST;
 
-pub fn run() {
+pub fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
     let num_lines = rng.gen_range(50, 200);
 
@@ -30,5 +31,9 @@ pub fn run() {
 
         println!();
         csleep(sleep_length);
+
+        if appconfig.is_time_to_quit() {
+            return;
+        }
     }
 }

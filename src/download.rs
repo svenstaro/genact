@@ -1,5 +1,3 @@
-/// Module that dumps some random memory locations in a slightly cool fashion.
-
 use rand::{thread_rng, Rng, ThreadRng};
 use std::path::Path;
 use std::cmp::max;
@@ -11,6 +9,7 @@ use utils::TermWriter;
 
 use utils::csleep;
 use CFILES_LIST;
+use parse_args::AppConfig;
 
 pub fn gen_file_name(files: &[&str], extension: &str, rng: &mut ThreadRng) -> String {
     let chosen_file = rng.choose(files).unwrap_or(&"");
@@ -18,12 +17,12 @@ pub fn gen_file_name(files: &[&str], extension: &str, rng: &mut ThreadRng) -> St
     path.file_name().unwrap().to_str().unwrap().to_string()
 }
 
-pub fn run() {
+pub fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
 
     const EXTENSIONS: &[&str] = &[
-        "iso", "zip", "rar", "tar.gz",
-        "tar.bz2", "tar.xz", "deb", "rpm", "exe"];
+        "iso", "zip", "rar", "tar.gz", "tar.bz2", "tar.xz", "deb", "rpm", "exe"
+    ];
 
     // We'll use the same extension for all files of this whole run to make things seem more
     // realistic.
@@ -56,10 +55,17 @@ pub fn run() {
         #[cfg(not(target_os = "emscripten"))]
         let mut pb = ProgressBar::new(file_bytes);
         pb.set_units(Units::Bytes);
-        pb.message(&format!("{} ", gen_file_name(&CFILES_LIST, extension, &mut rng)));
+        pb.message(&format!(
+            "{} ",
+            gen_file_name(&CFILES_LIST, extension, &mut rng)
+        ));
         for _ in 0..cycles {
             pb.add(bytes_per_sleep);
             csleep(sleep_millis);
+
+            if appconfig.is_time_to_quit() {
+                return;
+            }
         }
         pb.finish_println("");
     }

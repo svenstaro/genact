@@ -1,1 +1,1 @@
-link-args = ["-s", "ASYNCIFY=1"]
+link-args = ["-s", "EMTERPRETIFY=1", "-s", "EMTERPRETIFY_ASYNC=1"]

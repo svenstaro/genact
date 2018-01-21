@@ -5,7 +5,7 @@ use regex::Regex;
 
 use utils::csleep;
 use CFILES_LIST;
-
+use parse_args::AppConfig;
 
 /// Generate a build step for a header file
 fn gen_header(arch: &str, rng: &mut ThreadRng) -> String {
@@ -114,7 +114,7 @@ fn gen_line(arch: &str, rng: &mut ThreadRng) -> String {
     }
 }
 
-pub fn run() {
+pub fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
     let num_lines = rng.gen_range(50, 500);
 
@@ -159,6 +159,10 @@ pub fn run() {
 
         println!("{}", line);
         csleep(sleep_length);
+
+        if appconfig.is_time_to_quit() {
+            return;
+        }
     }
 
     println!("BUILD   arch/{}/boot/bzImage", arch);

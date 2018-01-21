@@ -47,7 +47,7 @@ or (on Docker)
 
 The help:
 
-    genact 0.2.3
+    genact 0.3.0
     Sven-Hendrik Haase <svenstaro@gmail.com>
     A nonsense activity generator
 
@@ -60,9 +60,9 @@ The help:
         -V, --version         Prints version information
 
     OPTIONS:
-        -m, --modules <MODULE>...    Run only these modules [values: bootlog, cargo, cc, composer, cryptomining, download,
-                                     memdump]
-
+        -e, --exitafter <EXITAFTER>    Exit after running for this long (format example: 2h10min)
+        -m, --modules <MODULE>...      Run only these modules [values: bootlog, cargo, cc, composer, cryptomining, download,
+                                       memdump, kernel_compile]
 
 In the web version, you can run specific modules by providing them as `?module`
 parameters like this: https://svenstaro.github.io/genact?module=cc&module=memdump
@@ -87,3 +87,4 @@ This is mostly a note for me on how to release this thing:
 - `git commit` and `git tag -s`, `git push`.
 - `cargo publish`
 - Releases will automatically be deployed by Travis.
+- Update AUR package.

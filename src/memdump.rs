@@ -4,15 +4,16 @@ use rand::{thread_rng, Rng};
 use std::io::Write;
 use std::io::stdout;
 
-use utils::{dprint, csleep, rand_hex_string, is_printable_ascii};
+use utils::{csleep, dprint, is_printable_ascii, rand_hex_string};
+use parse_args::AppConfig;
 
-pub fn run() {
+pub fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
 
     let mut current_loc = (rng.gen_range(0, 2u64.pow(63)) / 16) * 16;
     let num_lines = rng.gen_range(50, 200);
     for _ in 1..num_lines {
-        dprint(format!("{loc:016x}  ", loc=current_loc), 10);
+        dprint(format!("{loc:016x}  ", loc = current_loc), 10);
         current_loc += 0x10;
 
         let values = (0..16)
@@ -40,10 +41,14 @@ pub fn run() {
                 ascii_repr.push('.');
             }
         }
-        dprint(format!(" |{ascii_repr}|", ascii_repr=ascii_repr), 10);
+        dprint(format!(" |{ascii_repr}|", ascii_repr = ascii_repr), 10);
 
         let row_delay = rng.gen_range(100, 200);
         csleep(row_delay);
+
+        if appconfig.is_time_to_quit() {
+            return;
+        }
         println!();
     }
 }

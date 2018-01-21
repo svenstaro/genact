@@ -14,25 +14,14 @@ extern crate emscripten_sys;
 extern crate stdweb;
 
 extern crate chrono;
-extern crate pbr;
-extern crate rand;
-extern crate yansi;
-extern crate url;
+extern crate humantime;
 #[macro_use]
 extern crate lazy_static;
+extern crate pbr;
+extern crate rand;
+extern crate url;
+extern crate yansi;
 extern crate regex;
-
-use rand::{thread_rng, Rng};
-use yansi::Paint;
-
-#[cfg(not(target_os = "emscripten"))]
-use clap::{Arg, App};
-
-#[cfg(target_os = "emscripten")]
-use stdweb::web;
-
-#[cfg(target_os = "emscripten")]
-use url::Url;
 
 mod bootlog;
 mod cargo;
@@ -43,6 +32,11 @@ mod download;
 mod kernel_compile;
 mod memdump;
 mod utils;
+mod parse_args;
+
+use rand::{thread_rng, Rng};
+use yansi::Paint;
+use parse_args::parse_args;
 
 static BOOTLOG: &str = include_str!("../data/bootlog.txt");
 static CFILES: &str = include_str!("../data/cfiles.txt");
@@ -54,50 +48,6 @@ lazy_static! {
     static ref CFILES_LIST: Vec<&'static str> = CFILES.lines().collect();
     static ref PACKAGES_LIST: Vec<&'static str> = PACKAGES.lines().collect();
     static ref COMPOSERS_LIST: Vec<&'static str> = COMPOSERS.lines().collect();
-}
-
-#[cfg(not(target_os = "emscripten"))]
-fn parse_args(all_modules: Vec<&str>) -> Vec<String> {
-    use std::process;
-
-    let app = App::new(crate_name!())
-        .version(crate_version!())
-        .author(crate_authors!())
-        .about(crate_description!())
-        .arg(
-            Arg::with_name("list")
-            .short("l")
-            .long("list-modules")
-            .help("List available modules"),
-            )
-        .arg(
-            Arg::with_name("modules")
-            .short("m")
-            .long("modules")
-            .multiple(true)
-            .value_name("MODULE")
-            .takes_value(true)
-            .possible_values(&all_modules)
-            .help("Run only these modules"),
-            )
-        .get_matches();
-
-    if app.is_present("list") {
-        println!("Available modules:");
-        for module in all_modules {
-            println!("  {}", module);
-        }
-        process::exit(0);
-    }
-
-    if app.is_present("modules") {
-        app.values_of("modules")
-            .unwrap()
-            .map(|x| x.to_string())
-            .collect()
-    } else {
-        all_modules.iter().map(|x| x.to_string()).collect()
-    }
 }
 
 fn main() {
@@ -118,52 +68,45 @@ fn main() {
         // "heartbeat",
     ];
 
-    let modules_to_run: Vec<String>;
-
-    #[cfg(not(target_os = "emscripten"))]
-    {
-        modules_to_run = parse_args(all_modules);
-    }
-
     #[cfg(target_os = "emscripten")]
     {
         stdweb::initialize();
-        let mut temp_modules = vec![];
-        let location = web::document().location().unwrap();
-        let parsed_url = Url::parse(&location.href()).unwrap();
-        let pairs = parsed_url.query_pairs();
-        let filtered = pairs.filter(|&(ref x, _)| x == "module");
-        for (_, query_val) in filtered {
-            let actual_val = &&*query_val;
-            if all_modules.contains(actual_val) {
-                temp_modules.push(actual_val.to_string());
-            }
-        }
-        if temp_modules.is_empty() {
-            modules_to_run = all_modules.iter().map(|x| x.to_string()).collect();
-        } else {
-            modules_to_run = temp_modules;
-        }
     }
 
-    #[cfg(target_os = "emscripten")]
+    let appconfig = parse_args(&all_modules);
+
+    #[cfg(not(target_os = "emscripten"))]
     {
-        utils::csleep(10);
+        use std::process;
+        if appconfig.list_modules_and_exit {
+            println!("Available modules:");
+            for module in all_modules {
+                println!("  {}", module);
+            }
+            process::exit(0);
+        }
     }
 
     let mut rng = thread_rng();
     loop {
-        let choice: &str = rng.choose(&modules_to_run).unwrap();
+        let choice: &str = rng.choose(&appconfig.modules).unwrap();
         match choice {
-            "bootlog" => bootlog::run(),
-            "cargo" => cargo::run(),
-            "cryptomining" => cryptomining::run(),
-            "cc" => cc::run(),
-            "download" => download::run(),
-            "memdump" => memdump::run(),
-            "composer" => composer::run(),
-            "kernel_compile" => kernel_compile::run(),
+            "bootlog" => bootlog::run(&appconfig),
+            "cargo" => cargo::run(&appconfig),
+            "cryptomining" => cryptomining::run(&appconfig),
+            "cc" => cc::run(&appconfig),
+            "download" => download::run(&appconfig),
+            "memdump" => memdump::run(&appconfig),
+            "composer" => composer::run(&appconfig),
+            "kernel_compile" => kernel_compile::run(&appconfig),
             _ => panic!("Unknown module!"),
+        }
+        #[cfg(not(target_os = "emscripten"))]
+        {
+            use std::process;
+            if appconfig.is_time_to_quit() {
+                process::exit(0);
+            }
         }
     }
 }
