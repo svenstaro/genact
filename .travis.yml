@@ -57,7 +57,7 @@ before_deploy:
   # If this is a binary deployment...
   - if [[ -n $TARGET && $TARGET != "wasm32-unknown-emscripten" ]]; then cp -a target/$TARGET/release/$BIN_NAME $PROPER_NAME && strip $PROPER_NAME && upx $PROPER_NAME; fi
     # If this is a web deployment...
-  - if [[ $TARGET = "wasm32-unknown-emscripten" ]]; then cp target/wasm32-unknown-emscripten/release/genact.{js,wasm} static/; fi
+  - if [[ $TARGET = "wasm32-unknown-emscripten" ]]; then cp target/wasm32-unknown-emscripten/release/genact.js static/; fi
 
 deploy:
   - provider: releases
