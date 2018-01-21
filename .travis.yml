@@ -71,9 +71,7 @@ deploy:
     on:
       branch: master
       tags: true
-      condition: $TRAVIS_RUST_VERSION = stable
-      condition: $TARGET != "asmjs-unknown-emscripten"
-      condition: -n $TARGET
+      condition: $TRAVIS_RUST_VERSION = stable && -n $TARGET && $TARGET != "asmjs-unknown-emscripten"
   - provider: pages
     local_dir: ${TRAVIS_BUILD_DIR}/static
     skip_cleanup: true
@@ -82,6 +80,4 @@ deploy:
     on:
       branch: master
       tags: true
-      condition: $TRAVIS_RUST_VERSION = stable
-      condition: $TARGET = "asmjs-unknown-emscripten"
-      condition: -n $TARGET
+      condition: $TRAVIS_RUST_VERSION = stable && $TARGET = "asmjs-unknown-emscripten"
