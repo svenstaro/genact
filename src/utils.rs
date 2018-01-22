@@ -87,7 +87,7 @@ pub struct TermWriter;
 impl Write for TermWriter {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         let n = buf.len();
-        let s = str::from_utf8(&buf).unwrap();
+        let s = str::from_utf8(buf).unwrap();
         js! {
             window.term.write(@{s});
         }

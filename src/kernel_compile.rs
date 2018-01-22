@@ -21,9 +21,9 @@ fn gen_header(arch: &str, rng: &mut ThreadRng) -> String {
     ];
 
     let cmd = if rng.gen_weighted_bool(15) {
-        rng .choose(&RARE_CMDS).unwrap_or(&"")
+        rng .choose(RARE_CMDS).unwrap_or(&"")
     } else {
-        rng.choose(&CMDS).unwrap_or(&"")
+        rng.choose(CMDS).unwrap_or(&"")
     };
 
     let cfile = rng.choose(&CFILES_LIST).unwrap_or(&"");
@@ -45,13 +45,11 @@ fn gen_object(arch: &str, rng: &mut ThreadRng) -> String {
     ];
 
     let cmd = if rng.gen_weighted_bool(15) {
-        rng.choose(&RARE_CMDS).unwrap_or(&"")
+        rng.choose(RARE_CMDS).unwrap_or(&"")
+    } else if rng.gen_weighted_bool(3) {
+        "AR     "
     } else {
-        if rng.gen_weighted_bool(3) {
-            "AR     "
-        } else {
-            "CC     "
-        }
+        "CC     "
     };
 
     let cfile = rng.choose(&CFILES_LIST).unwrap_or(&"");
@@ -95,7 +93,7 @@ fn gen_special(arch: &str, rng: &mut ThreadRng) -> String {
         "ZOFFSET arch/ARCH/boot/zoffset.h",
     ];
 
-    let special = rng.choose(&SPECIALS).unwrap_or(&"").to_string();
+    let special = rng.choose(SPECIALS).unwrap_or(&"").to_string();
     let special = special.replace("ARCH", arch);
 
     format!("  {}", special)
@@ -105,12 +103,10 @@ fn gen_special(arch: &str, rng: &mut ThreadRng) -> String {
 fn gen_line(arch: &str, rng: &mut ThreadRng) -> String {
     if rng.gen_weighted_bool(50) {
         gen_special(arch, rng)
+    } else if rng.gen_weighted_bool(10) {
+        gen_header(arch, rng)
     } else {
-        if rng.gen_weighted_bool(10) {
-            gen_header(arch, rng)
-        } else {
-            gen_object(arch, rng)
-        }
+        gen_object(arch, rng)
     }
 }
 
@@ -151,7 +147,7 @@ pub fn run(appconfig: &AppConfig) {
         "xtensa",
     ];
 
-    let arch = rng.choose(&ARCHES).unwrap_or(&"x86");
+    let arch = rng.choose(ARCHES).unwrap_or(&"x86");
 
     for _ in 1..num_lines {
         let line = gen_line(arch, &mut rng);
@@ -169,8 +165,8 @@ pub fn run(appconfig: &AppConfig) {
 
     println!();
 
-    let bytes: u32 = rng.gen_range(9000, 1000000);
-    let padded_bytes: u32 = rng.gen_range(bytes, 1100000);
+    let bytes: u32 = rng.gen_range(9000, 1_000_000);
+    let padded_bytes: u32 = rng.gen_range(bytes, 1_100_000);
 
     println!("Setup is {} bytes (padded to {} bytes).",
              bytes,
@@ -179,7 +175,7 @@ pub fn run(appconfig: &AppConfig) {
     let system: u32 = rng.gen_range(300, 3000);
     println!("System is {} kB", system);
 
-    let crc: u32 = rng.gen_range(0x10000000, 0xffffffff);
+    let crc: u32 = rng.gen_range(0x1000_0000, 0xffff_ffff);
 
     println!("CRC {:x}", crc);
 

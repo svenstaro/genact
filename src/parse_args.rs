@@ -7,7 +7,7 @@ use std::time::Instant;
 
 #[cfg(not(target_os = "emscripten"))]
 fn is_parse_duration_format(v: String) -> Result<(), String> {
-    if let Ok(_) = parse_duration(&v) {
+    if parse_duration(&v).is_ok() {
         Ok(())
     } else {
         Err(String::from("Couldn't parse the time format"))
@@ -40,7 +40,7 @@ impl AppConfig {
                 return true;
             }
         }
-        return false;
+        false
     }
 }
 
@@ -65,7 +65,7 @@ pub fn parse_args(all_modules: &[&str]) -> AppConfig {
                 .multiple(true)
                 .value_name("MODULE")
                 .takes_value(true)
-                .possible_values(&all_modules)
+                .possible_values(all_modules)
                 .help("Run only these modules"),
         )
         .arg(
@@ -79,11 +79,7 @@ pub fn parse_args(all_modules: &[&str]) -> AppConfig {
         )
         .get_matches();
 
-    let list_modules_and_exit = if matches.is_present("list") {
-        true
-    } else {
-        false
-    };
+    let list_modules_and_exit = matches.is_present("list");
 
     let modules_to_run = if matches.is_present("modules") {
         matches
