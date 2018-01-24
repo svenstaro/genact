@@ -30,6 +30,7 @@ It's compatible with Linux, OSX, Windows 10 (it needs a recent Windows 10 to get
 **With Cargo**: If you have a somewhat recent version of Rust and Cargo installed, you can run
 
     cargo install genact
+    genact
 
 ## Running
 
@@ -74,10 +75,6 @@ You should have a recent version of rust and cargo installed. You don't need nig
     git clone https://github.com/svenstaro/genact.git
     cd genact
     cargo run
-
-## Contributing
-
-If you want to add a cool module just implement it, lint it with clippy and make a pull request with a screenshot. I will probably accept it.
 
 ## Releasing
 
