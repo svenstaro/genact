@@ -18,8 +18,8 @@ build-apple:
 
 .PHONY: build-web
 build-web:
-	cargo web build --target-webasm-emscripten --use-system-emscripten --release
+	cargo web build --target-asmjs-emscripten --use-system-emscripten --release
 
 .PHONY: run-web
 run-web:
-	cargo web start --target-webasm-emscripten --use-system-emscripten --release
+	cargo web start --target-asmjs-emscripten --use-system-emscripten --release
