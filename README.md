@@ -32,6 +32,11 @@ It's compatible with Linux, OSX, Windows 10 (it needs a recent Windows 10 to get
     cargo install genact
     genact
 
+**With snap**: If you are panic to run unconfined program on your Linux distro, you can
+
+    snapcraft cleanbuild
+    sudo snap install ./snap install genact_*.snap
+
 ## Running
 
 To see a list of all available options, you can run
