@@ -1,9 +1,7 @@
 use rand::{thread_rng, Rng};
-use yansi::Paint;
 use parse_args::AppConfig;
-use spinners::{Spinner, Spinners};
-use std::thread::sleep;
-use std::time::Duration;
+use utils::{dprint, csleep};
+use yansi::Paint;
 
 pub fn run(appconfig: &AppConfig) {
 
@@ -117,93 +115,92 @@ pub fn run(appconfig: &AppConfig) {
         "Zeroing Crime Network"
     ];
 
+    const SPINNERS: &[&str] = &["/", "-", "\\", "|"];
+    const SPINNER_SLEEP: u64 = 50;
+    const TEXT_SLEEP: u64 = 15;
+    const MAX_SPINNER_LOOPS: u8 = 20;
+
     let mut rng = thread_rng();
+    let mut simcity = "";
 
     for _ in 0..500 {
-        let sleep_length = rng.gen_range(200, 10000);
+        let spinner_loops = rng.gen_range(1, MAX_SPINNER_LOOPS);
 
-        // A number between 1 and 66 (inclusive)
-        let mut spinner_id: u8 = ((rng.next_u32() % 66) as u8) + 1;
-        let spinner_enum = match spinner_id {
-            1 => Spinners::Dots,
-            2 => Spinners::Dots2,
-            3 => Spinners::Dots3,
-            4 => Spinners::Dots4,
-            5 => Spinners::Dots5,
-            6 => Spinners::Dots6,
-            7 => Spinners::Dots7,
-            8 => Spinners::Dots8,
-            9 => Spinners::Dots9,
-            10 => Spinners::Dots10,
-            11 => Spinners::Dots11,
-            12 => Spinners::Dots12,
-            13 => Spinners::Line,
-            14 => Spinners::Line2,
-            15 => Spinners::Pipe,
-            16 => Spinners::SimpleDots,
-            18 => Spinners::Star,
-            19 => Spinners::Star2,
-            20 => Spinners::Flip,
-            21 => Spinners::Hamburger,
-            22 => Spinners::GrowVertical,
-            23 => Spinners::GrowHorizontal,
-            24 => Spinners::Balloon,
-            25 => Spinners::Balloon2,
-            26 => Spinners::Noise,
-            27 => Spinners::Bounce,
-            28 => Spinners::BoxBounce,
-            29 => Spinners::BoxBounce2,
-            30 => Spinners::Triangle,
-            31 => Spinners::Arc,
-            32 => Spinners::Circle,
-            33 => Spinners::SquareCorners,
-            34 => Spinners::CircleQuarters,
-            35 => Spinners::CircleHalves,
-            36 => Spinners::Squish,
-            37 => Spinners::Toggle,
-            38 => Spinners::Toggle2,
-            39 => Spinners::Toggle3,
-            40 => Spinners::Toggle4,
-            42 => Spinners::Toggle6,
-            43 => Spinners::Toggle7,
-            44 => Spinners::Toggle8,
-            45 => Spinners::Toggle9,
-            48 => Spinners::Toggle12,
-            49 => Spinners::Toggle13,
-            50 => Spinners::Arrow,
-            51 => Spinners::Arrow2,
-            52 => Spinners::Arrow3,
-            54 => Spinners::BouncingBall,
-            55 => Spinners::Smiley,
-            58 => Spinners::Clock,
-            59 => Spinners::Earth,
-            60 => Spinners::Moon,
-            64 => Spinners::Dqpb,
-            65 => Spinners::Weather,
-            _ => Spinners::Dots9,
+        // Message chosen from SIMCITY above
+        let last_simcity = simcity;
+        simcity = rng.choose(SIMCITY).unwrap_or(&"");
+
+        // Don't choose the same message twice in a row
+        while simcity == last_simcity {
+            // Select another message
+            simcity = rng.choose(SIMCITY).unwrap_or(&"");
+        }
+
+        // Choose a status/resolution per "task"
+        let resolution_id: u8 = ((rng.next_u32() % 100) as u8) + 1;
+        let resolution = match resolution_id {
+            1 ... 4 => "FAIL",
+            5 ... 9 => "YES",
+            10 ... 14 => "SUCCESS",
+            _ => "OK",
         };
 
-        // A number between 1 and 200 (inclusive)
-        let mut color_id: u8 = ((rng.next_u32() % 200) as u8) + 1;
-        let color_enum = match color_id {
-            1 ... 10 => Paint::blue,
-            10 ... 14 => Paint::green,
-            14 ... 16 => Paint::yellow,
-            16 ... 17 => Paint::red,
+        // Select a color
+        let mut color_id: u8 = ((rng.next_u32() % 20) as u8) + 1;
+        if resolution_id < 5 {
+            // Use red for FAIL
+            color_id = 1;
+        } else if resolution_id > 50 {
+            // Use white most of the time
+            color_id = 15;
+        }
+        let color_func = match color_id {
+            1 ... 2 => Paint::red,
+            3 ... 4 => Paint::green,
+            5 ... 6 => Paint::cyan,
+            7 ... 10 => Paint::blue,
             _ => Paint::white,
         };
 
-        // A message, chosen from SIMCITY above
-        let simcity_msg = rng.choose(SIMCITY).unwrap_or(&"").to_string();
+        // Prepare and color the messages
+        let simcity_msg = color_func(simcity.to_string());
+        let resolution_msg = color_func(resolution.to_string());
+        let dots = color_func("... ".to_string());
+        let unchecked_checkbox = "[ ] ";
+        let checked_checkbox = "[o] ";
 
-        // Create a spinner with a (sometimes) colored message)
-        let sp = Spinner::new(spinner_enum, color_enum(simcity_msg + "...").to_string());
-        sleep(Duration::from_millis(sleep_length));
-        sp.stop();
+        // Keep track of when the message is first printed
+        let mut first = true;
+        for i in 0..spinner_loops {
+            for spinner in SPINNERS {
+                // Output a message, with a checkbox in front and spinner behind
+                let msg = simcity_msg.to_string() + "... " + spinner;
+                if first {
+                    dprint(unchecked_checkbox.to_string(), 0);
+                    dprint(msg, TEXT_SLEEP);
+                    first = false;
+                } else {
+                    dprint(unchecked_checkbox.to_string(), 0);
+                    dprint(msg, 0);
+                }
+                // Wait a bit, then erase the line
+                csleep(SPINNER_SLEEP);
+                dprint("\r", 0);
+            }
+            if i == (spinner_loops - 1) {
+                // End of loop, the line has been removed, conclude the status
+                dprint(checked_checkbox.to_string(), 10);
+                dprint(simcity_msg.to_string(), 0);
+                dprint(dots.to_string(), 0);
+                dprint(resolution_msg.to_string(), 0);
+            }
+        }
 
         if appconfig.should_exit() {
+            dprint("\nALL DONE\n", 0);
             return;
         }
+
         println!();
     }
 }

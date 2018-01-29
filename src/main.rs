@@ -24,7 +24,6 @@ extern crate pbr;
 extern crate url;
 extern crate rand;
 extern crate regex;
-extern crate spinners;
 extern crate yansi;
 
 mod bootlog;
