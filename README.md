@@ -38,7 +38,7 @@ It's compatible with Linux, OSX, Windows 10 (it needs a recent Windows 10 to get
 **With snap**: If you'd like to use [snapcraft](https://snapcraft.io/), you can just get it from the [snap store](https://snapcraft.io/store/):
 
     snap install genact
-    
+
 To build it yourself using snap, run:
 
     snapcraft cleanbuild
@@ -92,8 +92,8 @@ You should have a recent version of rust and cargo installed. You don't need nig
 
 This is mostly a note for me on how to release this thing:
 
-- Update versions in `README.md`, `static/index.html`, `Cargo.toml`, `snapcraft.yaml`.
-- `git commit` and `git tag -s`, `git push`.
-- `cargo publish`
-- Releases will automatically be deployed by Travis.
-- Update AUR package.
+-   Update versions in `README.md`, `static/index.html`, `Cargo.toml`, `snapcraft.yaml`.
+-   `git commit` and `git tag -s`, `git push`.
+-   `cargo publish`
+-   Releases will automatically be deployed by Travis.
+-   Update AUR package.
