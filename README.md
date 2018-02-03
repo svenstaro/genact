@@ -92,8 +92,8 @@ You should have a recent version of rust and cargo installed. You don't need nig
 
 This is mostly a note for me on how to release this thing:
 
-- Update versions in `README.md`, `static/index.html`, `Cargo.toml`, `snapcraft.yaml`.
-- `git commit` and `git tag -s`, `git push`.
-- `cargo publish`
-- Releases will automatically be deployed by Travis.
-- Update AUR package.
+-   Update versions in `README.md`, `static/index.html`, `Cargo.toml`, `snapcraft.yaml`.
+-   `git commit` and `git tag -s`, `git push`.
+-   `cargo publish`
+-   Releases will automatically be deployed by Travis.
+-   Update AUR package.
