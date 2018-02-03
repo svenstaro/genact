@@ -21,16 +21,17 @@ extern crate humantime;
 #[macro_use]
 extern crate lazy_static;
 extern crate pbr;
-extern crate rand;
 extern crate url;
-extern crate yansi;
+extern crate rand;
 extern crate regex;
+extern crate yansi;
 
 mod bootlog;
 mod cargo;
 mod composer;
 mod cc;
 mod cryptomining;
+mod simcity;
 mod download;
 mod kernel_compile;
 mod memdump;
@@ -70,6 +71,7 @@ fn main() {
         "cc",
         "composer",
         "cryptomining",
+        "simcity",
         "download",
         "memdump",
         "kernel_compile",
@@ -110,6 +112,7 @@ fn main() {
             "bootlog" => bootlog::run(&appconfig),
             "cargo" => cargo::run(&appconfig),
             "cryptomining" => cryptomining::run(&appconfig),
+            "simcity" => simcity::run(&appconfig),
             "cc" => cc::run(&appconfig),
             "download" => download::run(&appconfig),
             "memdump" => memdump::run(&appconfig),
