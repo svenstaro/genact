@@ -38,7 +38,7 @@ It's compatible with Linux, OSX, Windows 10 (it needs a recent Windows 10 to get
 **With snap**: If you'd like to use [snapcraft](https://snapcraft.io/), you can just get it from the [snap store](https://snapcraft.io/store/):
 
     snap install genact
-    
+
 To build it yourself using snap, run:
 
     snapcraft cleanbuild
@@ -60,7 +60,7 @@ or (on Docker)
 
 The help:
 
-    genact 0.3.2
+    genact 0.4.0
     Sven-Hendrik Haase <svenstaro@gmail.com>
     A nonsense activity generator
 
@@ -74,8 +74,8 @@ The help:
 
     OPTIONS:
         -e, --exitafter <EXITAFTER>    Exit after running for this long (format example: 2h10min)
-        -m, --modules <MODULE>...      Run only these modules [values: bootlog, cargo, cc, composer, cryptomining, download,
-                                       memdump, kernel_compile]
+        -m, --modules <MODULE>...      Run only these modules [values: bootlog, cargo, cc, composer, cryptomining, simcity,
+                                       download, memdump, kernel_compile]
 
 In the web version, you can run specific modules by providing them as `?module`
 parameters like this: https://svenstaro.github.io/genact?module=cc&module=memdump
