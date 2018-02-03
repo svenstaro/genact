@@ -1,5 +1,4 @@
 /// Module that pretends to install composer packages.
-
 use rand::{thread_rng, Rng, ThreadRng};
 use rand::distributions::{ChiSquared, IndependentSample};
 use std::collections::HashMap;

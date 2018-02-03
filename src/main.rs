@@ -1,7 +1,6 @@
 /// genact - A nonsense activity generator
 ///
 /// Main module.
-
 #[cfg(not(target_os = "emscripten"))]
 #[macro_use]
 extern crate clap;

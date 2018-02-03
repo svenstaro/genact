@@ -1,5 +1,4 @@
 /// Module that pretends to run a C compiler.
-
 use rand::{thread_rng, Rng, ThreadRng};
 use std::path::Path;
 

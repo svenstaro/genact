@@ -1,5 +1,4 @@
 /// Module that pretends to mine a cryptocurrency.
-
 use rand::{thread_rng, Rng};
 use rand::distributions::{Normal, IndependentSample};
 use std::time::Instant;

@@ -1,5 +1,4 @@
 /// Module that pretends to boot a system.
-
 use rand::{thread_rng, Rng};
 use yansi::Paint;
 

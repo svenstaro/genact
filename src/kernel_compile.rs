@@ -1,5 +1,4 @@
 /// Module that pretends to build a Linux kernel
-
 use rand::{thread_rng, Rng, ThreadRng};
 use regex::Regex;
 

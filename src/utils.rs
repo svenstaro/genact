@@ -1,5 +1,4 @@
 /// Module containing random utilities.
-
 use rand::{ThreadRng, Rng};
 use std::time;
 #[cfg(not(target_os = "emscripten"))]
