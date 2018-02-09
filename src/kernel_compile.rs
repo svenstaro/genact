@@ -178,7 +178,7 @@ pub fn run(appconfig: &AppConfig) {
 
     println!("CRC {:x}", crc);
 
-    println!("Kernel: arch/x86/boot/bzImage is ready (#1)");
+    println!("Kernel: arch/{}/boot/bzImage is ready (#1)", arch);
 
     println!();
 }
