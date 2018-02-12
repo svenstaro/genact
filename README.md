@@ -16,7 +16,7 @@ Pretend to be busy or waiting for your computer when you should actually be doin
 
 You don't have to install anything! For your convenience, prebuilt binaries for Linux, OSX and Windows are provided [here](https://github.com/svenstaro/genact/releases) that should run without any dependencies. **Additionally, there is a web version at https://svenstaro.github.io/genact/**
 
-It's compatible with Linux, OSX, Windows 10 (it needs a recent Windows 10 to get ANSI support) and most modern web browsers that suppot WebAssembly.
+It's compatible with Linux, OSX, Windows 10 (it needs a recent Windows 10 to get ANSI support) and most modern web browsers that support WebAssembly.
 
 **On Linux**: Download `genact-linux` from [the releases page](https://github.com/svenstaro/genact/releases) and run
 
