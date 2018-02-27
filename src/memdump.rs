@@ -31,7 +31,7 @@ pub fn run(appconfig: &AppConfig) {
         }
 
         // Print the ascii values.
-        let mut ascii_repr = String::new();
+        let mut ascii_repr = String::with_capacity(values.len());
         for val in values {
             let ascii_val = u8::from_str_radix(&val, 16).unwrap_or(b'.') as char;
             if is_printable_ascii(ascii_val as u64) {

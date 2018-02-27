@@ -91,11 +91,7 @@ pub fn parse_args(all_modules: &[&str]) -> AppConfig {
         all_modules.iter().map(|x| x.to_string()).collect()
     };
 
-    let exit_after = if let Some(ea) = value_t!(matches, "exitafter", Duration).ok() {
-        Some(ea)
-    } else {
-        None
-    };
+    let exit_after = value_t!(matches, "exitafter", Duration).ok();
 
     AppConfig {
         list_modules_and_exit: list_modules_and_exit,
@@ -116,7 +112,7 @@ pub fn parse_args(all_modules: &[&str]) -> AppConfig {
     let pairs = parsed_url.query_pairs();
     let filtered = pairs.filter(|&(ref x, _)| x == "module");
     for (_, query_val) in filtered {
-        let actual_val = &&*query_val;
+        let actual_val = query_val;
         if all_modules.contains(actual_val) {
             temp_modules.push(actual_val.to_string());
         }
