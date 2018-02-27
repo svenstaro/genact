@@ -112,7 +112,7 @@ pub fn parse_args(all_modules: &[&str]) -> AppConfig {
     let pairs = parsed_url.query_pairs();
     let filtered = pairs.filter(|&(ref x, _)| x == "module");
     for (_, query_val) in filtered {
-        let actual_val = query_val;
+        let actual_val = &&*query_val;
         if all_modules.contains(actual_val) {
             temp_modules.push(actual_val.to_string());
         }
