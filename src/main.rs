@@ -64,7 +64,7 @@ lazy_static! {
 fn main() {
     Paint::enable_windows_ascii();
 
-    let all_modules = vec![
+    let all_modules = [
         "bootlog",
         "cargo",
         "cc",
@@ -92,7 +92,7 @@ fn main() {
         use std::process;
         if appconfig.list_modules_and_exit {
             println!("Available modules:");
-            for module in all_modules {
+            for module in &all_modules {
                 println!("  {}", module);
             }
             process::exit(0);

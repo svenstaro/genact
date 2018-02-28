@@ -19,12 +19,8 @@ fn generate_includes(file_list: &[&str], max: u32, rng: &mut ThreadRng) -> Strin
             }
         }
     }
-    let limited_flags = (0..max)
-        .map(|_| *rng.choose(&include_flags).unwrap())
-        .collect::<Vec<&str>>();
-    limited_flags
-        .iter()
-        .fold(String::new(), |acc, &x| acc + "-I" + x + " ")
+    let limited_flags = (0..max).map(|_| *rng.choose(&include_flags).unwrap());
+    limited_flags.fold(String::new(), |acc, x| acc + "-I" + x + " ")
 }
 
 /// Generate a list of `n` random linker flags given a list of `candidates`.

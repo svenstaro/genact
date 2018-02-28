@@ -20,13 +20,13 @@ fn gen_header(arch: &str, rng: &mut ThreadRng) -> String {
     ];
 
     let cmd = if rng.gen_weighted_bool(15) {
-        rng .choose(RARE_CMDS).unwrap_or(&"")
+        rng.choose(RARE_CMDS).unwrap_or(&"")
     } else {
         rng.choose(CMDS).unwrap_or(&"")
     };
 
     let cfile = rng.choose(&CFILES_LIST).unwrap_or(&"");
-    let mut file = format!("{}h", cfile[..cfile.len() - 1].to_owned());
+    let mut file = format!("{}h", &cfile[..cfile.len() - 1]);
 
     if file.starts_with("arch") {
         let re = Regex::new(r"arch/([a-z0-9_])+/").unwrap();
