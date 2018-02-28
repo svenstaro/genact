@@ -94,9 +94,9 @@ pub fn parse_args(all_modules: &[&str]) -> AppConfig {
     let exit_after = value_t!(matches, "exitafter", Duration).ok();
 
     AppConfig {
-        list_modules_and_exit: list_modules_and_exit,
+        list_modules_and_exit,
         modules: modules_to_run,
-        exit_after: exit_after,
+        exit_after,
         started_at: Instant::now(),
     }
 }
@@ -108,7 +108,7 @@ pub fn parse_args(all_modules: &[&str]) -> AppConfig {
 
     let mut temp_modules = vec![];
     let location = web::document().location().unwrap();
-    let parsed_url = Url::parse(&location.href()).unwrap();
+    let parsed_url = Url::parse(&location.href().unwrap()).unwrap();
     let pairs = parsed_url.query_pairs();
     let filtered = pairs.filter(|&(ref x, _)| x == "module");
     for (_, query_val) in filtered {

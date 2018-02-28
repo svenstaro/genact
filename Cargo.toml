@@ -15,12 +15,12 @@ maintenance = { status = "actively-developed" }
 
 [dependencies]
 pbr = "1.0"
-yansi = "0.3"
+yansi = "0.4"
 rand = "0.4"
 chrono = "0.4"
 url = "1.6"
 lazy_static = "1.0"
-humantime = "1.0"
+humantime = "1.1"
 regex = "0.2.5"
 
 [target.'cfg(not(target_os = "emscripten"))'.dependencies]
@@ -29,4 +29,4 @@ ctrlc = "3.1"
 
 [target.'cfg(target_os = "emscripten")'.dependencies]
 emscripten-sys = "0.3"
-stdweb = "0.3"
+stdweb = "0.4"
