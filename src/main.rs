@@ -45,12 +45,14 @@ static BOOTLOG: &str = include_str!("../data/bootlog.txt");
 static CFILES: &str = include_str!("../data/cfiles.txt");
 static PACKAGES: &str = include_str!("../data/packages.txt");
 static COMPOSERS: &str = include_str!("../data/composer.txt");
+static SIMCITY: &str = include_str!("../data/simcity.txt");
 
 lazy_static! {
     static ref BOOTLOG_LIST: Vec<&'static str> = BOOTLOG.lines().collect();
     static ref CFILES_LIST: Vec<&'static str> = CFILES.lines().collect();
     static ref PACKAGES_LIST: Vec<&'static str> = PACKAGES.lines().collect();
     static ref COMPOSERS_LIST: Vec<&'static str> = COMPOSERS.lines().collect();
+    static ref SIMCITY_LIST: Vec<&'static str> = SIMCITY.lines().collect();
 }
 
 #[cfg(not(target_os = "emscripten"))]

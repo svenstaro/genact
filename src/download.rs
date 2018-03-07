@@ -55,10 +55,7 @@ pub fn run(appconfig: &AppConfig) {
         #[cfg(not(target_os = "emscripten"))]
         let mut pb = ProgressBar::new(file_bytes);
         pb.set_units(Units::Bytes);
-        pb.message(&format!(
-            "{} ",
-            gen_file_name(&CFILES_LIST, extension, &mut rng)
-        ));
+        pb.message(&gen_file_name(&CFILES_LIST, extension, &mut rng));
         for _ in 0..cycles {
             pb.add(bytes_per_sleep);
             csleep(sleep_millis);
