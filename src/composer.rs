@@ -38,7 +38,7 @@ pub fn run(appconfig: &AppConfig) {
     );
 
     for stage in &["Installing"] {
-        for (package_name, package_version) in &chosen_packages {
+        for &(package_name, package_version) in &chosen_packages {
             let sleep_length = rng.gen_range(100, 2000);
 
             println!(
