@@ -31,7 +31,7 @@ pub fn run(appconfig: &AppConfig) {
 
     let now = Instant::now();
     for stage in &["Downloading", "Compiling"] {
-        for &(package_name, package_version) in &chosen_packages {
+        for &(package_name, ref package_version) in &chosen_packages {
             let sleep_length = rng.gen_range(100, 2000);
 
             println!(
