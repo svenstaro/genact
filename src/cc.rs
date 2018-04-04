@@ -1,5 +1,6 @@
 /// Module that pretends to run a C compiler.
 use rand::{thread_rng, Rng, ThreadRng};
+use rand::seq::sample_slice;
 use std::path::Path;
 
 use utils::{csleep, get_random_n_from_list_into_string};
@@ -24,14 +25,8 @@ fn generate_includes(file_list: &[&str], max: u32, rng: &mut ThreadRng) -> Strin
 }
 
 /// Generate a list of `n` random linker flags given a list of `candidates`.
-fn generate_linker_flags(candidates: &[&str], n: u64, rng: &mut ThreadRng) -> String {
-    let mut libraries = vec![];
-    for _ in 0..n {
-        let candidate = rng.choose(candidates).unwrap();
-        if !libraries.contains(candidate) {
-            libraries.push(candidate);
-        }
-    }
+fn generate_linker_flags(candidates: &[&str], n: usize, rng: &mut ThreadRng) -> String {
+    let libraries = sample_slice(rng, candidates, n);
     libraries
         .iter()
         .fold(String::new(), |acc, &x| acc + "-l" + x + " ")
@@ -67,21 +62,15 @@ pub fn run(appconfig: &AppConfig) {
     ];
 
     let mut rng = thread_rng();
-    let num_cfiles = rng.gen_range(100, 1000);
-    let mut chosen_files: Vec<&str> = vec![];
 
     // Choose a random package name to be our final linking target.
     let package = rng.choose(&packages_list).unwrap();
 
     let compiler = rng.choose(COMPILERS).unwrap();
 
-    while chosen_files.len() < num_cfiles {
-        let cfile = rng.choose(&CFILES_LIST).unwrap();
-        if !chosen_files.contains(cfile) {
-            chosen_files.push(cfile);
-        }
-    }
-    chosen_files.sort();
+    let num_cfiles = rng.gen_range(100, 1000);
+    let mut chosen_files = sample_slice(&mut rng, &CFILES_LIST, num_cfiles);
+    chosen_files.sort_unstable();
 
     let opt = rng.choose(FLAGS_OPT).unwrap();
 
