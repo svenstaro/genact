@@ -60,7 +60,7 @@ pub fn dprint<S: Into<String>>(s: S, delay: u64) {
 pub fn rand_hex_string(rng: &mut ThreadRng, length: u64) -> String {
     const HEX_CHARS: &[u8] = b"0123456789abcdef";
     let hex_string: String = (0..length)
-        .map(|_| (*rng.choose(HEX_CHARS).unwrap() as char))
+        .map(|_| *rng.choose(HEX_CHARS).unwrap() as char)
         .collect();
     hex_string
 }
