@@ -4,7 +4,7 @@ use rand::seq::sample_slice;
 use std::path::Path;
 
 use utils::{csleep, get_random_n_from_list_into_string};
-use CFILES_LIST;
+use {CFILES_LIST, PACKAGES_LIST};
 use parse_args::AppConfig;
 
 /// Generate a `String` containing all of the `file_list`'s file's parents as -I flags
@@ -33,9 +33,6 @@ fn generate_linker_flags(candidates: &[&str], n: usize, rng: &mut ThreadRng) -> 
 }
 
 pub fn run(appconfig: &AppConfig) {
-    let packages = include_str!("../data/packages.txt");
-    let packages_list: Vec<&str> = packages.lines().collect();
-
     const COMPILERS: &[&str] = &["gcc", "clang"];
     const FLAGS_OPT: &[&str] = &["-O0", "-O1", "-O2", "-O3", "-Og", "-Os"];
     const FLAGS_WARN_BASE: &[&str] = &["-Wall", "-Wall -Wextra"];
@@ -64,7 +61,7 @@ pub fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
 
     // Choose a random package name to be our final linking target.
-    let package = rng.choose(&packages_list).unwrap();
+    let package = rng.choose(&PACKAGES_LIST).unwrap();
 
     let compiler = rng.choose(COMPILERS).unwrap();
 
@@ -94,7 +91,7 @@ pub fn run(appconfig: &AppConfig) {
 
     // Get random linker flags.
     let num_linker_flags = rng.gen_range(0, 10);
-    let linker_flags = generate_linker_flags(&packages_list, num_linker_flags, &mut rng);
+    let linker_flags = generate_linker_flags(&PACKAGES_LIST, num_linker_flags, &mut rng);
 
     // Pick a bunch of defs
     let defs = rng.choose(FLAGS_DEF_BASE).unwrap().to_string();
