@@ -4,6 +4,7 @@
 [![Snap Status](https://build.snapcraft.io/badge/svenstaro/genact.svg)](https://build.snapcraft.io/user/svenstaro/genact)
 [![AUR](https://img.shields.io/aur/version/genact.svg)](https://aur.archlinux.org/packages/genact/)
 [![Crates.io](https://img.shields.io/crates/v/genact.svg)](https://crates.io/crates/genact)
+[![dependency status](https://deps.rs/repo/github/svenstaro/genact/status.svg)](https://deps.rs/repo/github/svenstaro/genact)
 [![license](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/svenstaro/genact/blob/master/LICENSE)
 
 Pretend to be busy or waiting for your computer when you should actually be doing real work! Impress people with your insane multitasking skills. Just open a few instances of `genact` and watch the show. `genact` has multiple scenes that pretend to be doing something exciting or useful when in reality nothing is happening at all.
