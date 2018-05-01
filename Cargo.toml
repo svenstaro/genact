@@ -21,7 +21,8 @@ chrono = "0.4"
 url = "1.6"
 lazy_static = "1.0"
 humantime = "1.1"
-regex = "0.2.5"
+regex = "1.0"
+fake = "1.2.1"
 
 [target.'cfg(not(target_os = "emscripten"))'.dependencies]
 clap = "2.29"
