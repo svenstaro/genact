@@ -24,6 +24,8 @@ extern crate url;
 extern crate rand;
 extern crate regex;
 extern crate yansi;
+#[macro_use]
+extern crate fake;
 
 mod bootlog;
 mod cargo;
@@ -33,6 +35,7 @@ mod cryptomining;
 mod simcity;
 mod download;
 mod kernel_compile;
+mod weblog;
 mod memdump;
 mod utils;
 mod parse_args;
@@ -55,6 +58,11 @@ lazy_static! {
     static ref SIMCITY_LIST: Vec<&'static str> = SIMCITY.lines().collect();
 }
 
+static EXTENSIONS_LIST: &'static [&str] = &["gif", "webm", "mp4", "html", "php", "md",
+                                            "png", "jpg", "ogg", "mp3", "flac", "iso",
+                                            "zip", "rar", "tar.gz", "tar.bz2", "tar.xz",
+                                            "deb", "rpm", "exe"];
+
 #[cfg(not(target_os = "emscripten"))]
 use std::sync::atomic::AtomicBool;
 
@@ -76,6 +84,7 @@ fn main() {
         "download",
         "memdump",
         "kernel_compile",
+        "weblog",
         // "bruteforce",
         // "initialize",
         // "botnet",
@@ -119,6 +128,7 @@ fn main() {
             "memdump" => memdump::run(&appconfig),
             "composer" => composer::run(&appconfig),
             "kernel_compile" => kernel_compile::run(&appconfig),
+            "weblog" => weblog::run(&appconfig),
             _ => panic!("Unknown module!"),
         }
         #[cfg(not(target_os = "emscripten"))]

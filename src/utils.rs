@@ -1,5 +1,6 @@
 /// Module containing random utilities.
 use rand::{ThreadRng, Rng};
+use std::path::{Path, PathBuf};
 use std::time;
 #[cfg(not(target_os = "emscripten"))]
 use std::thread;
@@ -57,7 +58,7 @@ pub fn dprint<S: Into<String>>(s: S, delay: u64) {
     }
 }
 
-pub fn rand_hex_string(rng: &mut ThreadRng, length: u64) -> String {
+pub fn gen_hex_string(rng: &mut ThreadRng, length: u64) -> String {
     const HEX_CHARS: &[u8] = b"0123456789abcdef";
     let hex_string: String = (0..length)
         .map(|_| *rng.choose(HEX_CHARS).unwrap() as char)
@@ -68,9 +69,32 @@ pub fn rand_hex_string(rng: &mut ThreadRng, length: u64) -> String {
 /// Return a String containing `n` random concatenated elements from `list`.
 ///
 /// If `n` >= `list.len()` then `list.len()` will be used instead of `n`.
-pub fn get_random_n_from_list_into_string(rng: &mut ThreadRng, list: &[&str], n: u64) -> String {
+pub fn gen_random_n_from_list_into_string(rng: &mut ThreadRng, list: &[&str], n: u64) -> String {
     (0..cmp::min(n, list.len() as u64))
         .fold(String::new(), |acc, _| acc + " " + rng.choose(list).unwrap())
+}
+
+pub fn gen_file_name_with_ext(rng: &mut ThreadRng, files: &[&str], extension: &str) -> String {
+    let chosen_file = rng.choose(files).unwrap_or(&"");
+    let path = Path::new(&chosen_file).with_extension(extension);
+    path.file_name().unwrap().to_str().unwrap().to_string()
+}
+
+pub fn gen_file_name(rng: &mut ThreadRng, files: &[&str], extensions: &[&str]) -> String {
+    let chosen_file = rng.choose(files).unwrap_or(&"");
+    let chosen_extension = rng.choose(extensions).unwrap_or(&"");
+    let path = Path::new(&chosen_file).with_extension(chosen_extension);
+    path.file_name().unwrap().to_str().unwrap().to_string()
+}
+
+pub fn gen_file_path(rng: &mut ThreadRng, files: &[&str], extensions: &[&str], dir_candidates: &[&str]) -> String {
+    let path_length = rng.gen_range(1, 5);
+    let mut path = PathBuf::from("/");
+    for _ in 0..path_length {
+        path.push(rng.choose(dir_candidates).unwrap_or(&""));
+    }
+    path.push(gen_file_name(rng, files, extensions));
+    path.to_string_lossy().to_string()
 }
 
 /// Return `true` if the given `a` is printable ASCII and `false` if it isn't.

@@ -6,7 +6,7 @@ use yansi::Paint;
 use chrono::prelude::*;
 use chrono::Duration;
 
-use utils::{rand_hex_string, csleep};
+use utils::{gen_hex_string, csleep};
 use parse_args::AppConfig;
 
 pub fn run(appconfig: &AppConfig) {
@@ -44,9 +44,9 @@ pub fn run(appconfig: &AppConfig) {
                      time=time,
                      separator=Paint::black("|"),
                      source=Paint::blue("stratum"),
-                     jobhex=rand_hex_string(&mut rng, 8),
-                     seedhex=rand_hex_string(&mut rng, 32),
-                     targethex=rand_hex_string(&mut rng, 24));
+                     jobhex=gen_hex_string(&mut rng, 8),
+                     seedhex=gen_hex_string(&mut rng, 32),
+                     targethex=gen_hex_string(&mut rng, 24));
         } else if remaining_until_next_solution == 0 {
             remaining_until_next_solution = solution_found_every_n_lines;
             num_solutions_found += 1;
@@ -62,7 +62,7 @@ pub fn run(appconfig: &AppConfig) {
                      time=time,
                      separator=Paint::black("|"),
                      source=Paint::blue("CUDA0"),
-                     noncehex=rand_hex_string(&mut rng, 16));
+                     noncehex=gen_hex_string(&mut rng, 16));
             println!("{info:>3}  {time}{separator}{source:<13}{accepted}",
                      info=info,
                      time=time,

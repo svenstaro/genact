@@ -3,7 +3,7 @@ use rand::{thread_rng, Rng};
 use std::io::Write;
 use std::io::stdout;
 
-use utils::{csleep, dprint, is_printable_ascii, rand_hex_string};
+use utils::{csleep, dprint, is_printable_ascii, gen_hex_string};
 use parse_args::AppConfig;
 
 pub fn run(appconfig: &AppConfig) {
@@ -16,7 +16,7 @@ pub fn run(appconfig: &AppConfig) {
         current_loc += 0x10;
 
         let values = (0..16)
-            .map(|_| rand_hex_string(&mut rng, 2))
+            .map(|_| gen_hex_string(&mut rng, 2))
             .collect::<Vec<String>>();
 
         // Print the values in two columns.

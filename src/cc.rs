@@ -3,7 +3,7 @@ use rand::{thread_rng, Rng, ThreadRng};
 use rand::seq::sample_slice;
 use std::path::Path;
 
-use utils::{csleep, get_random_n_from_list_into_string};
+use utils::{csleep, gen_random_n_from_list_into_string};
 use {CFILES_LIST, PACKAGES_LIST};
 use parse_args::AppConfig;
 
@@ -75,16 +75,16 @@ pub fn run(appconfig: &AppConfig) {
     let warn = rng.choose(FLAGS_WARN_BASE).unwrap().to_string();
     let num_additional_warn_flags = rng.gen_range(0, FLAGS_WARN.len()) as u64;
     let warn_additional =
-        get_random_n_from_list_into_string(&mut rng, FLAGS_WARN, num_additional_warn_flags);
+        gen_random_n_from_list_into_string(&mut rng, FLAGS_WARN, num_additional_warn_flags);
     let warn_final = warn + &warn_additional;
 
     // Pick a bunch of f flags
     let num_f_flags = rng.gen_range(0, FLAGS_F.len()) as u64;
-    let f = get_random_n_from_list_into_string(&mut rng, FLAGS_F, num_f_flags);
+    let f = gen_random_n_from_list_into_string(&mut rng, FLAGS_F, num_f_flags);
 
     // Pick a bunch of architecture flags.
     let num_arch_flags = rng.gen_range(0, FLAGS_ARCH.len()) as u64;
-    let arch = get_random_n_from_list_into_string(&mut rng, FLAGS_ARCH, num_arch_flags);
+    let arch = gen_random_n_from_list_into_string(&mut rng, FLAGS_ARCH, num_arch_flags);
 
     // Get includes for the given files.
     let includes = generate_includes(&chosen_files, 20, &mut rng);
@@ -96,7 +96,7 @@ pub fn run(appconfig: &AppConfig) {
     // Pick a bunch of defs
     let defs = rng.choose(FLAGS_DEF_BASE).unwrap().to_string();
     let num_def_flags = rng.gen_range(0, FLAGS_DEF.len()) as u64;
-    let defs_additional = get_random_n_from_list_into_string(&mut rng, FLAGS_DEF, num_def_flags);
+    let defs_additional = gen_random_n_from_list_into_string(&mut rng, FLAGS_DEF, num_def_flags);
     let defs_final = defs + &defs_additional;
 
     // Compile everything.

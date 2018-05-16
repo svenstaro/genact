@@ -1,5 +1,4 @@
-use rand::{thread_rng, Rng, ThreadRng};
-use std::path::Path;
+use rand::{thread_rng, Rng};
 use std::cmp::max;
 
 use pbr::{ProgressBar, Units};
@@ -7,26 +6,17 @@ use pbr::{ProgressBar, Units};
 #[cfg(target_os = "emscripten")]
 use utils::TermWriter;
 
-use utils::csleep;
+use utils::{csleep, gen_file_name_with_ext};
 use CFILES_LIST;
+use EXTENSIONS_LIST;
 use parse_args::AppConfig;
-
-pub fn gen_file_name(files: &[&str], extension: &str, rng: &mut ThreadRng) -> String {
-    let chosen_file = rng.choose(files).unwrap_or(&"");
-    let path = Path::new(&chosen_file).with_extension(extension);
-    path.file_name().unwrap().to_str().unwrap().to_string()
-}
 
 pub fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
 
-    const EXTENSIONS: &[&str] = &[
-        "iso", "zip", "rar", "tar.gz", "tar.bz2", "tar.xz", "deb", "rpm", "exe"
-    ];
-
     // We'll use the same extension for all files of this whole run to make things seem more
     // realistic.
-    let extension = rng.choose(EXTENSIONS).unwrap_or(&".wat");
+    let extension = rng.choose(EXTENSIONS_LIST).unwrap_or(&".wat");
 
     // Choose speed. We'll choose an approximate speed that we'll vary a little bit.
     // Download speed in bytes per second.
@@ -55,7 +45,7 @@ pub fn run(appconfig: &AppConfig) {
         #[cfg(not(target_os = "emscripten"))]
         let mut pb = ProgressBar::new(file_bytes);
         pb.set_units(Units::Bytes);
-        pb.message(&gen_file_name(&CFILES_LIST, extension, &mut rng));
+        pb.message(&gen_file_name_with_ext(&mut rng, &CFILES_LIST, extension));
         for _ in 0..cycles {
             pb.add(bytes_per_sleep);
             csleep(sleep_millis);
