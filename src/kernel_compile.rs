@@ -19,7 +19,7 @@ fn gen_header(arch: &str, rng: &mut ThreadRng) -> String {
         "UPD    ",
     ];
 
-    let cmd = if rng.gen_weighted_bool(15) {
+    let cmd = if rng.gen_bool(1.0 / 15.0) {
         rng.choose(RARE_CMDS).unwrap_or(&"")
     } else {
         rng.choose(CMDS).unwrap_or(&"")
@@ -43,9 +43,9 @@ fn gen_object(arch: &str, rng: &mut ThreadRng) -> String {
         "AS     ",
     ];
 
-    let cmd = if rng.gen_weighted_bool(15) {
+    let cmd = if rng.gen_bool(1.0 / 15.0) {
         rng.choose(RARE_CMDS).unwrap_or(&"")
-    } else if rng.gen_weighted_bool(3) {
+    } else if rng.gen_bool(0.33) {
         "AR     "
     } else {
         "CC     "
@@ -100,9 +100,9 @@ fn gen_special(arch: &str, rng: &mut ThreadRng) -> String {
 
 /// Generates a line from `make` output
 fn gen_line(arch: &str, rng: &mut ThreadRng) -> String {
-    if rng.gen_weighted_bool(50) {
+    if rng.gen_bool(1.0 / 50.0) {
         gen_special(arch, rng)
-    } else if rng.gen_weighted_bool(10) {
+    } else if rng.gen_bool(0.1) {
         gen_header(arch, rng)
     } else {
         gen_object(arch, rng)

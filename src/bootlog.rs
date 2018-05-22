@@ -25,14 +25,14 @@ pub fn run(appconfig: &AppConfig) {
             burst_mode = false;
             count_burst_lines = 0;
         } else if burst_mode == false {
-            burst_mode = rng.gen_weighted_bool(20);
+            burst_mode = rng.gen_bool(1.0 / 20.0);
         }
 
-        let is_error = rng.gen_weighted_bool(100);
+        let is_error = rng.gen_bool(0.01);
         if is_error {
             dprint(format!("{}", Paint::red(format!("ERROR: {}", choice))), 10);
         } else {
-            let has_bold_word = rng.gen_weighted_bool(10);
+            let has_bold_word = rng.gen_bool(0.1);
             if has_bold_word {
                 let mut words: Vec<String> = choice.split_whitespace().map(String::from).collect();
                 words[0] = format!("{}", Paint::new(&words[0]).bold());

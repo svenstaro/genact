@@ -1,6 +1,6 @@
 /// Module that pretends to run cargo to install rust packages.
 use rand::{thread_rng, Rng, ThreadRng};
-use rand::distributions::{ChiSquared, IndependentSample};
+use rand::distributions::{ChiSquared, Distribution};
 use rand::seq::sample_slice;
 use std::time::Instant;
 use yansi::Paint;
@@ -13,9 +13,9 @@ fn gen_package_version(rng: &mut ThreadRng) -> String {
     let chi = ChiSquared::new(1.0);
     format!(
         "{major:.0}.{minor:.0}.{patch:.0}",
-        major = 10.0 * chi.ind_sample(rng),
-        minor = 10.0 * chi.ind_sample(rng),
-        patch = 10.0 * chi.ind_sample(rng)
+        major = 10.0 * chi.sample(rng),
+        minor = 10.0 * chi.sample(rng),
+        patch = 10.0 * chi.sample(rng)
     )
 }
 

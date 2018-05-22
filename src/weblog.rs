@@ -15,7 +15,7 @@ pub fn run(appconfig: &AppConfig) {
     let mut count_burst_lines = 0;
 
     for _ in 1..num_lines {
-        let ip = if rng.gen_weighted_bool(2) {
+        let ip = if rng.gen_bool(0.5) {
             fake!(Internet.ipv4)
         } else {
             fake!(Internet.ipv6).to_lowercase()
@@ -48,7 +48,7 @@ pub fn run(appconfig: &AppConfig) {
             burst_mode = false;
             count_burst_lines = 0;
         } else if burst_mode == false {
-            burst_mode = rng.gen_weighted_bool(20);
+            burst_mode = rng.gen_bool(1.0 / 20.0);
         }
 
         dprint(format!("{}", line), 0);

@@ -16,7 +16,7 @@ maintenance = { status = "actively-developed" }
 [dependencies]
 pbr = "1.0"
 yansi = "0.4"
-rand = "0.4"
+rand = "0.5"
 chrono = "0.4"
 url = "1.6"
 lazy_static = "1.0"

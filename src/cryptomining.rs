@@ -1,6 +1,6 @@
 /// Module that pretends to mine a cryptocurrency.
 use rand::{thread_rng, Rng};
-use rand::distributions::{Normal, IndependentSample};
+use rand::distributions::{Normal, Distribution};
 use std::time::Instant;
 use yansi::Paint;
 use chrono::prelude::*;
@@ -78,7 +78,7 @@ pub fn run(appconfig: &AppConfig) {
             let mut total_mhs = 0.0;
             let mut gpus = String::from("");
             for gpu in 0..num_gpus {
-                let actual_mhs_per_gpu = approximate_mhs_per_gpu + normal.ind_sample(&mut rng);
+                let actual_mhs_per_gpu = approximate_mhs_per_gpu + normal.sample(&mut rng);
                 gpus.push_str(&format!("gpu/{gpu} {mhs:.2} ", gpu=gpu, mhs=Paint::cyan(actual_mhs_per_gpu)));
                 total_mhs += actual_mhs_per_gpu;
             }
