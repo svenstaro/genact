@@ -60,8 +60,10 @@ pub fn dprint<S: Into<String>>(s: S, delay: u64) {
 
 pub fn gen_hex_string(rng: &mut ThreadRng, length: u64) -> String {
     const HEX_CHARS: &[u8] = b"0123456789abcdef";
+    assert!(HEX_CHARS.len().is_power_of_two());
     let hex_string: String = (0..length)
-        .map(|_| *rng.choose(HEX_CHARS).unwrap() as char)
+        // `HEX_CHARS.len()` is a power of two, so modulo reduction is unbiased.
+        .map(|_| HEX_CHARS[rng.gen::<u32>() as usize % HEX_CHARS.len()] as char)
         .collect();
     hex_string
 }
