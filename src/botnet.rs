@@ -57,16 +57,18 @@ pub fn run(appconfig: &AppConfig) {
         csleep(100);
     }
 
-    for task in &[
+    let tasks = [
         "Synchronizing clocks...",
         "Sending login information...",
         "Sending command...",
-    ] {
+    ];
+
+    for task in &tasks {
         csleep(300);
         dprint(format!("+ {} ", task), 10);
         csleep(600);
         dprint("[done]\n", 10)
     }
 
-    dprint(">> Botnet update complete.\n", 10)
+    dprint(">> Botnet update complete.\n", 10);
 }
