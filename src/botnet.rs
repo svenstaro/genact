@@ -35,7 +35,6 @@ pub fn run(appconfig: &AppConfig) {
     loop {
         print!("\u{001b}[{}A\n", onlines.len() + 1);
         for (i, (nodes, online)) in clusters.iter().zip(onlines.iter()).enumerate() {
-            // cannot use bright color because yansi doesn't support it
             println!(
                 "\u{001b}[2K  Cluster #{:02} ({:3} nodes) [{}]",
                 i,
@@ -44,7 +43,7 @@ pub fn run(appconfig: &AppConfig) {
                     Paint::green("online")
                 } else {
                     Paint::yellow("booting")
-                },
+                }.bold(),
             );
         }
         if onlines.iter().all(|x| *x) {
