@@ -25,7 +25,7 @@ pub fn run(appconfig: &AppConfig) {
         let dir_candidates = fake!(Lorem.words(20));
         let path = gen_file_path(&mut rng, &PACKAGES_LIST, &EXTENSIONS_LIST, &dir_candidates);
         let http_code = rng.choose(HTTP_CODES).unwrap_or(&200);
-        let size = fake!(Number.between(99, 5000000));
+        let size = fake!(Number.between(99, 5_000_000));
         let referrer = "-";
         let user_agent = fake!(Internet.user_agent);
         let line = format!(
@@ -47,11 +47,11 @@ pub fn run(appconfig: &AppConfig) {
         } else if count_burst_lines == burst_lines {
             burst_mode = false;
             count_burst_lines = 0;
-        } else if burst_mode == false {
+        } else if !burst_mode {
             burst_mode = rng.gen_bool(1.0 / 20.0);
         }
 
-        dprint(format!("{}", line), 0);
+        dprint(line.to_string(), 0);
 
         println!();
         if burst_mode {

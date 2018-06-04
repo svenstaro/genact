@@ -24,7 +24,7 @@ pub fn run(appconfig: &AppConfig) {
         } else if count_burst_lines == burst_lines {
             burst_mode = false;
             count_burst_lines = 0;
-        } else if burst_mode == false {
+        } else if !burst_mode {
             burst_mode = rng.gen_bool(1.0 / 20.0);
         }
 
@@ -36,9 +36,9 @@ pub fn run(appconfig: &AppConfig) {
             if has_bold_word {
                 let mut words: Vec<String> = choice.split_whitespace().map(String::from).collect();
                 words[0] = format!("{}", Paint::new(&words[0]).bold());
-                dprint(format!("{}", words.join(" ")), char_sleep_length);
+                dprint(words.join(" ").to_string(), char_sleep_length);
             } else {
-                dprint(format!("{}", choice), char_sleep_length);
+                dprint(choice.to_string(), char_sleep_length);
             }
         }
 
