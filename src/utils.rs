@@ -1,5 +1,6 @@
 /// Module containing random utilities.
 use rand::{ThreadRng, Rng};
+use rand::distributions::Uniform;
 use std::path::{Path, PathBuf};
 use std::time;
 #[cfg(not(target_os = "emscripten"))]
@@ -58,20 +59,29 @@ pub fn dprint<S: Into<String>>(s: S, delay: u64) {
     }
 }
 
-pub fn gen_hex_string(rng: &mut ThreadRng, length: u64) -> String {
-    const HEX_CHARS: &[u8] = b"0123456789abcdef";
-    let hex_string: String = (0..length)
-        .map(|_| *rng.choose(HEX_CHARS).unwrap() as char)
+/// Generate a string of `length` with characters randomly sampled
+/// from `string`.
+pub fn gen_string_with_chars(rng: &mut ThreadRng, char_set: &str, length: u64) -> String {
+    let chars: Vec<_> = char_set.chars().collect();
+    let range = Uniform::new(0, chars.len());
+
+    let string: String = (0..length)
+        .map(|_| chars[rng.sample(range)])
         .collect();
-    hex_string
+    string
+}
+
+pub fn gen_hex_string(rng: &mut ThreadRng, length: u64) -> String {
+    gen_string_with_chars(rng, "0123456789abcdef", length)
 }
 
 /// Return a String containing `n` random concatenated elements from `list`.
 ///
 /// If `n` >= `list.len()` then `list.len()` will be used instead of `n`.
 pub fn gen_random_n_from_list_into_string(rng: &mut ThreadRng, list: &[&str], n: u64) -> String {
+    let range = Uniform::new(0, list.len());
     (0..cmp::min(n, list.len() as u64))
-        .fold(String::new(), |acc, _| acc + " " + rng.choose(list).unwrap())
+        .fold(String::new(), |acc, _| acc + " " + list[rng.sample(range)])
 }
 
 pub fn gen_file_name_with_ext(rng: &mut ThreadRng, files: &[&str], extension: &str) -> String {
@@ -90,8 +100,9 @@ pub fn gen_file_name(rng: &mut ThreadRng, files: &[&str], extensions: &[&str]) -
 pub fn gen_file_path(rng: &mut ThreadRng, files: &[&str], extensions: &[&str], dir_candidates: &[&str]) -> String {
     let path_length = rng.gen_range(1, 5);
     let mut path = PathBuf::from("/");
+    let range = Uniform::new(0, dir_candidates.len());
     for _ in 0..path_length {
-        path.push(rng.choose(dir_candidates).unwrap_or(&""));
+        path.push(dir_candidates[rng.sample(range)]);
     }
     path.push(gen_file_name(rng, files, extensions));
     path.to_string_lossy().to_string()
