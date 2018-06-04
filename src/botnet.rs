@@ -19,11 +19,14 @@ pub fn run(appconfig: &AppConfig) {
     let mut connected = 0;
 
     while connected <= size {
-        print!("\rEstablishing connections: {:4}/{:4}", connected, size);
+        dprint(
+            format!("\rEstablishing connections: {:4}/{:4}", connected, size),
+            0,
+        );
         connected += 1;
         csleep((rng.gen_range(0_f64, 1.).powi(50) * 50.) as u64);
     }
-    println!();
+    dprint("\n", 0);
 
     csleep(300);
 
@@ -33,17 +36,20 @@ pub fn run(appconfig: &AppConfig) {
     }
 
     loop {
-        print!("\u{001b}[{}A\n", onlines.len() + 1);
+        dprint(format!("\u{001b}[{}A\n", onlines.len() + 1), 0);
         for (i, (nodes, online)) in clusters.iter().zip(onlines.iter()).enumerate() {
-            println!(
-                "\u{001b}[2K  Cluster #{:02} ({:3} nodes) [{}]",
-                i,
-                nodes,
-                if *online {
-                    Paint::green("online")
-                } else {
-                    Paint::yellow("booting")
-                }.bold(),
+            dprint(
+                format!(
+                    "\u{001b}[2K  Cluster #{:02} ({:3} nodes) [{}]\n",
+                    i,
+                    nodes,
+                    if *online {
+                        Paint::green("online")
+                    } else {
+                        Paint::yellow("booting")
+                    }.bold(),
+                ),
+                0,
             );
         }
         if onlines.iter().all(|x| *x) {
@@ -67,7 +73,7 @@ pub fn run(appconfig: &AppConfig) {
         csleep(300);
         dprint(format!("+ {} ", task), 10);
         csleep(600);
-        dprint("[done]\n", 10)
+        dprint("[done]\n", 10);
     }
 
     dprint(">> Botnet update complete.\n", 10);
