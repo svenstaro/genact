@@ -33,6 +33,9 @@ pub fn run(appconfig: &AppConfig) {
     for (i, nodes) in clusters.iter().enumerate() {
         dprint(format!("  Cluster #{:02} ({:3} nodes)\n", i, nodes), 10);
         csleep(100);
+        if appconfig.should_exit() {
+            return;
+        }
     }
 
     loop {
@@ -61,6 +64,9 @@ pub fn run(appconfig: &AppConfig) {
             }
         }
         csleep(100);
+        if appconfig.should_exit() {
+            return;
+        }
     }
 
     let tasks = [
@@ -74,6 +80,9 @@ pub fn run(appconfig: &AppConfig) {
         dprint(format!("+ {} ", task), 10);
         csleep(600);
         dprint("[done]\n", 10);
+        if appconfig.should_exit() {
+            return;
+        }
     }
 
     dprint(">> Botnet update complete.\n", 10);
