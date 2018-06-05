@@ -7,12 +7,13 @@ pub fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
     let clusters = {
         let mut ret = vec![];
-        for _ in 0..rng.gen_range(8, 16 + 1) {
-            ret.push(rng.gen_range(100, 200 + 1));
+        let num_clusters = rng.gen_range(8, 16 + 1);
+        for _ in 0..num_clusters {
+            let num_nodes = rng.gen_range(100, 200 + 1);
+            ret.push(num_nodes);
         }
         ret
     };
-
     let mut onlines = vec![false; clusters.len()];
     let size: usize = clusters.iter().sum();
 
@@ -20,18 +21,29 @@ pub fn run(appconfig: &AppConfig) {
 
     while connected <= size {
         dprint(
-            format!("\rEstablishing connections: {:4}/{:4}", connected, size),
+            format!(
+                "\rEstablishing connections: {connected:4}/{size:4}",
+                connected = connected,
+                size = size
+            ),
             0,
         );
         connected += 1;
-        csleep((rng.gen_range(0_f64, 1.).powi(50) * 50.) as u64);
+        csleep((rng.gen_range(0f64, 1.).powi(50) * 50.) as u64);
     }
     dprint("\n", 0);
 
     csleep(300);
 
     for (i, nodes) in clusters.iter().enumerate() {
-        dprint(format!("  Cluster #{:02} ({:3} nodes)\n", i, nodes), 10);
+        dprint(
+            format!(
+                "  Cluster #{i:02} ({nodes:3} nodes)\n",
+                i = i,
+                nodes = nodes
+            ),
+            10,
+        );
         csleep(100);
         if appconfig.should_exit() {
             return;
@@ -39,27 +51,31 @@ pub fn run(appconfig: &AppConfig) {
     }
 
     loop {
-        dprint(format!("\u{001b}[{}A\n", onlines.len() + 1), 0);
-        for (i, (nodes, online)) in clusters.iter().zip(onlines.iter()).enumerate() {
-            dprint(
-                format!(
-                    "\u{001b}[2K  Cluster #{:02} ({:3} nodes) [{}]\n",
-                    i,
-                    nodes,
-                    if *online {
-                        Paint::green("online")
-                    } else {
-                        Paint::yellow("booting")
-                    }.bold(),
-                ),
-                0,
-            );
+        dprint(format!("\u{001b}[{line_up:}A", line_up = onlines.len()), 0);
+        {
+            let nodes_with_status = clusters.iter().zip(onlines.iter());
+            for (i, (nodes, online)) in nodes_with_status.enumerate() {
+                dprint(
+                    format!(
+                        "\u{001b}[2K  Cluster #{i:02} ({nodes:3} nodes) [{status:}]\n",
+                        i = i,
+                        nodes = nodes,
+                        status = if *online {
+                            Paint::green("online")
+                        } else {
+                            Paint::yellow("booting")
+                        }.bold(),
+                    ),
+                    0,
+                );
+            }
         }
         if onlines.iter().all(|x| *x) {
             break;
         }
         for o in &mut onlines {
-            if rng.gen_range(0., 1.) > 0.95_f64 {
+            let success_rate = 0.05;
+            if rng.gen_bool(success_rate) {
                 *o = true;
             }
         }
