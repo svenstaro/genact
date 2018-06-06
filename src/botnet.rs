@@ -1,6 +1,6 @@
 use parse_args::AppConfig;
 use rand::{thread_rng, Rng};
-use utils::{csleep, dprint};
+use utils::{csleep, cursor_up, dprint, erase_line};
 use yansi::Paint;
 
 pub fn run(appconfig: &AppConfig) {
@@ -51,13 +51,14 @@ pub fn run(appconfig: &AppConfig) {
     }
 
     loop {
-        dprint(format!("\u{001b}[{line_up:}A", line_up = onlines.len()), 0);
+        cursor_up(onlines.len() as u64);
         {
             let nodes_with_status = clusters.iter().zip(onlines.iter());
             for (i, (nodes, online)) in nodes_with_status.enumerate() {
+                erase_line();
                 dprint(
                     format!(
-                        "\u{001b}[2K  Cluster #{i:02} ({nodes:3} nodes) [{status:}]\n",
+                        "  Cluster #{i:02} ({nodes:3} nodes) [{status:}]\n",
                         i = i,
                         nodes = nodes,
                         status = if *online {

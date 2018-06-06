@@ -113,6 +113,13 @@ pub fn is_printable_ascii(a: u64) -> bool {
     a >= 0x21 && a <= 0x7e
 }
 
+pub fn cursor_up(n: u64) {
+    dprint(format!("\x1b[{}A", n), 0);
+}
+
+pub fn erase_line() {
+    dprint("\x1b[2K", 0);
+}
 
 #[cfg(target_os = "emscripten")]
 pub struct TermWriter;
