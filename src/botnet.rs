@@ -31,19 +31,20 @@ pub fn run(appconfig: &AppConfig) {
         connected += 1;
         csleep((rng.gen_range(0f64, 1.).powi(50) * 50.) as u64);
     }
-    dprint("\n", 0);
+    println!();
 
     csleep(300);
 
     for (i, nodes) in clusters.iter().enumerate() {
         dprint(
             format!(
-                "  Cluster #{i:02} ({nodes:3} nodes)\n",
+                "  Cluster #{i:02} ({nodes:3} nodes)",
                 i = i,
                 nodes = nodes
             ),
             10,
         );
+        println!();
         csleep(100);
         if appconfig.should_exit() {
             return;
@@ -56,9 +57,8 @@ pub fn run(appconfig: &AppConfig) {
             let nodes_with_status = clusters.iter().zip(onlines.iter());
             for (i, (nodes, online)) in nodes_with_status.enumerate() {
                 erase_line();
-                dprint(
-                    format!(
-                        "  Cluster #{i:02} ({nodes:3} nodes) [{status:}]\n",
+                println!(
+                        "  Cluster #{i:02} ({nodes:3} nodes) [{status:}]",
                         i = i,
                         nodes = nodes,
                         status = if *online {
@@ -66,8 +66,6 @@ pub fn run(appconfig: &AppConfig) {
                         } else {
                             Paint::yellow("booting")
                         }.bold(),
-                    ),
-                    0,
                 );
             }
         }
@@ -96,11 +94,13 @@ pub fn run(appconfig: &AppConfig) {
         csleep(300);
         dprint(format!("+ {} ", task), 10);
         csleep(600);
-        dprint("[done]\n", 10);
+        dprint("[done]", 10);
+        println!();
         if appconfig.should_exit() {
             return;
         }
     }
 
-    dprint(">> Botnet update complete.\n", 10);
+    dprint(">> Botnet update complete.", 10);
+    println!();
 }
