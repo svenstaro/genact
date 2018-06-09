@@ -28,6 +28,7 @@ extern crate yansi;
 extern crate fake;
 
 mod bootlog;
+mod botnet;
 mod cargo;
 mod composer;
 mod cc;
@@ -76,6 +77,7 @@ fn main() {
 
     let all_modules = [
         "bootlog",
+        "botnet",
         "cargo",
         "cc",
         "composer",
@@ -87,7 +89,6 @@ fn main() {
         "weblog",
         // "bruteforce",
         // "initialize",
-        // "botnet",
         // "heartbeat",
     ];
 
@@ -120,6 +121,7 @@ fn main() {
         let choice: &str = rng.choose(&appconfig.modules).unwrap();
         match choice {
             "bootlog" => bootlog::run(&appconfig),
+            "botnet" => botnet::run(&appconfig),
             "cargo" => cargo::run(&appconfig),
             "cryptomining" => cryptomining::run(&appconfig),
             "simcity" => simcity::run(&appconfig),
