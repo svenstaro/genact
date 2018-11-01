@@ -46,12 +46,13 @@ impl AppConfig {
 
 #[cfg(not(target_os = "emscripten"))]
 pub fn parse_args(all_modules: &[&str]) -> AppConfig {
-    use clap::{App, Arg};
+    use clap::{App, Arg, AppSettings};
 
     let matches = App::new(crate_name!())
         .version(crate_version!())
         .author(crate_authors!())
         .about(crate_description!())
+        .global_setting(AppSettings::ColoredHelp)
         .arg(
             Arg::with_name("list")
                 .short("l")
