@@ -1,4 +1,4 @@
-use rand::{thread_rng, Rng};
+use rand::prelude::*;
 use std::cmp::max;
 
 use pbr::{ProgressBar, Units};
@@ -16,7 +16,7 @@ pub fn run(appconfig: &AppConfig) {
 
     // We'll use the same extension for all files of this whole run to make things seem more
     // realistic.
-    let extension = rng.choose(EXTENSIONS_LIST).unwrap_or(&".wat");
+    let extension = EXTENSIONS_LIST.choose(&mut rng).unwrap_or(&".wat");
 
     // Choose speed. We'll choose an approximate speed that we'll vary a little bit.
     // Download speed in bytes per second.

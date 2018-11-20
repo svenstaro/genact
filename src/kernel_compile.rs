@@ -1,5 +1,5 @@
 /// Module that pretends to build a Linux kernel
-use rand::{thread_rng, Rng, ThreadRng};
+use rand::prelude::*;
 use regex::Regex;
 
 use utils::csleep;
@@ -20,12 +20,12 @@ fn gen_header(arch: &str, rng: &mut ThreadRng) -> String {
     ];
 
     let cmd = if rng.gen_bool(1.0 / 15.0) {
-        rng.choose(RARE_CMDS).unwrap_or(&"")
+        RARE_CMDS.choose(rng).unwrap_or(&"")
     } else {
-        rng.choose(CMDS).unwrap_or(&"")
+        CMDS.choose(rng).unwrap_or(&"")
     };
 
-    let cfile = rng.choose(&CFILES_LIST).unwrap_or(&"");
+    let cfile = &CFILES_LIST.choose(rng).unwrap_or(&"");
     let mut file = format!("{}h", &cfile[..cfile.len() - 1]);
 
     if file.starts_with("arch") {
@@ -44,14 +44,14 @@ fn gen_object(arch: &str, rng: &mut ThreadRng) -> String {
     ];
 
     let cmd = if rng.gen_bool(1.0 / 15.0) {
-        rng.choose(RARE_CMDS).unwrap_or(&"")
+        RARE_CMDS.choose(rng).unwrap_or(&"")
     } else if rng.gen_bool(0.33) {
         "AR     "
     } else {
         "CC     "
     };
 
-    let cfile = rng.choose(&CFILES_LIST).unwrap_or(&"");
+    let cfile = &CFILES_LIST.choose(rng).unwrap_or(&"");
     let mut file = format!("{}o", cfile[..cfile.len() - 1].to_owned());
 
     if file.starts_with("arch") {
@@ -92,7 +92,7 @@ fn gen_special(arch: &str, rng: &mut ThreadRng) -> String {
         "ZOFFSET arch/ARCH/boot/zoffset.h",
     ];
 
-    let special = rng.choose(SPECIALS).unwrap_or(&"").to_string();
+    let special = SPECIALS.choose(rng).unwrap_or(&"").to_string();
     let special = special.replace("ARCH", arch);
 
     format!("  {}", special)
@@ -146,7 +146,7 @@ pub fn run(appconfig: &AppConfig) {
         "xtensa",
     ];
 
-    let arch = rng.choose(ARCHES).unwrap_or(&"x86");
+    let arch = ARCHES.choose(&mut rng).unwrap_or(&"x86");
 
     for _ in 1..num_lines {
         let line = gen_line(arch, &mut rng);

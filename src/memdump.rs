@@ -1,5 +1,5 @@
 /// Module that dumps some random memory locations in a slightly cool fashion.
-use rand::{thread_rng, Rng};
+use rand::prelude::*;
 use std::io::Write;
 use std::io::stdout;
 

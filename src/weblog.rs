@@ -1,5 +1,5 @@
 /// Module that pretends to tail a web server log.
-use rand::{thread_rng, Rng};
+use rand::prelude::*;
 
 use parse_args::AppConfig;
 use chrono::prelude::*;
@@ -24,7 +24,7 @@ pub fn run(appconfig: &AppConfig) {
         let method = "GET";
         let dir_candidates = fake!(Lorem.words(20));
         let path = gen_file_path(&mut rng, &PACKAGES_LIST, &EXTENSIONS_LIST, &dir_candidates);
-        let http_code = rng.choose(HTTP_CODES).unwrap_or(&200);
+        let http_code = HTTP_CODES.choose(&mut rng).unwrap_or(&200);
         let size = fake!(Number.between(99, 5_000_000));
         let referrer = "-";
         let user_agent = fake!(Internet.user_agent);

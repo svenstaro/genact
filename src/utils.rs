@@ -1,5 +1,5 @@
 /// Module containing random utilities.
-use rand::{ThreadRng, Rng};
+use rand::prelude::*;
 use rand::distributions::Uniform;
 use std::path::{Path, PathBuf};
 use std::time;
@@ -85,14 +85,14 @@ pub fn gen_random_n_from_list_into_string(rng: &mut ThreadRng, list: &[&str], n:
 }
 
 pub fn gen_file_name_with_ext(rng: &mut ThreadRng, files: &[&str], extension: &str) -> String {
-    let chosen_file = rng.choose(files).unwrap_or(&"");
+    let chosen_file = files.choose(rng).unwrap_or(&"");
     let path = Path::new(&chosen_file).with_extension(extension);
     path.file_name().unwrap().to_str().unwrap().to_string()
 }
 
 pub fn gen_file_name(rng: &mut ThreadRng, files: &[&str], extensions: &[&str]) -> String {
-    let chosen_file = rng.choose(files).unwrap_or(&"");
-    let chosen_extension = rng.choose(extensions).unwrap_or(&"");
+    let chosen_file = files.choose(rng).unwrap_or(&"");
+    let chosen_extension = extensions.choose(rng).unwrap_or(&"");
     let path = Path::new(&chosen_file).with_extension(chosen_extension);
     path.file_name().unwrap().to_str().unwrap().to_string()
 }

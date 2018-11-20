@@ -1,4 +1,4 @@
-use rand::{thread_rng, Rng};
+use rand::prelude::*;
 use parse_args::AppConfig;
 use utils::{dprint, csleep};
 use yansi::Paint;
@@ -20,12 +20,12 @@ pub fn run(appconfig: &AppConfig) {
         // Message chosen from "data/simcity.txt"
         // Thanks https://gist.github.com/erikcox/7e96d031d00d7ecb1a2f
         let last_simcity = simcity;
-        simcity = rng.choose(&SIMCITY_LIST).unwrap_or(&"");
+        simcity = &SIMCITY_LIST.choose(&mut rng).unwrap_or(&"");
 
         // Don't choose the same message twice in a row
         while simcity == last_simcity {
             // Select another message
-            simcity = rng.choose(&SIMCITY_LIST).unwrap_or(&"");
+            simcity = &SIMCITY_LIST.choose(&mut rng).unwrap_or(&"");
         }
 
         // Choose a status/resolution per "task"

@@ -1,7 +1,6 @@
 /// Module that pretends to run cargo to install rust packages.
-use rand::{thread_rng, Rng, ThreadRng};
+use rand::prelude::*;
 use rand::distributions::{ChiSquared, Distribution};
-use rand::seq::sample_slice;
 use std::time::Instant;
 use yansi::Paint;
 
@@ -23,7 +22,7 @@ pub fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
     let num_packages = rng.gen_range(10, 100);
     // Choose `num_packages` packages, non-repeating and in random order
-    let chosen_names = sample_slice(&mut rng, &PACKAGES_LIST, num_packages);
+    let chosen_names: Vec<_> = PACKAGES_LIST.choose_multiple(&mut rng, num_packages).collect();
     let chosen_packages: Vec<_> = chosen_names
         .iter()
         .map(|name| (name, gen_package_version(&mut rng)))

@@ -1,11 +1,10 @@
 /// Module that pretends to run a C compiler.
-use rand::{thread_rng, Rng, ThreadRng};
-use rand::seq::sample_slice;
+use rand::prelude::*;
 use std::path::Path;
 
+use parse_args::AppConfig;
 use utils::{csleep, gen_random_n_from_list_into_string};
 use {CFILES_LIST, PACKAGES_LIST};
-use parse_args::AppConfig;
 
 /// Generate a `String` containing all of the `file_list`'s file's parents as -I flags
 fn generate_includes(file_list: &[&str], max: u32, rng: &mut ThreadRng) -> String {
@@ -20,16 +19,14 @@ fn generate_includes(file_list: &[&str], max: u32, rng: &mut ThreadRng) -> Strin
             }
         }
     }
-    let limited_flags = (0..max).map(|_| *rng.choose(&include_flags).unwrap());
+    let limited_flags = (0..max).map(|_| include_flags.choose(rng).unwrap());
     limited_flags.fold(String::new(), |acc, x| acc + "-I" + x + " ")
 }
 
 /// Generate a list of `n` random linker flags given a list of `candidates`.
 fn generate_linker_flags(candidates: &[&str], n: usize, rng: &mut ThreadRng) -> String {
-    let libraries = sample_slice(rng, candidates, n);
-    libraries
-        .iter()
-        .fold(String::new(), |acc, &x| acc + "-l" + x + " ")
+    let libraries = candidates.choose_multiple(rng, n);
+    libraries.fold(String::new(), |acc, &x| acc + "-l" + x + " ")
 }
 
 pub fn run(appconfig: &AppConfig) {
@@ -61,18 +58,21 @@ pub fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
 
     // Choose a random package name to be our final linking target.
-    let package = rng.choose(&PACKAGES_LIST).unwrap();
+    let package = &PACKAGES_LIST.choose(&mut rng).unwrap();
 
-    let compiler = rng.choose(COMPILERS).unwrap();
+    let compiler = COMPILERS.choose(&mut rng).unwrap();
 
     let num_cfiles = rng.gen_range(100, 1000);
-    let mut chosen_files = sample_slice(&mut rng, &CFILES_LIST, num_cfiles);
+    let mut chosen_files: Vec<&str> = CFILES_LIST
+        .choose_multiple(&mut rng, num_cfiles)
+        .cloned()
+        .collect();
     chosen_files.sort_unstable();
 
-    let opt = rng.choose(FLAGS_OPT).unwrap();
+    let opt = FLAGS_OPT.choose(&mut rng).unwrap();
 
     // Pick a bunch of warning flags.
-    let warn = rng.choose(FLAGS_WARN_BASE).unwrap().to_string();
+    let warn = FLAGS_WARN_BASE.choose(&mut rng).unwrap().to_string();
     let num_additional_warn_flags = rng.gen_range(0, FLAGS_WARN.len()) as u64;
     let warn_additional =
         gen_random_n_from_list_into_string(&mut rng, FLAGS_WARN, num_additional_warn_flags);
@@ -87,14 +87,14 @@ pub fn run(appconfig: &AppConfig) {
     let arch = gen_random_n_from_list_into_string(&mut rng, FLAGS_ARCH, num_arch_flags);
 
     // Get includes for the given files.
-    let includes = generate_includes(&chosen_files, 20, &mut rng);
+    let includes = generate_includes(chosen_files.as_slice(), 20, &mut rng);
 
     // Get random linker flags.
     let num_linker_flags = rng.gen_range(0, 10);
     let linker_flags = generate_linker_flags(&PACKAGES_LIST, num_linker_flags, &mut rng);
 
     // Pick a bunch of defs
-    let defs = rng.choose(FLAGS_DEF_BASE).unwrap().to_string();
+    let defs = FLAGS_DEF_BASE.choose(&mut rng).unwrap().to_string();
     let num_def_flags = rng.gen_range(0, FLAGS_DEF.len()) as u64;
     let defs_additional = gen_random_n_from_list_into_string(&mut rng, FLAGS_DEF, num_def_flags);
     let defs_final = defs + &defs_additional;

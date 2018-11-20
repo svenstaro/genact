@@ -1,5 +1,5 @@
 /// Module that pretends to boot a system.
-use rand::{thread_rng, Rng};
+use rand::prelude::*;
 use yansi::Paint;
 
 use parse_args::AppConfig;
@@ -13,7 +13,7 @@ pub fn run(appconfig: &AppConfig) {
     let mut count_burst_lines = 0;
 
     for _ in 1..num_lines {
-        let choice = rng.choose(&BOOTLOG_LIST).unwrap_or(&"");
+        let choice = BOOTLOG_LIST.choose(&mut rng).unwrap_or(&"");
         let mut line_sleep_length = rng.gen_range(10, 1000);
         let mut char_sleep_length = 5;
         let burst_lines = rng.gen_range(10, 50);

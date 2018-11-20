@@ -41,7 +41,7 @@ mod memdump;
 mod utils;
 mod parse_args;
 
-use rand::{thread_rng, Rng};
+use rand::prelude::*;
 use yansi::Paint;
 use parse_args::parse_args;
 
@@ -118,7 +118,7 @@ fn main() {
 
     let mut rng = thread_rng();
     loop {
-        let choice: &str = rng.choose(&appconfig.modules).unwrap();
+        let choice: &str = appconfig.modules.choose(&mut rng).unwrap();
         match choice {
             "bootlog" => bootlog::run(&appconfig),
             "botnet" => botnet::run(&appconfig),
