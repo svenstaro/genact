@@ -15,8 +15,9 @@ maintenance = { status = "actively-developed" }
 
 [dependencies]
 pbr = "1.0"
-yansi = "0.4"
-rand = "0.6"
+yansi = "0.5"
+# Switch back to rand once this is merged: https://github.com/rust-random/rand/pull/671
+rand = { git = "https://github.com/svenstaro/rand.git", branch = "fix-emscripten-target" }
 chrono = "0.4"
 url = "1.6"
 lazy_static = "1.0"

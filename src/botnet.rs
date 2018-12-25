@@ -1,5 +1,5 @@
 use parse_args::AppConfig;
-use rand::{thread_rng, Rng};
+use rand::prelude::*;
 use utils::{csleep, cursor_up, dprint, erase_line};
 use yansi::Paint;
 

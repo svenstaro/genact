@@ -33,7 +33,7 @@ pub fn run(appconfig: &AppConfig) {
     for _ in 1..num_lines {
         let sleep_length = 300;
 
-        let time = Paint::purple(Local::now().format("%H:%M:%S"));
+        let time = Paint::magenta(Local::now().format("%H:%M:%S"));
 
         if remaining_until_new_job == 0 {
             remaining_until_new_job = new_job_every_n_lines;
