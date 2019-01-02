@@ -424,7 +424,7 @@ dependencies = [
 [[package]]
 name = "rand"
 version = "0.6.1"
-source = "git+https://github.com/svenstaro/rand.git?branch=fix-emscripten-target#2f7a04269ea1cd6fc186240efa78457f1c4e92a4"
+source = "git+https://github.com/svenstaro/rand.git?branch=fix-emscripten-target#0540168ca6d1d8d0d658704f849680ef7f712d03"
 dependencies = [
  "autocfg 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "cloudabi 0.0.3 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -443,7 +443,7 @@ dependencies = [
 [[package]]
 name = "rand_chacha"
 version = "0.1.0"
-source = "git+https://github.com/svenstaro/rand.git?branch=fix-emscripten-target#2f7a04269ea1cd6fc186240efa78457f1c4e92a4"
+source = "git+https://github.com/svenstaro/rand.git?branch=fix-emscripten-target#0540168ca6d1d8d0d658704f849680ef7f712d03"
 dependencies = [
  "autocfg 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "rand_core 0.3.0 (git+https://github.com/svenstaro/rand.git?branch=fix-emscripten-target)",
@@ -452,12 +452,12 @@ dependencies = [
 [[package]]
 name = "rand_core"
 version = "0.3.0"
-source = "git+https://github.com/svenstaro/rand.git?branch=fix-emscripten-target#2f7a04269ea1cd6fc186240efa78457f1c4e92a4"
+source = "git+https://github.com/svenstaro/rand.git?branch=fix-emscripten-target#0540168ca6d1d8d0d658704f849680ef7f712d03"
 
 [[package]]
 name = "rand_hc"
 version = "0.1.0"
-source = "git+https://github.com/svenstaro/rand.git?branch=fix-emscripten-target#2f7a04269ea1cd6fc186240efa78457f1c4e92a4"
+source = "git+https://github.com/svenstaro/rand.git?branch=fix-emscripten-target#0540168ca6d1d8d0d658704f849680ef7f712d03"
 dependencies = [
  "rand_core 0.3.0 (git+https://github.com/svenstaro/rand.git?branch=fix-emscripten-target)",
 ]
@@ -465,7 +465,7 @@ dependencies = [
 [[package]]
 name = "rand_isaac"
 version = "0.1.1"
-source = "git+https://github.com/svenstaro/rand.git?branch=fix-emscripten-target#2f7a04269ea1cd6fc186240efa78457f1c4e92a4"
+source = "git+https://github.com/svenstaro/rand.git?branch=fix-emscripten-target#0540168ca6d1d8d0d658704f849680ef7f712d03"
 dependencies = [
  "rand_core 0.3.0 (git+https://github.com/svenstaro/rand.git?branch=fix-emscripten-target)",
 ]
@@ -473,7 +473,7 @@ dependencies = [
 [[package]]
 name = "rand_pcg"
 version = "0.1.1"
-source = "git+https://github.com/svenstaro/rand.git?branch=fix-emscripten-target#2f7a04269ea1cd6fc186240efa78457f1c4e92a4"
+source = "git+https://github.com/svenstaro/rand.git?branch=fix-emscripten-target#0540168ca6d1d8d0d658704f849680ef7f712d03"
 dependencies = [
  "autocfg 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "rand_core 0.3.0 (git+https://github.com/svenstaro/rand.git?branch=fix-emscripten-target)",
@@ -482,7 +482,7 @@ dependencies = [
 [[package]]
 name = "rand_xorshift"
 version = "0.1.0"
-source = "git+https://github.com/svenstaro/rand.git?branch=fix-emscripten-target#2f7a04269ea1cd6fc186240efa78457f1c4e92a4"
+source = "git+https://github.com/svenstaro/rand.git?branch=fix-emscripten-target#0540168ca6d1d8d0d658704f849680ef7f712d03"
 dependencies = [
  "rand_core 0.3.0 (git+https://github.com/svenstaro/rand.git?branch=fix-emscripten-target)",
 ]
@@ -490,7 +490,7 @@ dependencies = [
 [[package]]
 name = "rand_xoshiro"
 version = "0.1.0"
-source = "git+https://github.com/svenstaro/rand.git?branch=fix-emscripten-target#2f7a04269ea1cd6fc186240efa78457f1c4e92a4"
+source = "git+https://github.com/svenstaro/rand.git?branch=fix-emscripten-target#0540168ca6d1d8d0d658704f849680ef7f712d03"
 dependencies = [
  "byteorder 1.2.7 (registry+https://github.com/rust-lang/crates.io-index)",
  "rand_core 0.3.0 (git+https://github.com/svenstaro/rand.git?branch=fix-emscripten-target)",
