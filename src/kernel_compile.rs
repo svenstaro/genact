@@ -2,9 +2,9 @@
 use rand::prelude::*;
 use regex::Regex;
 
-use utils::csleep;
-use CFILES_LIST;
-use parse_args::AppConfig;
+use crate::utils::csleep;
+use crate::CFILES_LIST;
+use crate::parse_args::AppConfig;
 
 /// Generate a build step for a header file
 fn gen_header(arch: &str, rng: &mut ThreadRng) -> String {

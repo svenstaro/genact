@@ -6,8 +6,8 @@ use yansi::Paint;
 use chrono::prelude::*;
 use chrono::Duration;
 
-use utils::{gen_hex_string, csleep};
-use parse_args::AppConfig;
+use crate::utils::{gen_hex_string, csleep};
+use crate::parse_args::AppConfig;
 
 pub fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();

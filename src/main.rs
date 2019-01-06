@@ -43,7 +43,7 @@ mod parse_args;
 
 use rand::prelude::*;
 use yansi::Paint;
-use parse_args::parse_args;
+use crate::parse_args::parse_args;
 
 static BOOTLOG: &str = include_str!("../data/bootlog.txt");
 static CFILES: &str = include_str!("../data/cfiles.txt");

@@ -4,9 +4,9 @@ use rand::distributions::{ChiSquared, Distribution};
 use std::time::Instant;
 use yansi::Paint;
 
-use utils::csleep;
-use PACKAGES_LIST;
-use parse_args::AppConfig;
+use crate::utils::csleep;
+use crate::PACKAGES_LIST;
+use crate::parse_args::AppConfig;
 
 fn gen_package_version(rng: &mut ThreadRng) -> String {
     let chi = ChiSquared::new(1.0);

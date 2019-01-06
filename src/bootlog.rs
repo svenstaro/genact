@@ -2,9 +2,9 @@
 use rand::prelude::*;
 use yansi::Paint;
 
-use parse_args::AppConfig;
-use utils::{csleep, dprint};
-use BOOTLOG_LIST;
+use crate::parse_args::AppConfig;
+use crate::utils::{csleep, dprint};
+use crate::BOOTLOG_LIST;
 
 pub fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();

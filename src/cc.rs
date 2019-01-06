@@ -2,9 +2,9 @@
 use rand::prelude::*;
 use std::path::Path;
 
-use parse_args::AppConfig;
-use utils::{csleep, gen_random_n_from_list_into_string};
-use {CFILES_LIST, PACKAGES_LIST};
+use crate::parse_args::AppConfig;
+use crate::utils::{csleep, gen_random_n_from_list_into_string};
+use crate::{CFILES_LIST, PACKAGES_LIST};
 
 /// Generate a `String` containing all of the `file_list`'s file's parents as -I flags
 fn generate_includes(file_list: &[&str], max: u32, rng: &mut ThreadRng) -> String {

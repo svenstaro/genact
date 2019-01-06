@@ -3,9 +3,9 @@ use rand::prelude::*;
 use rand::distributions::{ChiSquared, Distribution};
 use yansi::Paint;
 
-use utils::csleep;
-use COMPOSERS_LIST;
-use parse_args::AppConfig;
+use crate::utils::csleep;
+use crate::COMPOSERS_LIST;
+use crate::parse_args::AppConfig;
 
 fn gen_package_version(rng: &mut ThreadRng) -> String {
     let chi = ChiSquared::new(1.0);

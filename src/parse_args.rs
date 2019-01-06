@@ -28,7 +28,7 @@ impl AppConfig {
         #[cfg(not(target_os = "emscripten"))]
         {
             use std::sync::atomic::Ordering;
-            use CTRLC_PRESSED;
+            use crate::CTRLC_PRESSED;
             if CTRLC_PRESSED.load(Ordering::SeqCst) {
                 return true;
             }

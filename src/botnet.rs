@@ -1,6 +1,6 @@
-use parse_args::AppConfig;
+use crate::parse_args::AppConfig;
 use rand::prelude::*;
-use utils::{csleep, cursor_up, dprint, erase_line};
+use crate::utils::{csleep, cursor_up, dprint, erase_line};
 use yansi::Paint;
 
 pub fn run(appconfig: &AppConfig) {

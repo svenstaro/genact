@@ -3,8 +3,8 @@ use rand::prelude::*;
 use std::io::Write;
 use std::io::stdout;
 
-use utils::{csleep, dprint, is_printable_ascii, gen_hex_string};
-use parse_args::AppConfig;
+use crate::utils::{csleep, dprint, is_printable_ascii, gen_hex_string};
+use crate::parse_args::AppConfig;
 
 pub fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();

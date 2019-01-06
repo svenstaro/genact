@@ -1,9 +1,9 @@
 use rand::prelude::*;
-use parse_args::AppConfig;
-use utils::{dprint, csleep};
+use crate::parse_args::AppConfig;
+use crate::utils::{dprint, csleep};
 use yansi::Paint;
 
-use SIMCITY_LIST;
+use crate::SIMCITY_LIST;
 
 pub fn run(appconfig: &AppConfig) {
     const SPINNERS: &[&str] = &["/", "-", "\\", "|"];
