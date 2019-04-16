@@ -30,15 +30,48 @@ pub fn run(appconfig: &AppConfig) {
 
         // Choose a status/resolution per "task"
         let resolution_id = 1 + rng.gen::<u8>() % 100;
-        let resolution = match resolution_id {
+        let mut resolution = match resolution_id {
             1...4 => "FAIL",
             5...9 => "YES",
             10...14 => "SUCCESS",
             _ => "OK",
         };
 
-        // Select a color
-        let color_func = if resolution == "FAIL" {
+        // Prepare and color the messages
+        let unchecked_checkbox = "[ ] ";
+        let checked_checkbox = "[o] ";
+
+        // Keep track of when the message is first printed
+        let mut first = true;
+
+        'outer: for _ in 0..spinner_loops {
+            for spinner in SPINNERS {
+                // Output a message, with a checkbox in front and spinner behind
+                let msg = format!("{}... {}", simcity, spinner);
+
+                // on first print, text appears letter by letter
+                if first {
+                    dprint(unchecked_checkbox, 0);
+                    dprint(msg, TEXT_SLEEP);
+                    first = false;
+                } else {
+                    dprint(unchecked_checkbox, 0);
+                    dprint(msg, 0);
+                }
+                // Wait a bit, then erase the line
+                csleep(SPINNER_SLEEP);
+                dprint("\r", 0);
+
+                // Don't wait until finished, exit both loops if that is requested
+                if appconfig.should_exit() {
+                    resolution = "ABORTED";
+                    break 'outer;
+                }
+            }
+        }
+
+        // Select the color
+        let color_func = if resolution == "FAIL" || resolution == "ABORTED" {
             // Use red for FAIL
             Paint::red
         } else if resolution_id > 50 {
@@ -55,39 +88,9 @@ pub fn run(appconfig: &AppConfig) {
             }
         };
 
-        // Prepare and color the messages
-        let simcity_msg = color_func(simcity);
-        let resolution_msg = color_func(resolution);
-        let dots = color_func("... ");
-        let unchecked_checkbox = "[ ] ";
-        let checked_checkbox = "[o] ";
-
-        // Keep track of when the message is first printed
-        let mut first = true;
-        for i in 0..spinner_loops {
-            for spinner in SPINNERS {
-                // Output a message, with a checkbox in front and spinner behind
-                let msg = simcity_msg.to_string() + "... " + spinner;
-                if first {
-                    dprint(unchecked_checkbox, 0);
-                    dprint(msg, TEXT_SLEEP);
-                    first = false;
-                } else {
-                    dprint(unchecked_checkbox, 0);
-                    dprint(msg, 0);
-                }
-                // Wait a bit, then erase the line
-                csleep(SPINNER_SLEEP);
-                dprint("\r", 0);
-            }
-            if i == (spinner_loops - 1) {
-                // End of loop, the line has been removed, conclude the status
-                dprint(checked_checkbox, 10);
-                dprint(simcity_msg.to_string(), 0);
-                dprint(dots.to_string(), 0);
-                dprint(resolution_msg.to_string(), 0);
-            }
-        }
+        // End of loop, the line has been removed, conclude the status
+        dprint(checked_checkbox, 10);
+        dprint(color_func(format!("{}... {}", simcity, resolution)).to_string(), 0);
 
         if appconfig.should_exit() {
             dprint("\nALL DONE\n", 0);
