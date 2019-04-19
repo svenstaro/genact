@@ -1,6 +1,6 @@
 use crate::parse_args::AppConfig;
 use crate::utils::csleep;
-use crate::{BOOT_HOOKS_LIST, CFILES_LIST, COMPRESSION_ALGORITHMS_LIST};
+use crate::{BOOT_HOOKS_LIST, CFILES_LIST, COMPRESSION_ALGORITHMS_LIST, OS_RELEASES_LIST};
 use rand::prelude::*;
 use rand::seq::SliceRandom;
 use regex::Regex;
@@ -38,6 +38,7 @@ fn build(
     mode: &str,
     zip: &str,
     drivers: &[&str],
+    os_release: &str,
     appconfig: &AppConfig,
 ) {
     let mut rng = thread_rng();
@@ -69,7 +70,7 @@ fn build(
         )
         .as_ref(),
     );
-    msg1("Starting build: 5.0.7-arch1-1-ARCH");
+    msg1(format!("Starting build: {}", os_release).as_ref());
 
     for hook in hooks {
         msg2(format!("Running build hook: [{}]", hook).as_ref());
@@ -127,10 +128,10 @@ pub fn run(appconfig: &AppConfig) {
 
         let count = rng.gen_range(0, 5);
         while ret.len() < count {
-            if let Some(file) = CFILES_LIST.choose(&mut rng) {
-                if let Some(m) = re.captures(file) {
-                    ret.push(m.get(1).unwrap().as_str());
-                }
+            let file = CFILES_LIST.choose(&mut rng).unwrap();
+
+            if let Some(m) = re.captures(file) {
+                ret.push(m.get(1).unwrap().as_str());
             }
         }
         ret
@@ -138,9 +139,13 @@ pub fn run(appconfig: &AppConfig) {
 
     // For now, the preset is always the same.
     let preset = "linux";
+    let os_release = OS_RELEASES_LIST.choose(&mut rng).unwrap();
+    let zip = COMPRESSION_ALGORITHMS_LIST.choose(&mut rng).unwrap();
 
-    if let Some(zip) = COMPRESSION_ALGORITHMS_LIST.choose(&mut rng) {
-        build(&hooks, preset, "default", zip, &drivers, &appconfig);
-        build(&hooks, preset, "fallback", zip, &drivers, &appconfig);
-    };
+    build(
+        &hooks, preset, "default", zip, &drivers, os_release, &appconfig,
+    );
+    build(
+        &hooks, preset, "fallback", zip, &drivers, os_release, &appconfig,
+    );
 }

@@ -53,6 +53,7 @@ static PACKAGES: &str = include_str!("../data/packages.txt");
 static COMPOSERS: &str = include_str!("../data/composer.txt");
 static SIMCITY: &str = include_str!("../data/simcity.txt");
 static BOOT_HOOKS: &str = include_str!("../data/boot_hooks.txt");
+static OS_RELEASES: &str = include_str!("../data/os_releases.txt");
 
 lazy_static! {
     static ref BOOTLOG_LIST: Vec<&'static str> = BOOTLOG.lines().collect();
@@ -61,6 +62,7 @@ lazy_static! {
     static ref COMPOSERS_LIST: Vec<&'static str> = COMPOSERS.lines().collect();
     static ref SIMCITY_LIST: Vec<&'static str> = SIMCITY.lines().collect();
     static ref BOOT_HOOKS_LIST: Vec<&'static str> = BOOT_HOOKS.lines().collect();
+    static ref OS_RELEASES_LIST: Vec<&'static str> = OS_RELEASES.lines().collect();
 }
 
 static EXTENSIONS_LIST: &'static [&str] = &["gif", "webm", "mp4", "html", "php", "md",
