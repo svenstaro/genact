@@ -30,14 +30,16 @@ extern crate fake;
 mod bootlog;
 mod botnet;
 mod cargo;
-mod composer;
 mod cc;
+mod composer;
 mod cryptomining;
-mod simcity;
 mod download;
 mod kernel_compile;
-mod weblog;
 mod memdump;
+mod mkinitcpio;
+mod simcity;
+mod weblog;
+
 mod utils;
 mod parse_args;
 
@@ -85,6 +87,7 @@ fn main() {
         "simcity",
         "download",
         "memdump",
+        "mkinitcpio",
         "kernel_compile",
         "weblog",
         // "bruteforce",
@@ -125,6 +128,7 @@ fn main() {
             "cargo" => cargo::run(&appconfig),
             "cryptomining" => cryptomining::run(&appconfig),
             "simcity" => simcity::run(&appconfig),
+            "mkinitcpio" => mkinitcpio::run(&appconfig),
             "cc" => cc::run(&appconfig),
             "download" => download::run(&appconfig),
             "memdump" => memdump::run(&appconfig),
