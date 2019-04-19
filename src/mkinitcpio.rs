@@ -4,7 +4,7 @@ use rand::prelude::*;
 use rand::seq::SliceRandom;
 use yansi::Paint;
 
-const ALL_HOOKS: &'static [&str] = &[
+const ALL_HOOKS: &[&str] = &[
     &"base",
     &"udev",
     &"usr",
@@ -24,7 +24,7 @@ const ALL_HOOKS: &'static [&str] = &[
     &"filesystems",
 ];
 
-const REQUIRED_HOOKS: &'static [&str] = &[
+const REQUIRED_HOOKS: &[&str] = &[
     &"base",
     &"udev",
     &"autodetect",
@@ -34,7 +34,7 @@ const REQUIRED_HOOKS: &'static [&str] = &[
     &"filesystems",
 ];
 
-const ZIP_FORMATS: &'static [&str] = &[&"gzip", &"bzip2", &"lzma", &"xz", &"lzop", &"lz4"];
+const ZIP_FORMATS: &[&str] = &[&"gzip", &"bzip2", &"lzma", &"xz", &"lzop", &"lz4"];
 
 fn warn(msg: &str) {
     println!(
@@ -129,11 +129,8 @@ pub fn run(appconfig: &AppConfig) {
 
     let preset = "linux";
 
-    match ZIP_FORMATS.choose(&mut rng) {
-        Some(zip) => {
-            build(&hooks, preset, "default", zip, &appconfig);
-            build(&hooks, preset, "fallback", zip, &appconfig);
-        }
-        _ => {}
+    if let Some(zip) = ZIP_FORMATS.choose(&mut rng) {
+        build(&hooks, preset, "default", zip, &appconfig);
+        build(&hooks, preset, "fallback", zip, &appconfig);
     };
 }
