@@ -1,28 +1,9 @@
 use crate::parse_args::AppConfig;
 use crate::utils::csleep;
+use crate::{BOOT_HOOKS_LIST, COMPRESSION_ALGORITHMS_LIST};
 use rand::prelude::*;
 use rand::seq::SliceRandom;
 use yansi::Paint;
-
-const ALL_HOOKS: &[&str] = &[
-    &"base",
-    &"udev",
-    &"usr",
-    &"resume",
-    &"autodetect",
-    &"modconf",
-    &"block",
-    &"net",
-    &"mdadm",
-    &"mdadm_udev",
-    &"keyboard",
-    &"keymap",
-    &"consolefont",
-    &"encrypt",
-    &"lvm2",
-    &"fsck",
-    &"filesystems",
-];
 
 const REQUIRED_HOOKS: &[&str] = &[
     &"base",
@@ -33,8 +14,6 @@ const REQUIRED_HOOKS: &[&str] = &[
     &"fsck",
     &"filesystems",
 ];
-
-const ZIP_FORMATS: &[&str] = &[&"gzip", &"bzip2", &"lzma", &"xz", &"lzop", &"lz4"];
 
 fn warn(msg: &str) {
     println!(
@@ -119,7 +98,7 @@ pub fn run(appconfig: &AppConfig) {
 
     let hooks = {
         let mut ret: Vec<&str> = vec![];
-        for hook in ALL_HOOKS {
+        for hook in BOOT_HOOKS_LIST.iter() {
             if REQUIRED_HOOKS.contains(hook) || rng.gen_range(0, 10) < 3 {
                 ret.push(&hook);
             }
@@ -129,7 +108,7 @@ pub fn run(appconfig: &AppConfig) {
 
     let preset = "linux";
 
-    if let Some(zip) = ZIP_FORMATS.choose(&mut rng) {
+    if let Some(zip) = COMPRESSION_ALGORITHMS_LIST.choose(&mut rng) {
         build(&hooks, preset, "default", zip, &appconfig);
         build(&hooks, preset, "fallback", zip, &appconfig);
     };

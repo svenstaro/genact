@@ -52,6 +52,7 @@ static CFILES: &str = include_str!("../data/cfiles.txt");
 static PACKAGES: &str = include_str!("../data/packages.txt");
 static COMPOSERS: &str = include_str!("../data/composer.txt");
 static SIMCITY: &str = include_str!("../data/simcity.txt");
+static BOOT_HOOKS: &str = include_str!("../data/boot_hooks.txt");
 
 lazy_static! {
     static ref BOOTLOG_LIST: Vec<&'static str> = BOOTLOG.lines().collect();
@@ -59,12 +60,15 @@ lazy_static! {
     static ref PACKAGES_LIST: Vec<&'static str> = PACKAGES.lines().collect();
     static ref COMPOSERS_LIST: Vec<&'static str> = COMPOSERS.lines().collect();
     static ref SIMCITY_LIST: Vec<&'static str> = SIMCITY.lines().collect();
+    static ref BOOT_HOOKS_LIST: Vec<&'static str> = BOOT_HOOKS.lines().collect();
 }
 
 static EXTENSIONS_LIST: &'static [&str] = &["gif", "webm", "mp4", "html", "php", "md",
                                             "png", "jpg", "ogg", "mp3", "flac", "iso",
                                             "zip", "rar", "tar.gz", "tar.bz2", "tar.xz",
                                             "deb", "rpm", "exe"];
+
+static COMPRESSION_ALGORITHMS_LIST: &'static [&str] = &["gzip", "bzip2", "lzma", "xz", "lzop", "lz4"];
 
 #[cfg(not(target_os = "emscripten"))]
 use std::sync::atomic::AtomicBool;
