@@ -1,8 +1,9 @@
 use crate::parse_args::AppConfig;
 use crate::utils::csleep;
-use crate::{BOOT_HOOKS_LIST, COMPRESSION_ALGORITHMS_LIST};
+use crate::{BOOT_HOOKS_LIST, CFILES_LIST, COMPRESSION_ALGORITHMS_LIST};
 use rand::prelude::*;
 use rand::seq::SliceRandom;
+use regex::Regex;
 use yansi::Paint;
 
 const REQUIRED_HOOKS: &[&str] = &[
@@ -31,7 +32,14 @@ fn msg2(msg: &str) {
     println!("{}{}", Paint::blue("  -> ").bold(), Paint::new(msg).bold());
 }
 
-fn build(hooks: &[&str], preset: &str, mode: &str, zip: &str, appconfig: &AppConfig) {
+fn build(
+    hooks: &[&str],
+    preset: &str,
+    mode: &str,
+    zip: &str,
+    drivers: &[&str],
+    appconfig: &AppConfig,
+) {
     let mut rng = thread_rng();
 
     msg1(
@@ -68,8 +76,9 @@ fn build(hooks: &[&str], preset: &str, mode: &str, zip: &str, appconfig: &AppCon
         csleep(rng.gen_range(50, 1000));
 
         if *hook == "block" && mode == "fallback" {
-            warn("Possibly missing firmware for module: aic94xx");
-            warn("Possibly missing firmware for module: wd719x");
+            for driver in drivers {
+                warn(format!("Possibly missing firmware for module: {}", driver).as_ref());
+            }
         }
 
         if appconfig.should_exit() {
@@ -96,6 +105,8 @@ fn build(hooks: &[&str], preset: &str, mode: &str, zip: &str, appconfig: &AppCon
 pub fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
 
+    // Select a few hooks from the list of all hooks (in order). Make sure the required default
+    // hooks are also included (also, in order).
     let hooks = {
         let mut ret: Vec<&str> = vec![];
         for hook in BOOT_HOOKS_LIST.iter() {
@@ -106,10 +117,30 @@ pub fn run(appconfig: &AppConfig) {
         ret
     };
 
+    // Find some "drivers" that cannot find firmware in fallback mode, by identifying files in the
+    // kernel under driverr/scsi/**/*.c and use their file name (without extension) as the kernel
+    // module name. It may not be 100% what happens, but it's close enough and looks reasonable.
+    let drivers = {
+        let mut ret: Vec<&str> = vec![];
+
+        let re = Regex::new(r"^drivers/scsi.*/([^/\.]+).c$").unwrap();
+
+        let count = rng.gen_range(0, 5);
+        while ret.len() < count {
+            if let Some(file) = CFILES_LIST.choose(&mut rng) {
+                if let Some(m) = re.captures(file) {
+                    ret.push(m.get(1).unwrap().as_str());
+                }
+            }
+        }
+        ret
+    };
+
+    // For now, the preset is always the same.
     let preset = "linux";
 
     if let Some(zip) = COMPRESSION_ALGORITHMS_LIST.choose(&mut rng) {
-        build(&hooks, preset, "default", zip, &appconfig);
-        build(&hooks, preset, "fallback", zip, &appconfig);
+        build(&hooks, preset, "default", zip, &drivers, &appconfig);
+        build(&hooks, preset, "fallback", zip, &drivers, &appconfig);
     };
 }
