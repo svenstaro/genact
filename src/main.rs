@@ -30,14 +30,16 @@ extern crate fake;
 mod bootlog;
 mod botnet;
 mod cargo;
-mod composer;
 mod cc;
+mod composer;
 mod cryptomining;
-mod simcity;
 mod download;
 mod kernel_compile;
-mod weblog;
 mod memdump;
+mod mkinitcpio;
+mod simcity;
+mod weblog;
+
 mod utils;
 mod parse_args;
 
@@ -50,6 +52,8 @@ static CFILES: &str = include_str!("../data/cfiles.txt");
 static PACKAGES: &str = include_str!("../data/packages.txt");
 static COMPOSERS: &str = include_str!("../data/composer.txt");
 static SIMCITY: &str = include_str!("../data/simcity.txt");
+static BOOT_HOOKS: &str = include_str!("../data/boot_hooks.txt");
+static OS_RELEASES: &str = include_str!("../data/os_releases.txt");
 
 lazy_static! {
     static ref BOOTLOG_LIST: Vec<&'static str> = BOOTLOG.lines().collect();
@@ -57,12 +61,16 @@ lazy_static! {
     static ref PACKAGES_LIST: Vec<&'static str> = PACKAGES.lines().collect();
     static ref COMPOSERS_LIST: Vec<&'static str> = COMPOSERS.lines().collect();
     static ref SIMCITY_LIST: Vec<&'static str> = SIMCITY.lines().collect();
+    static ref BOOT_HOOKS_LIST: Vec<&'static str> = BOOT_HOOKS.lines().collect();
+    static ref OS_RELEASES_LIST: Vec<&'static str> = OS_RELEASES.lines().collect();
 }
 
 static EXTENSIONS_LIST: &'static [&str] = &["gif", "webm", "mp4", "html", "php", "md",
                                             "png", "jpg", "ogg", "mp3", "flac", "iso",
                                             "zip", "rar", "tar.gz", "tar.bz2", "tar.xz",
                                             "deb", "rpm", "exe"];
+
+static COMPRESSION_ALGORITHMS_LIST: &'static [&str] = &["gzip", "bzip2", "lzma", "xz", "lzop", "lz4"];
 
 #[cfg(not(target_os = "emscripten"))]
 use std::sync::atomic::AtomicBool;
@@ -85,6 +93,7 @@ fn main() {
         "simcity",
         "download",
         "memdump",
+        "mkinitcpio",
         "kernel_compile",
         "weblog",
         // "bruteforce",
@@ -125,6 +134,7 @@ fn main() {
             "cargo" => cargo::run(&appconfig),
             "cryptomining" => cryptomining::run(&appconfig),
             "simcity" => simcity::run(&appconfig),
+            "mkinitcpio" => mkinitcpio::run(&appconfig),
             "cc" => cc::run(&appconfig),
             "download" => download::run(&appconfig),
             "memdump" => memdump::run(&appconfig),

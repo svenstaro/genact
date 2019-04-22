@@ -1,7 +1,7 @@
 # genact - a nonsense activity generator
 
 [![Build Status](https://travis-ci.org/svenstaro/genact.svg?branch=master)](https://travis-ci.org/svenstaro/genact)
-[![Snap Status](https://build.snapcraft.io/badge/svenstaro/genact.svg)](https://build.snapcraft.io/user/svenstaro/genact)
+[![DockerHub](https://img.shields.io/docker/build/svenstaro/genact.svg?style=flat)](https://cloud.docker.com/repository/docker/svenstaro/genact)
 [![AUR](https://img.shields.io/aur/version/genact.svg)](https://aur.archlinux.org/packages/genact/)
 [![Crates.io](https://img.shields.io/crates/v/genact.svg)](https://crates.io/crates/genact)
 [![dependency status](https://deps.rs/repo/github/svenstaro/genact/status.svg)](https://deps.rs/repo/github/svenstaro/genact)
@@ -11,9 +11,9 @@
 
 Pretend to be busy or waiting for your computer when you should actually be doing real work! Impress people with your insane multitasking skills. Just open a few instances of `genact` and watch the show. `genact` has multiple scenes that pretend to be doing something exciting or useful when in reality nothing is happening at all.
 
-![](https://svenstaro.org/genact/cc.gif)
-![](https://svenstaro.org/genact/memdump.gif)
-![](https://svenstaro.org/genact/cargo.gif)
+![](gifs/cc.gif)
+![](gifs/memdump.gif)
+![](gifs/cargo.gif)
 
 ## Installation
 
