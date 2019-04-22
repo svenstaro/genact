@@ -68,7 +68,7 @@ or (on Docker)
 
 The help:
 
-    genact 0.6.0
+    genact 0.7.0
     Sven-Hendrik Haase <svenstaro@gmail.com>
     A nonsense activity generator
 
@@ -82,8 +82,9 @@ The help:
 
     OPTIONS:
         -e, --exitafter <EXITAFTER>    Exit after running for this long (format example: 2h10min)
-        -m, --modules <MODULE>...      Run only these modules [values: bootlog, botnet, cargo, cc, composer,
-                                       cryptomining, simcity, download, memdump, kernel_compile, weblog]
+        -m, --modules <MODULE>...      Run only these modules [possible values: bootlog, botnet, cargo,
+                                       cc, composer, cryptomining, simcity, download,
+                                       memdump, kernel_compile, weblog]
 
 In the web version, you can run specific modules by providing them as `?module`
 parameters like this: https://svenstaro.github.io/genact?module=cc&module=memdump
