@@ -23,3 +23,7 @@ build-web:
 .PHONY: run-web
 run-web:
 	cargo web start --use-system-emscripten --release
+
+.PHONY: clean
+clean:
+	cargo clean
