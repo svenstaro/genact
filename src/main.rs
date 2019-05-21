@@ -33,6 +33,7 @@ mod cargo;
 mod cc;
 mod composer;
 mod cryptomining;
+mod docker;
 mod download;
 mod kernel_compile;
 mod memdump;
@@ -54,6 +55,7 @@ static COMPOSERS: &str = include_str!("../data/composer.txt");
 static SIMCITY: &str = include_str!("../data/simcity.txt");
 static BOOT_HOOKS: &str = include_str!("../data/boot_hooks.txt");
 static OS_RELEASES: &str = include_str!("../data/os_releases.txt");
+static DOCKERPACKAGES: &str = include_str!("../data/docker_packages.txt");
 
 lazy_static! {
     static ref BOOTLOG_LIST: Vec<&'static str> = BOOTLOG.lines().collect();
@@ -63,6 +65,7 @@ lazy_static! {
     static ref SIMCITY_LIST: Vec<&'static str> = SIMCITY.lines().collect();
     static ref BOOT_HOOKS_LIST: Vec<&'static str> = BOOT_HOOKS.lines().collect();
     static ref OS_RELEASES_LIST: Vec<&'static str> = OS_RELEASES.lines().collect();
+    static ref DOCKER_LIST: Vec<&'static str> = DOCKERPACKAGES.lines().collect();
 }
 
 static EXTENSIONS_LIST: &'static [&str] = &["gif", "webm", "mp4", "html", "php", "md",
@@ -92,6 +95,7 @@ fn main() {
         "cryptomining",
         "simcity",
         "download",
+        "docker",
         "memdump",
         "mkinitcpio",
         "kernel_compile",
@@ -137,6 +141,7 @@ fn main() {
             "mkinitcpio" => mkinitcpio::run(&appconfig),
             "cc" => cc::run(&appconfig),
             "download" => download::run(&appconfig),
+            "docker" => docker::run(&appconfig),
             "memdump" => memdump::run(&appconfig),
             "composer" => composer::run(&appconfig),
             "kernel_compile" => kernel_compile::run(&appconfig),
