@@ -75,6 +75,10 @@ pub fn gen_hex_string(rng: &mut ThreadRng, length: u64) -> String {
     gen_string_with_chars(rng, "0123456789abcdef", length)
 }
 
+pub fn gen_sha256_string(rng: &mut ThreadRng) -> String {
+    gen_hex_string(rng, 64)
+}
+
 /// Return a String containing `n` random concatenated elements from `list`.
 ///
 /// If `n` >= `list.len()` then `list.len()` will be used instead of `n`.
