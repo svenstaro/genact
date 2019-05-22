@@ -10,7 +10,7 @@ use crate::parse_args::AppConfig;
 
 pub fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
-    let num_packages = rng.gen_range(20, 50);
+    let num_packages = rng.gen_range(20, 100);
     // Choose `num_packages` packages, non-repeating and in random order
     let chosen_packages: Vec<_> = DOCKER_LIST.choose_multiple(&mut rng, num_packages).collect();
 
