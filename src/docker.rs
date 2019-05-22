@@ -1,11 +1,9 @@
 /// Module that pretends to delete Docker images
 use rand::prelude::*;
-use rand::distributions::{ChiSquared, Distribution};
-use yansi::Paint;
+use rand::distributions::{Distribution};
 use rand::Rng;
 use rand::distributions::Alphanumeric;
 use sha2::{Sha256, Digest};
-use std::str;
 
 use crate::utils::csleep;
 use crate::DOCKER_LIST;
@@ -29,7 +27,7 @@ pub fn run(appconfig: &AppConfig) {
     let chosen_packages: Vec<_> = DOCKER_LIST.choose_multiple(&mut rng, num_packages).collect();
 
     for stage in &["Deleting"] {
-        for &(package_name) in &chosen_packages {
+        for &package_name in &chosen_packages {
             let sleep_length = rng.gen_range(100, 2000);
 
             println!(
@@ -37,7 +35,7 @@ pub fn run(appconfig: &AppConfig) {
                 package_name = package_name
             );
             println!(
-                "Untagged: {package_name}@sha256:{:hash}",
+                "Untagged: {package_name}@sha256:{hash}",
                 package_name = package_name,
                 hash = gen_hash()
             );
@@ -46,7 +44,7 @@ pub fn run(appconfig: &AppConfig) {
             let mut index = 0;
             while index < num_hashes {
                 println!(
-                    "Deleted: sha256:{:hash}", 
+                    "Deleted: sha256:{hash}", 
                     hash = gen_hash()
                 );
 
