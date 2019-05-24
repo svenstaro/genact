@@ -83,7 +83,7 @@ The help:
     OPTIONS:
         -e, --exitafter <EXITAFTER>    Exit after running for this long (format example: 2h10min)
         -m, --modules <MODULE>...      Run only these modules [possible values: bootlog, botnet, cargo,
-                                       cc, composer, cryptomining, simcity, download,
+                                       cc, composer, cryptomining, simcity, download, docker,
                                        memdump, kernel_compile, weblog]
 
 In the web version, you can run specific modules by providing them as `?module`
