@@ -97,12 +97,12 @@ pub fn gen_file_name(rng: &mut ThreadRng, files: &[&str], extensions: &[&str]) -
     path.file_name().unwrap().to_str().unwrap().to_string()
 }
 
-pub fn gen_file_path(rng: &mut ThreadRng, files: &[&str], extensions: &[&str], dir_candidates: &[&str]) -> String {
+pub fn gen_file_path(rng: &mut ThreadRng, files: &[&str], extensions: &[&str], dir_candidates: &Vec<String>) -> String {
     let path_length = rng.gen_range(1, 5);
     let mut path = PathBuf::from("/");
     let range = Uniform::new(0, dir_candidates.len());
     for _ in 0..path_length {
-        path.push(dir_candidates[rng.sample(range)]);
+        path.push(dir_candidates[rng.sample(range)].clone());
     }
     path.push(gen_file_name(rng, files, extensions));
     path.to_string_lossy().to_string()

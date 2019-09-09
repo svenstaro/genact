@@ -1,31 +1,6 @@
 /// genact - A nonsense activity generator
 ///
 /// Main module.
-#[cfg(not(target_os = "emscripten"))]
-#[macro_use]
-extern crate clap;
-
-#[cfg(not(target_os = "emscripten"))]
-extern crate ctrlc;
-
-#[cfg(target_os = "emscripten")]
-extern crate emscripten_sys;
-
-#[cfg(target_os = "emscripten")]
-#[macro_use]
-extern crate stdweb;
-
-extern crate chrono;
-extern crate humantime;
-#[macro_use]
-extern crate lazy_static;
-extern crate pbr;
-extern crate url;
-extern crate rand;
-extern crate regex;
-extern crate yansi;
-#[macro_use]
-extern crate fake;
 
 mod bootlog;
 mod botnet;
@@ -47,6 +22,7 @@ mod parse_args;
 use rand::prelude::*;
 use yansi::Paint;
 use crate::parse_args::parse_args;
+use lazy_static::lazy_static;
 
 static BOOTLOG: &str = include_str!("../data/bootlog.txt");
 static CFILES: &str = include_str!("../data/cfiles.txt");

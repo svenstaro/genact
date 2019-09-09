@@ -14,24 +14,30 @@ edition = "2018"
 travis-ci = { repository = "svenstaro/genact", branch = "master" }
 maintenance = { status = "actively-developed" }
 
+[profile.release]
+lto = true
+opt-level = 'z'
+codegen-units = 1
+panic = 'abort'
+
 [dependencies]
 pbr = "1.0"
 yansi = "0.5"
 rand = "0.7.0"
+rand_distr = "0.2.1"
 chrono = "0.4"
 url = "2.1"
 lazy_static = "1.4"
 humantime = "1.1"
 regex = "1.3"
-fake = "1.3.0"
+fake = { git = "https://github.com/svenstaro/fake-rs.git", branch = "patch-2" }
 
 [target.'cfg(not(target_os = "emscripten"))'.dependencies]
 clap = "2.29"
 ctrlc = "3.1"
 
 [target.'cfg(target_os = "emscripten")'.dependencies]
-emscripten-sys = "0.3"
-stdweb = "0.4"
+stdweb = { git = "https://github.com/koute/stdweb.git", features = ["experimental_features_which_may_break_on_minor_version_bumps"] }
 
 [profile.dev]
 debug = 1  # Required due to emscripten with emterpretify
