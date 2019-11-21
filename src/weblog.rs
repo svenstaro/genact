@@ -2,10 +2,10 @@
 use rand::prelude::*;
 
 use crate::parse_args::AppConfig;
-use chrono::prelude::*;
+use crate::utils::{csleep, dprint, gen_file_path};
 use crate::EXTENSIONS_LIST;
 use crate::PACKAGES_LIST;
-use crate::utils::{csleep, dprint, gen_file_path};
+use chrono::prelude::*;
 static HTTP_CODES: &'static [u16] = &[200, 201, 400, 401, 403, 404, 500, 502, 503];
 
 pub fn run(appconfig: &AppConfig) {

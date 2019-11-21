@@ -6,10 +6,10 @@ use pbr::{ProgressBar, Units};
 #[cfg(target_os = "emscripten")]
 use crate::utils::TermWriter;
 
+use crate::parse_args::AppConfig;
 use crate::utils::{csleep, gen_file_name_with_ext};
 use crate::CFILES_LIST;
 use crate::EXTENSIONS_LIST;
-use crate::parse_args::AppConfig;
 
 pub fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();

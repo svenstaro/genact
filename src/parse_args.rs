@@ -27,8 +27,8 @@ impl AppConfig {
         // Check whether CTRL-C was pressed.
         #[cfg(not(target_os = "emscripten"))]
         {
-            use std::sync::atomic::Ordering;
             use crate::CTRLC_PRESSED;
+            use std::sync::atomic::Ordering;
             if CTRLC_PRESSED.load(Ordering::SeqCst) {
                 return true;
             }
@@ -46,7 +46,7 @@ impl AppConfig {
 
 #[cfg(not(target_os = "emscripten"))]
 pub fn parse_args(all_modules: &[&str]) -> AppConfig {
-    use clap::{App, Arg, AppSettings};
+    use clap::{App, AppSettings, Arg};
 
     let matches = App::new(crate_name!())
         .version(crate_version!())

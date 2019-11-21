@@ -1,6 +1,6 @@
 use crate::parse_args::AppConfig;
-use rand::prelude::*;
 use crate::utils::{csleep, cursor_up, dprint, erase_line};
+use rand::prelude::*;
 use yansi::Paint;
 
 pub fn run(appconfig: &AppConfig) {
@@ -37,11 +37,7 @@ pub fn run(appconfig: &AppConfig) {
 
     for (i, nodes) in clusters.iter().enumerate() {
         dprint(
-            format!(
-                "  Cluster #{i:02} ({nodes:3} nodes)",
-                i = i,
-                nodes = nodes
-            ),
+            format!("  Cluster #{i:02} ({nodes:3} nodes)", i = i, nodes = nodes),
             10,
         );
         println!();
@@ -58,14 +54,15 @@ pub fn run(appconfig: &AppConfig) {
             for (i, (nodes, online)) in nodes_with_status.enumerate() {
                 erase_line();
                 println!(
-                        "  Cluster #{i:02} ({nodes:3} nodes) [{status:}]",
-                        i = i,
-                        nodes = nodes,
-                        status = if *online {
-                            Paint::green("online")
-                        } else {
-                            Paint::yellow("booting")
-                        }.bold(),
+                    "  Cluster #{i:02} ({nodes:3} nodes) [{status:}]",
+                    i = i,
+                    nodes = nodes,
+                    status = if *online {
+                        Paint::green("online")
+                    } else {
+                        Paint::yellow("booting")
+                    }
+                    .bold(),
                 );
             }
         }

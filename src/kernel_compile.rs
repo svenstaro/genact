@@ -2,22 +2,15 @@
 use rand::prelude::*;
 use regex::Regex;
 
+use crate::parse_args::AppConfig;
 use crate::utils::csleep;
 use crate::CFILES_LIST;
-use crate::parse_args::AppConfig;
 
 /// Generate a build step for a header file
 fn gen_header(arch: &str, rng: &mut ThreadRng) -> String {
-    const RARE_CMDS: &[&str] = &[
-        "SYSTBL ",
-        "SYSHDR ",
-    ];
+    const RARE_CMDS: &[&str] = &["SYSTBL ", "SYSHDR "];
 
-    const CMDS: &[&str] = &[
-        "WRAP   ",
-        "CHK    ",
-        "UPD    ",
-    ];
+    const CMDS: &[&str] = &["WRAP   ", "CHK    ", "UPD    "];
 
     let cmd = if rng.gen_bool(1.0 / 15.0) {
         RARE_CMDS.choose(rng).unwrap_or(&"")
@@ -30,7 +23,9 @@ fn gen_header(arch: &str, rng: &mut ThreadRng) -> String {
 
     if file.starts_with("arch") {
         let re = Regex::new(r"arch/([a-z0-9_])+/").unwrap();
-        file = re.replace(&file, format!("arch/{}/", arch).as_str()).into_owned();
+        file = re
+            .replace(&file, format!("arch/{}/", arch).as_str())
+            .into_owned();
     }
 
     format!("  {} {}", cmd, file)
@@ -38,10 +33,7 @@ fn gen_header(arch: &str, rng: &mut ThreadRng) -> String {
 
 /// Generate a build step for an object file
 fn gen_object(arch: &str, rng: &mut ThreadRng) -> String {
-    const RARE_CMDS: &[&str] = &[
-        "HOSTCC ",
-        "AS     ",
-    ];
+    const RARE_CMDS: &[&str] = &["HOSTCC ", "AS     "];
 
     let cmd = if rng.gen_bool(1.0 / 15.0) {
         RARE_CMDS.choose(rng).unwrap_or(&"")
@@ -56,7 +48,9 @@ fn gen_object(arch: &str, rng: &mut ThreadRng) -> String {
 
     if file.starts_with("arch") {
         let re = Regex::new(r"arch/([a-z0-9_])+/").unwrap();
-        file = re.replace(&file, format!("arch/{}/", arch).as_str()).into_owned();
+        file = re
+            .replace(&file, format!("arch/{}/", arch).as_str())
+            .into_owned();
     }
 
     format!("  {} {}", cmd, file)
@@ -167,9 +161,10 @@ pub fn run(appconfig: &AppConfig) {
     let bytes: u32 = rng.gen_range(9000, 1_000_000);
     let padded_bytes: u32 = rng.gen_range(bytes, 1_100_000);
 
-    println!("Setup is {} bytes (padded to {} bytes).",
-             bytes,
-             padded_bytes);
+    println!(
+        "Setup is {} bytes (padded to {} bytes).",
+        bytes, padded_bytes
+    );
 
     let system: u32 = rng.gen_range(300, 3000);
     println!("System is {} kB", system);

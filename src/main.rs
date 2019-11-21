@@ -20,9 +20,9 @@ extern crate humantime;
 #[macro_use]
 extern crate lazy_static;
 extern crate pbr;
-extern crate url;
 extern crate rand;
 extern crate regex;
+extern crate url;
 extern crate yansi;
 #[macro_use]
 extern crate fake;
@@ -41,12 +41,12 @@ mod mkinitcpio;
 mod simcity;
 mod weblog;
 
-mod utils;
 mod parse_args;
+mod utils;
 
+use crate::parse_args::parse_args;
 use rand::prelude::*;
 use yansi::Paint;
-use crate::parse_args::parse_args;
 
 static BOOTLOG: &str = include_str!("../data/bootlog.txt");
 static CFILES: &str = include_str!("../data/cfiles.txt");
@@ -70,12 +70,13 @@ lazy_static! {
     static ref DOCKER_TAGS_LIST: Vec<&'static str> = DOCKER_TAGS.lines().collect();
 }
 
-static EXTENSIONS_LIST: &'static [&str] = &["gif", "webm", "mp4", "html", "php", "md",
-                                            "png", "jpg", "ogg", "mp3", "flac", "iso",
-                                            "zip", "rar", "tar.gz", "tar.bz2", "tar.xz",
-                                            "deb", "rpm", "exe"];
+static EXTENSIONS_LIST: &'static [&str] = &[
+    "gif", "webm", "mp4", "html", "php", "md", "png", "jpg", "ogg", "mp3", "flac", "iso", "zip",
+    "rar", "tar.gz", "tar.bz2", "tar.xz", "deb", "rpm", "exe",
+];
 
-static COMPRESSION_ALGORITHMS_LIST: &'static [&str] = &["gzip", "bzip2", "lzma", "xz", "lzop", "lz4"];
+static COMPRESSION_ALGORITHMS_LIST: &'static [&str] =
+    &["gzip", "bzip2", "lzma", "xz", "lzop", "lz4"];
 
 #[cfg(not(target_os = "emscripten"))]
 use std::sync::atomic::AtomicBool;
@@ -128,7 +129,8 @@ fn main() {
         use std::sync::atomic::Ordering;
         ctrlc::set_handler(move || {
             CTRLC_PRESSED.store(true, Ordering::SeqCst);
-        }).expect("Error setting Ctrl-C handler");
+        })
+        .expect("Error setting Ctrl-C handler");
     }
 
     let mut rng = thread_rng();

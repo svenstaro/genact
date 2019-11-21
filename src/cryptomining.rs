@@ -1,13 +1,13 @@
-/// Module that pretends to mine a cryptocurrency.
-use rand::{thread_rng, Rng};
-use rand::distributions::{Normal, Distribution};
-use std::time::Instant;
-use yansi::Paint;
 use chrono::prelude::*;
 use chrono::Duration;
+use rand::distributions::{Distribution, Normal};
+/// Module that pretends to mine a cryptocurrency.
+use rand::{thread_rng, Rng};
+use std::time::Instant;
+use yansi::Paint;
 
-use crate::utils::{gen_hex_string, csleep};
 use crate::parse_args::AppConfig;
+use crate::utils::{csleep, gen_hex_string};
 
 pub fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
@@ -57,18 +57,22 @@ pub fn run(appconfig: &AppConfig) {
                      time=time,
                      separator=Paint::black("|"),
                      source=Paint::blue("CUDA0"));
-            println!("{info:>3}  {time}{separator}{source:<13}Nonce: 0x{noncehex}",
-                     info=info,
-                     time=time,
-                     separator=Paint::black("|"),
-                     source=Paint::blue("CUDA0"),
-                     noncehex=gen_hex_string(&mut rng, 16));
-            println!("{info:>3}  {time}{separator}{source:<13}{accepted}",
-                     info=info,
-                     time=time,
-                     separator=Paint::black("|"),
-                     source=Paint::blue("stratum"),
-                     accepted=Paint::green("Accepted."));
+            println!(
+                "{info:>3}  {time}{separator}{source:<13}Nonce: 0x{noncehex}",
+                info = info,
+                time = time,
+                separator = Paint::black("|"),
+                source = Paint::blue("CUDA0"),
+                noncehex = gen_hex_string(&mut rng, 16)
+            );
+            println!(
+                "{info:>3}  {time}{separator}{source:<13}{accepted}",
+                info = info,
+                time = time,
+                separator = Paint::black("|"),
+                source = Paint::blue("stratum"),
+                accepted = Paint::green("Accepted.")
+            );
         } else {
             remaining_until_new_job -= 1;
             remaining_until_next_solution -= 1;
@@ -79,12 +83,21 @@ pub fn run(appconfig: &AppConfig) {
             let mut gpus = String::from("");
             for gpu in 0..num_gpus {
                 let actual_mhs_per_gpu = approximate_mhs_per_gpu + normal.sample(&mut rng);
-                gpus.push_str(&format!("gpu/{gpu} {mhs:.2} ", gpu=gpu, mhs=Paint::cyan(actual_mhs_per_gpu)));
+                gpus.push_str(&format!(
+                    "gpu/{gpu} {mhs:.2} ",
+                    gpu = gpu,
+                    mhs = Paint::cyan(actual_mhs_per_gpu)
+                ));
                 total_mhs += actual_mhs_per_gpu;
             }
-            let speed = format!("Speed {mhs:>6.2} Mh/s", mhs=Paint::cyan(total_mhs).bold());
-            let duration = Duration::from_std(now.elapsed()).expect("Couldn't make chrono::Duration from std::time::Duration!");
-            let elapsed = format!("{hours:02}:{minutes:02}", hours=duration.num_hours(), minutes=duration.num_minutes());
+            let speed = format!("Speed {mhs:>6.2} Mh/s", mhs = Paint::cyan(total_mhs).bold());
+            let duration = Duration::from_std(now.elapsed())
+                .expect("Couldn't make chrono::Duration from std::time::Duration!");
+            let elapsed = format!(
+                "{hours:02}:{minutes:02}",
+                hours = duration.num_hours(),
+                minutes = duration.num_minutes()
+            );
             println!("{info:>3}  {time}{separator}{source:<13}{speed}    {gpus}  [A{solutions}+0:R0+0:F0] Time: {elapsed}",
                      info=info,
                      time=time,
@@ -94,12 +107,11 @@ pub fn run(appconfig: &AppConfig) {
                      gpus=gpus,
                      solutions=num_solutions_found,
                      elapsed=elapsed);
-
         }
         csleep(sleep_length);
 
         if appconfig.should_exit() {
-            return
+            return;
         }
     }
 }
