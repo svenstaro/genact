@@ -34,6 +34,7 @@ mod cc;
 mod composer;
 mod cryptomining;
 mod docker;
+mod docker_build;
 mod download;
 mod kernel_compile;
 mod memdump;
@@ -98,6 +99,7 @@ fn main() {
         "simcity",
         "download",
         "docker",
+        "docker_build",
         "memdump",
         "mkinitcpio",
         "kernel_compile",
@@ -144,6 +146,7 @@ fn main() {
             "cc" => cc::run(&appconfig),
             "download" => download::run(&appconfig),
             "docker" => docker::run(&appconfig),
+            "docker_build" => docker_build::run(&appconfig),
             "memdump" => memdump::run(&appconfig),
             "composer" => composer::run(&appconfig),
             "kernel_compile" => kernel_compile::run(&appconfig),
