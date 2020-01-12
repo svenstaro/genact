@@ -43,15 +43,6 @@ It's compatible with FreeBSD, Linux, OSX, Windows 10 (it needs a recent Windows 
     cargo install genact
     genact
 
-**With snap**: If you'd like to use [snapcraft](https://snapcraft.io/), you can just get it from the [snap store](https://snapcraft.io/store/):
-
-    snap install genact
-
-To build it yourself using snap, run:
-
-    snapcraft cleanbuild
-    snap install genact_*.snap --devmode --dangerous
-
 ## Running
 
 To see a list of all available options, you can run
