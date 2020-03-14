@@ -1,6 +1,6 @@
-use rand::prelude::*;
 use crate::parse_args::AppConfig;
-use crate::utils::{dprint, csleep};
+use crate::utils::{csleep, dprint};
+use rand::prelude::*;
 use yansi::Paint;
 
 use crate::SIMCITY_LIST;
@@ -90,7 +90,10 @@ pub fn run(appconfig: &AppConfig) {
 
         // End of loop, the line has been removed, conclude the status
         dprint(checked_checkbox, 10);
-        dprint(color_func(format!("{}... {}", simcity, resolution)).to_string(), 0);
+        dprint(
+            color_func(format!("{}... {}", simcity, resolution)).to_string(),
+            0,
+        );
 
         if appconfig.should_exit() {
             dprint("\nALL DONE\n", 0);

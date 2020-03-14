@@ -1,10 +1,10 @@
 /// Module that dumps some random memory locations in a slightly cool fashion.
 use rand::prelude::*;
-use std::io::Write;
 use std::io::stdout;
+use std::io::Write;
 
-use crate::utils::{csleep, dprint, is_printable_ascii, gen_hex_string};
 use crate::parse_args::AppConfig;
+use crate::utils::{csleep, dprint, gen_hex_string, is_printable_ascii};
 
 pub fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();

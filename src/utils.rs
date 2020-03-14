@@ -1,17 +1,17 @@
+use rand::distributions::Uniform;
 /// Module containing random utilities.
 use rand::prelude::*;
-use rand::distributions::Uniform;
-use std::path::{Path, PathBuf};
-use std::time;
-#[cfg(not(target_os = "emscripten"))]
-use std::thread;
 use std::cmp;
 #[cfg(target_os = "emscripten")]
 use std::io;
-use std::io::Write;
 #[cfg(not(target_os = "emscripten"))]
 use std::io::stdout;
+use std::io::Write;
+use std::path::{Path, PathBuf};
 use std::str;
+#[cfg(not(target_os = "emscripten"))]
+use std::thread;
+use std::time;
 
 #[cfg(target_os = "emscripten")]
 use emscripten_sys;
@@ -65,9 +65,7 @@ pub fn gen_string_with_chars(rng: &mut ThreadRng, char_set: &str, length: u64) -
     let chars: Vec<_> = char_set.chars().collect();
     let range = Uniform::new(0, chars.len());
 
-    let string: String = (0..length)
-        .map(|_| chars[rng.sample(range)])
-        .collect();
+    let string: String = (0..length).map(|_| chars[rng.sample(range)]).collect();
     string
 }
 
@@ -97,7 +95,12 @@ pub fn gen_file_name(rng: &mut ThreadRng, files: &[&str], extensions: &[&str]) -
     path.file_name().unwrap().to_str().unwrap().to_string()
 }
 
-pub fn gen_file_path(rng: &mut ThreadRng, files: &[&str], extensions: &[&str], dir_candidates: &[&str]) -> String {
+pub fn gen_file_path(
+    rng: &mut ThreadRng,
+    files: &[&str],
+    extensions: &[&str],
+    dir_candidates: &[&str],
+) -> String {
     let path_length = rng.gen_range(1, 5);
     let mut path = PathBuf::from("/");
     let range = Uniform::new(0, dir_candidates.len());

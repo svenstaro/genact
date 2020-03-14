@@ -1,11 +1,11 @@
+use rand::distributions::{ChiSquared, Distribution};
 /// Module that pretends to install composer packages.
 use rand::prelude::*;
-use rand::distributions::{ChiSquared, Distribution};
 use yansi::Paint;
 
+use crate::parse_args::AppConfig;
 use crate::utils::csleep;
 use crate::COMPOSERS_LIST;
-use crate::parse_args::AppConfig;
 
 fn gen_package_version(rng: &mut ThreadRng) -> String {
     let chi = ChiSquared::new(1.0);
@@ -21,7 +21,9 @@ pub fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
     let num_packages = rng.gen_range(10, 100);
     // Choose `num_packages` packages, non-repeating and in random order
-    let chosen_names: Vec<_> = COMPOSERS_LIST.choose_multiple(&mut rng, num_packages).collect();
+    let chosen_names: Vec<_> = COMPOSERS_LIST
+        .choose_multiple(&mut rng, num_packages)
+        .collect();
     let chosen_packages: Vec<_> = chosen_names
         .iter()
         .map(|name| (name, gen_package_version(&mut rng)))
