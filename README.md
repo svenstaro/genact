@@ -4,7 +4,6 @@
 [![DockerHub](https://img.shields.io/docker/build/svenstaro/genact.svg?style=flat)](https://cloud.docker.com/repository/docker/svenstaro/genact)
 [![AUR](https://img.shields.io/aur/version/genact.svg)](https://aur.archlinux.org/packages/genact/)
 [![Crates.io](https://img.shields.io/crates/v/genact.svg)](https://crates.io/crates/genact)
-[![dependency status](https://deps.rs/repo/github/svenstaro/genact/status.svg)](https://deps.rs/repo/github/svenstaro/genact)
 [![license](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/svenstaro/genact/blob/master/LICENSE)
 [![Stars](https://img.shields.io/github/stars/svenstaro/genact.svg)](https://github.com/svenstaro/genact/stargazers)
 [![Downloads](https://img.shields.io/github/downloads/svenstaro/genact/total.svg)](https://github.com/svenstaro/genact/releases)
