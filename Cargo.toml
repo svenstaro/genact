@@ -31,3 +31,9 @@ stdweb = "0.4"
 
 [profile.dev]
 debug = 1  # Required due to emscripten with emterpretify
+
+[profile.release]
+lto = true
+opt-level = 'z'
+codegen-units = 1
+panic = 'abort'
