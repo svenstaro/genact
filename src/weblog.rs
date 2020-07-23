@@ -1,12 +1,15 @@
-/// Module that pretends to tail a web server log.
+//! Module that pretends to tail a web server log.
 use rand::prelude::*;
+use chrono::prelude::*;
+use fake::faker::internet::en::*;
+use fake::faker::lorem::en::*;
+use fake::Fake;
 
 use crate::parse_args::AppConfig;
 use crate::utils::{csleep, dprint, gen_file_path};
 use crate::EXTENSIONS_LIST;
 use crate::PACKAGES_LIST;
-use chrono::prelude::*;
-static HTTP_CODES: &'static [u16] = &[200, 201, 400, 401, 403, 404, 500, 502, 503];
+static HTTP_CODES: &[u16] = &[200, 201, 400, 401, 403, 404, 500, 502, 503];
 
 pub fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
@@ -16,18 +19,18 @@ pub fn run(appconfig: &AppConfig) {
 
     for _ in 1..num_lines {
         let ip = if rng.gen_bool(0.5) {
-            fake!(Internet.ipv4)
+            IPv4().fake()
         } else {
-            fake!(Internet.ipv6).to_lowercase()
+            IPv6().fake::<String>().to_lowercase()
         };
         let date = Local::now().format("%e/%b/%Y:%T %z");
         let method = "GET";
-        let dir_candidates = fake!(Lorem.words(20));
+        let dir_candidates: Vec<String> = Words(20..21).fake();
         let path = gen_file_path(&mut rng, &PACKAGES_LIST, &EXTENSIONS_LIST, &dir_candidates);
         let http_code = HTTP_CODES.choose(&mut rng).unwrap_or(&200);
-        let size = fake!(Number.between(99, 5_000_000));
+        let size = rng.gen_range(99, 5_000_000);
         let referrer = "-";
-        let user_agent = fake!(Internet.user_agent);
+        let user_agent: String = UserAgent().fake();
         let line = format!(
             "{ip} - - [{date}] \"{method} {path} HTTP/1.0\" {http_code} {size} \"{referrer}\" \"{user_agent}\"",
             ip=ip,

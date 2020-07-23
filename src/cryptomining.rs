@@ -1,8 +1,8 @@
+//! Module that pretends to mine a cryptocurrency.
 use chrono::prelude::*;
 use chrono::Duration;
-use rand::distributions::{Distribution, Normal};
-/// Module that pretends to mine a cryptocurrency.
 use rand::{thread_rng, Rng};
+use rand_distr::{Distribution, Normal};
 use std::time::Instant;
 use yansi::Paint;
 
@@ -78,7 +78,7 @@ pub fn run(appconfig: &AppConfig) {
             remaining_until_next_solution -= 1;
             let info = Paint::green("m");
 
-            let normal = Normal::new(0.0, 0.2);
+            let normal = Normal::new(0.0, 0.2).unwrap();
             let mut total_mhs = 0.0;
             let mut gpus = String::from("");
             for gpu in 0..num_gpus {

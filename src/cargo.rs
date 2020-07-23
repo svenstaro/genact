@@ -1,5 +1,5 @@
-use rand::distributions::{ChiSquared, Distribution, Exp};
-/// Module that pretends to run cargo to install rust packages.
+//! Module that pretends to run cargo to install rust packages.
+use rand_distr::{ChiSquared, Distribution, Exp};
 use rand::prelude::*;
 use std::time::Instant;
 use yansi::Paint;
@@ -9,8 +9,8 @@ use crate::utils::csleep;
 use crate::PACKAGES_LIST;
 
 fn gen_package_version(rng: &mut ThreadRng) -> String {
-    let chi = ChiSquared::new(1.0);
-    let exp = Exp::new(2.0);
+    let chi = ChiSquared::new(1.0).unwrap();
+    let exp = Exp::new(2.0).unwrap();
     format!(
         "{major:.0}.{minor:.0}.{patch:.0}",
         major = exp.sample(rng),
