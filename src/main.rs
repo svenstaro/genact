@@ -15,18 +15,6 @@ extern crate emscripten_sys;
 #[macro_use]
 extern crate stdweb;
 
-extern crate chrono;
-extern crate humantime;
-#[macro_use]
-extern crate lazy_static;
-extern crate pbr;
-extern crate rand;
-extern crate regex;
-extern crate url;
-extern crate yansi;
-#[macro_use]
-extern crate fake;
-
 mod bootlog;
 mod botnet;
 mod cargo;
@@ -58,7 +46,7 @@ static OS_RELEASES: &str = include_str!("../data/os_releases.txt");
 static DOCKER_PACKAGES: &str = include_str!("../data/docker_packages.txt");
 static DOCKER_TAGS: &str = include_str!("../data/docker_tags.txt");
 
-lazy_static! {
+lazy_static::lazy_static! {
     static ref BOOTLOG_LIST: Vec<&'static str> = BOOTLOG.lines().collect();
     static ref CFILES_LIST: Vec<&'static str> = CFILES.lines().collect();
     static ref PACKAGES_LIST: Vec<&'static str> = PACKAGES.lines().collect();
@@ -70,19 +58,19 @@ lazy_static! {
     static ref DOCKER_TAGS_LIST: Vec<&'static str> = DOCKER_TAGS.lines().collect();
 }
 
-static EXTENSIONS_LIST: &'static [&str] = &[
+static EXTENSIONS_LIST: &[&str] = &[
     "gif", "webm", "mp4", "html", "php", "md", "png", "jpg", "ogg", "mp3", "flac", "iso", "zip",
     "rar", "tar.gz", "tar.bz2", "tar.xz", "deb", "rpm", "exe",
 ];
 
-static COMPRESSION_ALGORITHMS_LIST: &'static [&str] =
+static COMPRESSION_ALGORITHMS_LIST: &[&str] =
     &["gzip", "bzip2", "lzma", "xz", "lzop", "lz4"];
 
 #[cfg(not(target_os = "emscripten"))]
 use std::sync::atomic::AtomicBool;
 
 #[cfg(not(target_os = "emscripten"))]
-lazy_static! {
+lazy_static::lazy_static! {
     static ref CTRLC_PRESSED: AtomicBool = AtomicBool::new(false);
 }
 

@@ -10,20 +10,17 @@ keywords = ["fake", "nonsense", "useless"]
 categories = ["command-line-utilities", "command-line-interface"]
 edition = "2018"
 
-[badges]
-travis-ci = { repository = "svenstaro/genact", branch = "master" }
-maintenance = { status = "actively-developed" }
-
 [dependencies]
 pbr = "1.0"
 yansi = "0.5"
 rand = "0.7.0"
+rand_distr = "0.2.1"
 chrono = "0.4"
 url = "2.1"
 lazy_static = "1.4"
-humantime = "1.3"
+humantime = "2"
 regex = "1.3"
-fake = "1.3.0"
+fake = "2.2"
 
 [target.'cfg(not(target_os = "emscripten"))'.dependencies]
 clap = "2.33"
@@ -33,5 +30,8 @@ ctrlc = "3.1"
 emscripten-sys = "0.3"
 stdweb = "0.4"
 
-[profile.dev]
-debug = 1  # Required due to emscripten with emterpretify
+[profile.release]
+lto = true
+opt-level = 'z'
+codegen-units = 1
+panic = 'abort'
