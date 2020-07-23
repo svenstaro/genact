@@ -18,11 +18,7 @@ build-apple:
 
 .PHONY: build-web
 build-web:
-	cargo web build --use-system-emscripten --release
-
-.PHONY: run-web
-run-web:
-	cargo web start --use-system-emscripten --release
+	wasm-pack build --target web
 
 .PHONY: clean
 clean:
