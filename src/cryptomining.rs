@@ -1,15 +1,16 @@
-//! Module that pretends to mine a cryptocurrency.
+//! Pretend to mine a cryptocurrency
 use chrono::prelude::*;
 use chrono::Duration;
 use rand::{thread_rng, Rng};
 use rand_distr::{Distribution, Normal};
-use std::time::Instant;
+use instant::Instant;
 use yansi::Paint;
 
+use crate::generators::gen_hex_string;
+use crate::io::{csleep, newline, print};
 use crate::parse_args::AppConfig;
-use crate::utils::{csleep, gen_hex_string};
 
-pub fn run(appconfig: &AppConfig) {
+pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
     let num_lines = rng.gen_range(300, 1000);
 
@@ -39,40 +40,44 @@ pub fn run(appconfig: &AppConfig) {
             remaining_until_new_job = new_job_every_n_lines;
             let info = Paint::cyan("ℹ").bold();
 
-            println!("{info:>3}  {time}{separator}{source:<13}Received new job #{jobhex}  seed: #{seedhex}  target: #{targethex}",
+            print(format!("{info:>3}  {time}{separator}{source:<13}Received new job #{jobhex}  seed: #{seedhex}  target: #{targethex}",
                      info=info,
                      time=time,
                      separator=Paint::black("|"),
                      source=Paint::blue("stratum"),
                      jobhex=gen_hex_string(&mut rng, 8),
                      seedhex=gen_hex_string(&mut rng, 32),
-                     targethex=gen_hex_string(&mut rng, 24));
+                     targethex=gen_hex_string(&mut rng, 24))).await;
+            newline().await;
         } else if remaining_until_next_solution == 0 {
             remaining_until_next_solution = solution_found_every_n_lines;
             num_solutions_found += 1;
             let info = Paint::cyan("ℹ").bold();
 
-            println!("{info:>3}  {time}{separator}{source:<13}Solution found; Submitted to stratum.buttcoin.org",
+            print(format!("{info:>3}  {time}{separator}{source:<13}Solution found; Submitted to stratum.buttcoin.org",
                      info=info,
                      time=time,
                      separator=Paint::black("|"),
-                     source=Paint::blue("CUDA0"));
-            println!(
+                     source=Paint::blue("CUDA0"))).await;
+            newline().await;
+            print(format!(
                 "{info:>3}  {time}{separator}{source:<13}Nonce: 0x{noncehex}",
                 info = info,
                 time = time,
                 separator = Paint::black("|"),
                 source = Paint::blue("CUDA0"),
                 noncehex = gen_hex_string(&mut rng, 16)
-            );
-            println!(
+            )).await;
+            newline().await;
+            print(format!(
                 "{info:>3}  {time}{separator}{source:<13}{accepted}",
                 info = info,
                 time = time,
                 separator = Paint::black("|"),
                 source = Paint::blue("stratum"),
                 accepted = Paint::green("Accepted.")
-            );
+            )).await;
+            newline().await;
         } else {
             remaining_until_new_job -= 1;
             remaining_until_next_solution -= 1;
@@ -98,7 +103,7 @@ pub fn run(appconfig: &AppConfig) {
                 hours = duration.num_hours(),
                 minutes = duration.num_minutes()
             );
-            println!("{info:>3}  {time}{separator}{source:<13}{speed}    {gpus}  [A{solutions}+0:R0+0:F0] Time: {elapsed}",
+            print(format!("{info:>3}  {time}{separator}{source:<13}{speed}    {gpus}  [A{solutions}+0:R0+0:F0] Time: {elapsed}",
                      info=info,
                      time=time,
                      separator=Paint::black("|"),
@@ -106,9 +111,10 @@ pub fn run(appconfig: &AppConfig) {
                      speed=speed,
                      gpus=gpus,
                      solutions=num_solutions_found,
-                     elapsed=elapsed);
+                     elapsed=elapsed)).await;
+            newline().await;
         }
-        csleep(sleep_length);
+        csleep(sleep_length).await;
 
         if appconfig.should_exit() {
             return;

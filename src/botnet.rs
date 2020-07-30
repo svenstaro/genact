@@ -1,9 +1,10 @@
+//! Pretend to run and orchestrate a botnet
+use crate::io::{csleep, cursor_up, dprint, erase_line, newline, print};
 use crate::parse_args::AppConfig;
-use crate::utils::{csleep, cursor_up, dprint, erase_line};
 use rand::prelude::*;
 use yansi::Paint;
 
-pub fn run(appconfig: &AppConfig) {
+pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
     let clusters = {
         let mut ret = vec![];
@@ -20,40 +21,39 @@ pub fn run(appconfig: &AppConfig) {
     let mut connected = 0;
 
     while connected <= size {
-        dprint(
-            format!(
-                "\rEstablishing connections: {connected:4}/{size:4}",
-                connected = connected,
-                size = size
-            ),
-            0,
-        );
+        print(format!(
+            "\rEstablishing connections: {connected:4}/{size:4}",
+            connected = connected,
+            size = size
+        ))
+        .await;
         connected += 1;
-        csleep((rng.gen_range(0f64, 1.).powi(50) * 50.) as u64);
+        csleep((rng.gen_range(0f64, 1.).powi(50) * 50.) as u64).await;
     }
-    println!();
+    dprint("\r\n", 0).await;
 
-    csleep(300);
+    csleep(300).await;
 
     for (i, nodes) in clusters.iter().enumerate() {
         dprint(
             format!("  Cluster #{i:02} ({nodes:3} nodes)", i = i, nodes = nodes),
             10,
-        );
-        println!();
-        csleep(100);
+        )
+        .await;
+        newline().await;
+        csleep(100).await;
         if appconfig.should_exit() {
             return;
         }
     }
 
     loop {
-        cursor_up(onlines.len() as u64);
+        cursor_up(onlines.len() as u64).await;
         {
             let nodes_with_status = clusters.iter().zip(onlines.iter());
             for (i, (nodes, online)) in nodes_with_status.enumerate() {
-                erase_line();
-                println!(
+                erase_line().await;
+                print(format!(
                     "  Cluster #{i:02} ({nodes:3} nodes) [{status:}]",
                     i = i,
                     nodes = nodes,
@@ -63,7 +63,9 @@ pub fn run(appconfig: &AppConfig) {
                         Paint::yellow("booting")
                     }
                     .bold(),
-                );
+                ))
+                .await;
+                newline().await;
             }
         }
         if onlines.iter().all(|x| *x) {
@@ -75,7 +77,7 @@ pub fn run(appconfig: &AppConfig) {
                 *o = true;
             }
         }
-        csleep(100);
+        csleep(100).await;
         if appconfig.should_exit() {
             return;
         }
@@ -88,16 +90,16 @@ pub fn run(appconfig: &AppConfig) {
     ];
 
     for task in &tasks {
-        csleep(300);
-        dprint(format!("+ {} ", task), 10);
-        csleep(600);
-        dprint("[done]", 10);
-        println!();
+        csleep(300).await;
+        dprint(format!("+ {} ", task), 10).await;
+        csleep(600).await;
+        dprint("[done]", 10).await;
+        newline().await;
         if appconfig.should_exit() {
             return;
         }
     }
 
-    dprint(">> Botnet update complete.", 10);
-    println!();
+    dprint(">> Botnet update complete.", 10).await;
+    newline().await;
 }

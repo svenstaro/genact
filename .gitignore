@@ -1,4 +1,5 @@
 target
+out
 
 /target/
 **/*.rs.bk

@@ -1,11 +1,7 @@
-use humantime::Duration;
-
-#[cfg(not(target_os = "emscripten"))]
 use humantime::parse_duration;
+use humantime::Duration;
+use instant::Instant;
 
-use std::time::Instant;
-
-#[cfg(not(target_os = "emscripten"))]
 fn is_parse_duration_format(v: String) -> Result<(), String> {
     if parse_duration(&v).is_ok() {
         Ok(())
@@ -25,7 +21,7 @@ impl AppConfig {
     /// Check whether it's time to stop running.
     pub fn should_exit(&self) -> bool {
         // Check whether CTRL-C was pressed.
-        #[cfg(not(target_os = "emscripten"))]
+        #[cfg(not(target_arch = "wasm32"))]
         {
             use crate::CTRLC_PRESSED;
             use std::sync::atomic::Ordering;
@@ -44,7 +40,7 @@ impl AppConfig {
     }
 }
 
-#[cfg(not(target_os = "emscripten"))]
+#[cfg(not(target_arch = "wasm32"))]
 pub fn parse_args(all_modules: &[&str]) -> AppConfig {
     use clap::{App, AppSettings, Arg};
 
@@ -102,13 +98,13 @@ pub fn parse_args(all_modules: &[&str]) -> AppConfig {
     }
 }
 
-#[cfg(target_os = "emscripten")]
+#[cfg(target_arch = "wasm32")]
 pub fn parse_args(all_modules: &[&str]) -> AppConfig {
-    use stdweb::web;
     use url::Url;
 
     let mut temp_modules = vec![];
-    let location = web::document().location().unwrap();
+    let window = web_sys::window().expect("no global `window` exists");
+    let location = window.location();
     let parsed_url = Url::parse(&location.href().unwrap()).unwrap();
     let pairs = parsed_url.query_pairs();
     let filtered = pairs.filter(|&(ref x, _)| x == "module");

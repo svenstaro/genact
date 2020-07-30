@@ -1,11 +1,12 @@
+//! Print some Sim City loading screen status quips
+use crate::io::{csleep, dprint, newline, print};
 use crate::parse_args::AppConfig;
-use crate::utils::{csleep, dprint};
 use rand::prelude::*;
 use yansi::Paint;
 
-use crate::SIMCITY_LIST;
+use crate::data::SIMCITY_LIST;
 
-pub fn run(appconfig: &AppConfig) {
+pub async fn run(appconfig: &AppConfig) {
     const SPINNERS: &[&str] = &["/", "-", "\\", "|"];
     const SPINNER_SLEEP: u64 = 50;
     const TEXT_SLEEP: u64 = 15;
@@ -51,16 +52,16 @@ pub fn run(appconfig: &AppConfig) {
 
                 // on first print, text appears letter by letter
                 if first {
-                    dprint(unchecked_checkbox, 0);
-                    dprint(msg, TEXT_SLEEP);
+                    print(unchecked_checkbox).await;
+                    dprint(msg, TEXT_SLEEP).await;
                     first = false;
                 } else {
-                    dprint(unchecked_checkbox, 0);
-                    dprint(msg, 0);
+                    print(unchecked_checkbox).await;
+                    print(msg).await;
                 }
                 // Wait a bit, then erase the line
-                csleep(SPINNER_SLEEP);
-                dprint("\r", 0);
+                csleep(SPINNER_SLEEP).await;
+                print("\r").await;
 
                 // Don't wait until finished, exit both loops if that is requested
                 if appconfig.should_exit() {
@@ -89,17 +90,14 @@ pub fn run(appconfig: &AppConfig) {
         };
 
         // End of loop, the line has been removed, conclude the status
-        dprint(checked_checkbox, 10);
-        dprint(
-            color_func(format!("{}... {}", simcity, resolution)).to_string(),
-            0,
-        );
+        dprint(checked_checkbox, 10).await;
+        print(color_func(format!("{}... {}", simcity, resolution)).to_string()).await;
 
         if appconfig.should_exit() {
-            dprint("\nALL DONE\n", 0);
+            print("\nALL DONE\n").await;
             return;
         }
 
-        println!();
+        newline().await;
     }
 }

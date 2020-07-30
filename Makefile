@@ -18,7 +18,7 @@ build-apple:
 
 .PHONY: build-web
 build-web:
-	wasm-pack build --target web
+	wasm-pack build --target web --no-typescript -d out && cp static/* out/
 
 .PHONY: clean
 clean:

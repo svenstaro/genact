@@ -1,6 +1,7 @@
-//! Random utilities.
+//! Module containing random utilities.
 use rand::distributions::Uniform;
 use rand::prelude::*;
+use rand_distr::{ChiSquared, Exp};
 use std::cmp;
 use std::path::{Path, PathBuf};
 use std::str;

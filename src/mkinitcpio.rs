@@ -1,6 +1,7 @@
+//! Pretend to run mkinitcpio
+use crate::data::{BOOT_HOOKS_LIST, CFILES_LIST, COMPRESSION_ALGORITHMS_LIST, OS_RELEASES_LIST};
+use crate::io::{csleep, print};
 use crate::parse_args::AppConfig;
-use crate::utils::csleep;
-use crate::{BOOT_HOOKS_LIST, CFILES_LIST, COMPRESSION_ALGORITHMS_LIST, OS_RELEASES_LIST};
 use rand::prelude::*;
 use rand::seq::SliceRandom;
 use regex::Regex;
@@ -16,23 +17,37 @@ const REQUIRED_HOOKS: &[&str] = &[
     &"filesystems",
 ];
 
-fn warn(msg: &str) {
-    println!(
+async fn warn(msg: &str) {
+    print(format!(
         "{}{}",
         Paint::yellow("==> WARNING: ").bold(),
         Paint::new(msg).bold()
-    );
+    ))
+    .await;
+    print("\r\n").await;
 }
 
-fn msg1(msg: &str) {
-    println!("{}{}", Paint::green("==> ").bold(), Paint::new(msg).bold());
+async fn msg1(msg: &str) {
+    print(format!(
+        "{}{}",
+        Paint::green("==> ").bold(),
+        Paint::new(msg).bold()
+    ))
+    .await;
+    print("\r\n").await;
 }
 
-fn msg2(msg: &str) {
-    println!("{}{}", Paint::blue("  -> ").bold(), Paint::new(msg).bold());
+async fn msg2(msg: &str) {
+    print(format!(
+        "{}{}",
+        Paint::blue("  -> ").bold(),
+        Paint::new(msg).bold()
+    ))
+    .await;
+    print("\r\n").await;
 }
 
-fn build(
+async fn build(
     hooks: &[&str],
     preset: &str,
     mode: &str,
@@ -50,7 +65,7 @@ fn build(
             mode = mode
         )
         .as_ref(),
-    );
+    ).await;
 
     let image = format!(
         "/boot/initramfs-{preset}{suffix}.img",
@@ -69,16 +84,16 @@ fn build(
             image = image
         )
         .as_ref(),
-    );
-    msg1(format!("Starting build: {}", os_release).as_ref());
+    ).await;
+    msg1(format!("Starting build: {}", os_release).as_ref()).await;
 
     for hook in hooks {
-        msg2(format!("Running build hook: [{}]", hook).as_ref());
-        csleep(rng.gen_range(50, 1000));
+        msg2(format!("Running build hook: [{}]", hook).as_ref()).await;
+        csleep(rng.gen_range(50, 1000)).await;
 
         if *hook == "block" && mode == "fallback" {
             for driver in drivers {
-                warn(format!("Possibly missing firmware for module: {}", driver).as_ref());
+                warn(format!("Possibly missing firmware for module: {}", driver).as_ref()).await;
             }
         }
 
@@ -87,8 +102,8 @@ fn build(
         }
     }
 
-    msg1("Generating module dependencies");
-    csleep(rng.gen_range(200, 500));
+    msg1("Generating module dependencies").await;
+    csleep(rng.gen_range(200, 500)).await;
 
     msg1(
         format!(
@@ -97,13 +112,13 @@ fn build(
             zip = zip
         )
         .as_ref(),
-    );
-    csleep(rng.gen_range(500, 2500));
+    ).await;
+    csleep(rng.gen_range(500, 2500)).await;
 
-    msg1("Image generation successful");
+    msg1("Image generation successful").await;
 }
 
-pub fn run(appconfig: &AppConfig) {
+pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
 
     // Select a few hooks from the list of all hooks (in order). Make sure the required default
@@ -144,8 +159,8 @@ pub fn run(appconfig: &AppConfig) {
 
     build(
         &hooks, preset, "default", zip, &drivers, os_release, &appconfig,
-    );
+    ).await;
     build(
         &hooks, preset, "fallback", zip, &drivers, os_release, &appconfig,
-    );
+    ).await;
 }

@@ -1,17 +1,14 @@
+//! Petend to do some downloading
 use rand::prelude::*;
 use std::cmp::max;
 
-use pbr::{ProgressBar, Units};
-
-#[cfg(target_os = "emscripten")]
-use crate::utils::TermWriter;
-
+use crate::data::CFILES_LIST;
+use crate::data::EXTENSIONS_LIST;
+use crate::generators::gen_file_name_with_ext;
+use crate::io::{newline, cursor_left, print, erase_line, csleep};
 use crate::parse_args::AppConfig;
-use crate::utils::{csleep, gen_file_name_with_ext};
-use crate::CFILES_LIST;
-use crate::EXTENSIONS_LIST;
 
-pub fn run(appconfig: &AppConfig) {
+pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
 
     // We'll use the same extension for all files of this whole run to make things seem more
@@ -40,20 +37,23 @@ pub fn run(appconfig: &AppConfig) {
         // How many cycles we need.
         let cycles = file_bytes / bytes_per_sleep;
 
-        #[cfg(target_os = "emscripten")]
-        let mut pb = ProgressBar::on(TermWriter, file_bytes);
-        #[cfg(not(target_os = "emscripten"))]
-        let mut pb = ProgressBar::new(file_bytes);
-        pb.set_units(Units::Bytes);
-        pb.message(&gen_file_name_with_ext(&mut rng, &CFILES_LIST, extension));
-        for _ in 0..cycles {
-            pb.add(bytes_per_sleep);
-            csleep(sleep_millis);
+        let mut bar = progress_string::BarBuilder::new()
+            .total(cycles as usize)
+            .full_char('=')
+            .width(50)
+            .get_bar();
+
+        for i in 1..=cycles {
+            erase_line().await;
+            bar.replace(i as usize);
+            cursor_left(bar.get_last_width() as u64).await;
+            print(format!("{}", bar.to_string())).await;
+            csleep(sleep_millis).await;
 
             if appconfig.should_exit() {
                 return;
             }
         }
-        pb.finish_println("");
+        newline().await;
     }
 }

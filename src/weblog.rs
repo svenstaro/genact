@@ -1,17 +1,18 @@
-//! Module that pretends to tail a web server log.
-use rand::prelude::*;
+//! Pretend to tail a web server log
 use chrono::prelude::*;
 use fake::faker::internet::en::*;
 use fake::faker::lorem::en::*;
 use fake::Fake;
+use rand::prelude::*;
 
+use crate::data::EXTENSIONS_LIST;
+use crate::data::PACKAGES_LIST;
+use crate::generators::gen_file_path;
+use crate::io::{csleep, newline, print};
 use crate::parse_args::AppConfig;
-use crate::utils::{csleep, dprint, gen_file_path};
-use crate::EXTENSIONS_LIST;
-use crate::PACKAGES_LIST;
 static HTTP_CODES: &[u16] = &[200, 201, 400, 401, 403, 404, 500, 502, 503];
 
-pub fn run(appconfig: &AppConfig) {
+pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
     let num_lines = rng.gen_range(50, 200);
     let mut burst_mode = false;
@@ -54,14 +55,14 @@ pub fn run(appconfig: &AppConfig) {
             burst_mode = rng.gen_bool(1.0 / 20.0);
         }
 
-        dprint(line.to_string(), 0);
+        print(line.to_string()).await;
 
-        println!();
+        newline().await;
         if burst_mode {
             count_burst_lines += 1;
         }
 
-        csleep(line_sleep_length);
+        csleep(line_sleep_length).await;
 
         if appconfig.should_exit() {
             return;
