@@ -23,7 +23,7 @@ lazy_static = "1.4"
 humantime = "2"
 regex = "1.3"
 fake = { version = "2.2", features = ["wasm-bindgen", "chrono"] }
-wasm-bindgen = "0.2.65"
+wasm-bindgen = "0.2.67"
 anyhow = "1"
 progress_string = "0.1"
 instant = { version = "0.1", features = ["now", "wasm-bindgen"] }
