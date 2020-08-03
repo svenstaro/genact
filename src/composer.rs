@@ -4,7 +4,7 @@ use rand_distr::ChiSquared;
 use yansi::Paint;
 
 use crate::parse_args::AppConfig;
-use crate::io::{dprint, print, newline, csleep};
+use crate::io::{print, newline, csleep};
 use crate::data::COMPOSERS_LIST;
 
 fn gen_package_version(rng: &mut ThreadRng) -> String {

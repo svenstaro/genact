@@ -79,5 +79,16 @@ pub async fn cursor_left(n: u64) {
 }
 
 pub async fn erase_line() {
-    print("\x1b[2K").await;
+    print("\x1b[2K\x1b[0G").await;
+}
+
+#[cfg(not(target_arch = "wasm32"))]
+pub fn get_terminal_width() -> usize {
+    term_size::dimensions().expect("We're not attached to a terminal apparently").0
+}
+
+#[cfg(target_arch = "wasm32")]
+#[wasm_bindgen(inline_js = "export function get_terminal_width() { return window.xterm.cols }")]
+extern "C" {
+    pub fn get_terminal_width() -> usize;
 }

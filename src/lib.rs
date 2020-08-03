@@ -40,6 +40,7 @@ static ALL_MODULES: &[&str] = &[
 #[macro_use]
 extern crate clap;
 
+#[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
 
 // Called when the wasm module is instantiated
