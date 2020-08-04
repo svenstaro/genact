@@ -1,11 +1,12 @@
 //! Petend to do some downloading
+use crate::io::dprint;
 use rand::prelude::*;
 use std::cmp::max;
 
 use crate::data::CFILES_LIST;
 use crate::data::EXTENSIONS_LIST;
 use crate::generators::gen_file_name_with_ext;
-use crate::io::{csleep, erase_line, newline, print, get_terminal_width};
+use crate::io::{csleep, erase_line, get_terminal_width, newline, print};
 use crate::parse_args::AppConfig;
 use file_size_opts::FileSizeOpts;
 use humansize::{file_size_opts, FileSize};
@@ -33,10 +34,20 @@ pub async fn run(appconfig: &AppConfig) {
         let sleep_millis = 50;
 
         let file_name = &gen_file_name_with_ext(&mut rng, &CFILES_LIST, extension);
+
+        let stats_width = 32; // Fixed sum of the width of the right side info stats.
+        let rest_padding = 16; // Magic number is chars around the progress bar and other padding.
+        if get_terminal_width() < stats_width + rest_padding + 7 {
+            dprint("Terminal too small to display download progress\n", 10).await;
+            continue;
+        }
+        let remaining_width = get_terminal_width() - stats_width;
+        let file_name_width = remaining_width / 3;
+        let full_progress_bar_size = remaining_width - file_name_width - rest_padding;
         let mut bar = progress_string::BarBuilder::new()
             .total(file_bytes as usize)
             .full_char('=')
-            .width(50)
+            .width(full_progress_bar_size)
             .get_bar();
 
         let mut bytes_downloaded = 0u64;
@@ -68,15 +79,16 @@ pub async fn run(appconfig: &AppConfig) {
                 suffix: "/s",
                 ..file_size_opts::BINARY
             };
+
             print(format!(
-                "{file_name} {percent:.0}%{progress_bar} {bytes_downloaded} {download_speed} eta {eta} {width}",
-                file_name = file_name,
+                "{file_name:<file_name_width$} {percent:>4.0}%{progress_bar} {bytes_downloaded:<10} {download_speed:<12} eta {eta:<10}",
+                file_name = file_name.chars().take(file_name_width).collect::<String>(),
                 percent = percent,
                 progress_bar = bar.to_string(),
                 bytes_downloaded = bytes_incoming.file_size(size_opts).unwrap(),
                 download_speed = actual_download_speed.file_size(speed_opts).unwrap(),
                 eta = format_duration(eta).to_string(),
-                width = get_terminal_width(),
+                file_name_width = file_name_width,
             ))
             .await;
             csleep(sleep_millis).await;
