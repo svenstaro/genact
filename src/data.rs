@@ -25,5 +25,4 @@ pub static EXTENSIONS_LIST: &[&str] = &[
     "rar", "tar.gz", "tar.bz2", "tar.xz", "deb", "rpm", "exe",
 ];
 
-pub static COMPRESSION_ALGORITHMS_LIST: &[&str] =
-    &["gzip", "bzip2", "lzma", "xz", "lzop", "lz4"];
+pub static COMPRESSION_ALGORITHMS_LIST: &[&str] = &["gzip", "bzip2", "lzma", "xz", "lzop", "lz4"];

@@ -84,7 +84,9 @@ pub async fn erase_line() {
 
 #[cfg(not(target_arch = "wasm32"))]
 pub fn get_terminal_width() -> usize {
-    term_size::dimensions().expect("We're not attached to a terminal apparently").0
+    term_size::dimensions()
+        .expect("We're not attached to a terminal apparently")
+        .0
 }
 
 #[cfg(target_arch = "wasm32")]

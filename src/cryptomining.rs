@@ -1,9 +1,9 @@
 //! Pretend to mine a cryptocurrency
 use chrono::prelude::*;
 use chrono::Duration;
+use instant::Instant;
 use rand::{thread_rng, Rng};
 use rand_distr::{Distribution, Normal};
-use instant::Instant;
 use yansi::Paint;
 
 use crate::generators::gen_hex_string;
@@ -67,7 +67,8 @@ pub async fn run(appconfig: &AppConfig) {
                 separator = Paint::black("|"),
                 source = Paint::blue("CUDA0"),
                 noncehex = gen_hex_string(&mut rng, 16)
-            )).await;
+            ))
+            .await;
             newline().await;
             print(format!(
                 "{info:>3}  {time}{separator}{source:<13}{accepted}",
@@ -76,7 +77,8 @@ pub async fn run(appconfig: &AppConfig) {
                 separator = Paint::black("|"),
                 source = Paint::blue("stratum"),
                 accepted = Paint::green("Accepted.")
-            )).await;
+            ))
+            .await;
             newline().await;
         } else {
             remaining_until_new_job -= 1;

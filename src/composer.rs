@@ -3,9 +3,9 @@ use rand::prelude::*;
 use rand_distr::ChiSquared;
 use yansi::Paint;
 
-use crate::parse_args::AppConfig;
-use crate::io::{print, newline, csleep};
 use crate::data::COMPOSERS_LIST;
+use crate::io::{csleep, newline, print};
+use crate::parse_args::AppConfig;
 
 fn gen_package_version(rng: &mut ThreadRng) -> String {
     let chi = ChiSquared::new(1.0).unwrap();
@@ -32,12 +32,14 @@ pub async fn run(appconfig: &AppConfig) {
     print(format!(
         "{text}",
         text = Paint::green("Loading composer repositories with package information")
-    )).await;
+    ))
+    .await;
     newline().await;
     print(format!(
         "{text}",
         text = Paint::green("Updating dependencies (including require-dev)")
-    )).await;
+    ))
+    .await;
     newline().await;
 
     for stage in &["Installing"] {
@@ -49,7 +51,8 @@ pub async fn run(appconfig: &AppConfig) {
                 stage = stage,
                 package_name = Paint::green(package_name),
                 package_version = Paint::yellow(package_version)
-            )).await;
+            ))
+            .await;
             newline().await;
 
             csleep(sleep_length).await;
@@ -61,6 +64,10 @@ pub async fn run(appconfig: &AppConfig) {
     }
     print(format!("{text}", text = Paint::green("Writing lock file"))).await;
     newline().await;
-    print(format!("{text}", text = Paint::green("Generating autoload files"))).await;
+    print(format!(
+        "{text}",
+        text = Paint::green("Generating autoload files")
+    ))
+    .await;
     newline().await;
 }

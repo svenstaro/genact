@@ -65,7 +65,8 @@ async fn build(
             mode = mode
         )
         .as_ref(),
-    ).await;
+    )
+    .await;
 
     let image = format!(
         "/boot/initramfs-{preset}{suffix}.img",
@@ -84,7 +85,8 @@ async fn build(
             image = image
         )
         .as_ref(),
-    ).await;
+    )
+    .await;
     msg1(format!("Starting build: {}", os_release).as_ref()).await;
 
     for hook in hooks {
@@ -112,7 +114,8 @@ async fn build(
             zip = zip
         )
         .as_ref(),
-    ).await;
+    )
+    .await;
     csleep(rng.gen_range(500, 2500)).await;
 
     msg1("Image generation successful").await;
@@ -159,8 +162,10 @@ pub async fn run(appconfig: &AppConfig) {
 
     build(
         &hooks, preset, "default", zip, &drivers, os_release, &appconfig,
-    ).await;
+    )
+    .await;
     build(
         &hooks, preset, "fallback", zip, &drivers, os_release, &appconfig,
-    ).await;
+    )
+    .await;
 }
