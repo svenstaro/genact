@@ -79,20 +79,22 @@ The help:
 In the web version, you can run specific modules by providing them as `?module`
 parameters like this: https://svenstaro.github.io/genact?module=cc&module=memdump
 
-## Compiling
+## Building
 
-You should have a recent version of rust and cargo installed. You don't need nightly. Then, just clone it like usual and `cargo run` to get output:
+You should have a recent version of rust and cargo installed.
+
+Then, just clone it like usual and `cargo run` to get output:
 
     git clone https://github.com/svenstaro/genact.git
     cd genact
-    cargo run
+    cargo run --release
 
 ## Releasing
 
 This is mostly a note for me on how to release this thing:
 
-- Update versions in `README.md`, `static/index.html`, `Cargo.toml`, `snapcraft.yaml`.
-- `git commit` and `git tag -s`, `git push`.
-- `cargo publish`
-- Releases will automatically be deployed by Travis.
+- `cargo release --dry-run`
+- `cargo release`
+- Releases will automatically be deployed by Github Actions.
+- Docker images will automatically be built by Docker Hub.
 - Update AUR package.

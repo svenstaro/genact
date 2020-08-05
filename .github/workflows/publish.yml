@@ -1,0 +1,74 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  publish:
+    name: Publish for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            artifact_name: target/x86_64-unknown-linux-musl/release/genact
+            release_name: linux-x86_64
+            target: x86_64-unknown-linux-musl
+          - os: windows-latest
+            artifact_name: target/x86_64-pc-windows-msvc/release/genact.exe
+            release_name: windows-x86_64.exe
+            target: x86_64-pc-windows-msvc
+          - os: macos-latest
+            artifact_name: target/x86_64-apple-darwin/release/genact
+            release_name: macos-x86_64
+            target: x86_64-apple-darwin
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: ${{ matrix.target }}
+
+      - run: sudo apt install musl-tools
+        if: matrix.os == 'ubuntu-latest'
+
+      - name: cargo build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --locked --target=${{ matrix.target }}
+
+      - name: Compress binaries
+        uses: svenstaro/upx-action@v2
+        with:
+          file: ${{ matrix.artifact_name }}
+          args: --better --lzma
+
+      - name: Get tag name
+        id: tag_name
+        run: |
+          echo ::set-output name=current_version::${GITHUB_REF#refs/tags/v}
+        shell: bash
+
+      - name: Get CHANGELOG.md entry
+        id: changelog_reader
+        uses: mindsers/changelog-reader-action@v1
+        with:
+          version: ${{ steps.tag.outputs.current_version }}
+          path: ./CHANGELOG.md
+
+      - name: Release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ matrix.artifact_name }}
+          tag: ${{ github.ref }}
+          asset_name: genact-$tag-${{ matrix.release_name }}
+          body: ${{ steps.changelog_reader.outputs.log_entry }}
