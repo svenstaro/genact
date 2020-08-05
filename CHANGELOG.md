@@ -8,8 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
-
-## [0.8.0] - 2020-08-05
+- Refactor entrypoint
+- Use structopt instead of clap
 
 ## [0.8.0] - 2020-08-05
 - Enhance download module
@@ -17,5 +17,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 <!-- next-url -->
 [Unreleased]: https://github.com/svenstaro/genact/compare/v0.8.0...HEAD
-[0.8.0]: https://github.com/svenstaro/proby/compare/v0.8.0...v0.8.0
 [0.8.0]: https://github.com/svenstaro/proby/compare/0.7.0...v0.8.0
