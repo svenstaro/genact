@@ -4,18 +4,17 @@ mod cargo;
 mod cc;
 mod composer;
 mod cryptomining;
+mod data;
 mod docker;
 mod download;
+mod generators;
+mod io;
 mod kernel_compile;
 mod memdump;
 mod mkinitcpio;
+mod parse_args;
 mod simcity;
 mod weblog;
-
-mod data;
-mod generators;
-mod io;
-mod parse_args;
 
 static ALL_MODULES: &[&str] = &[
     "bootlog",
@@ -76,7 +75,6 @@ pub async fn main() -> Result<(), JsValue> {
     }
 }
 
-use crate::parse_args::parse_args;
 use rand::prelude::*;
 
 use std::sync::atomic::AtomicBool;
@@ -89,6 +87,7 @@ use anyhow::Result;
 
 #[cfg(not(target_arch = "wasm32"))]
 pub async fn main() -> Result<()> {
+    use crate::parse_args::parse_args;
     let appconfig = parse_args(&ALL_MODULES);
 
     if appconfig.list_modules_and_exit {

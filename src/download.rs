@@ -44,7 +44,7 @@ pub async fn run(appconfig: &AppConfig) {
         let remaining_width = get_terminal_width() - stats_width;
         let file_name_width = remaining_width / 3;
         let full_progress_bar_size = remaining_width - file_name_width - rest_padding;
-        let mut bar = progress_string::BarBuilder::new()
+        let mut progress_bar = progress_string::BarBuilder::new()
             .total(file_bytes as usize)
             .full_char('=')
             .width(full_progress_bar_size)
@@ -69,7 +69,7 @@ pub async fn run(appconfig: &AppConfig) {
             };
 
             erase_line().await;
-            bar.replace(bytes_downloaded as usize);
+            progress_bar.replace(bytes_downloaded as usize);
             let size_opts = FileSizeOpts {
                 space: false,
                 ..file_size_opts::BINARY
@@ -84,7 +84,7 @@ pub async fn run(appconfig: &AppConfig) {
                 "{file_name:<file_name_width$} {percent:>4.0}%{progress_bar} {bytes_downloaded:<10} {download_speed:<12} eta {eta:<10}",
                 file_name = file_name.chars().take(file_name_width).collect::<String>(),
                 percent = percent,
-                progress_bar = bar.to_string(),
+                progress_bar = progress_bar.to_string(),
                 bytes_downloaded = bytes_incoming.file_size(size_opts).unwrap(),
                 download_speed = actual_download_speed.file_size(speed_opts).unwrap(),
                 eta = format_duration(eta).to_string(),

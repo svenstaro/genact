@@ -1,12 +1,10 @@
 //! Module containing functionality for I/O operations.
 
-use std::io::stdout;
-use std::io::Write;
-use std::time;
 use wasm_bindgen::prelude::*;
 
 #[cfg(not(target_arch = "wasm32"))]
 pub async fn csleep(length: u64) {
+    use std::time;
     let sleep_length = time::Duration::from_millis(length as u64);
     async_std::task::sleep(sleep_length).await;
 }
@@ -45,6 +43,8 @@ pub async fn dprint<S: Into<String>>(s: S, delay: u64) {
 
         #[cfg(not(target_arch = "wasm32"))]
         {
+            use std::io::stdout;
+            use std::io::Write;
             print!("{}", c);
             stdout().flush().unwrap();
         }
@@ -74,9 +74,9 @@ pub async fn cursor_up(n: u64) {
     print(format!("\x1b[{}A", n)).await;
 }
 
-pub async fn cursor_left(n: u64) {
-    print(format!("\x1b[{}D", n)).await;
-}
+// pub async fn cursor_left(n: u64) {
+//     print(format!("\x1b[{}D", n)).await;
+// }
 
 pub async fn erase_line() {
     print("\x1b[2K\x1b[0G").await;

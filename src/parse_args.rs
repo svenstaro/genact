@@ -1,8 +1,9 @@
-use humantime::parse_duration;
 use humantime::Duration;
 use instant::Instant;
 
+#[cfg(not(target_arch = "wasm32"))]
 fn is_parse_duration_format(v: String) -> Result<(), String> {
+    use humantime::parse_duration;
     if parse_duration(&v).is_ok() {
         Ok(())
     } else {
