@@ -85,6 +85,7 @@ jobs:
         with:
           command: build
           args: --release --locked --target=${{ matrix.target }}
+          use-cross: ${{ matrix.cross }}
         if: matrix.target != 'wasm32-unknown-unknown'
 
       - name: wasm-pack build
@@ -100,6 +101,7 @@ jobs:
         with:
           file: ${{ matrix.artifact_name }}
           args: --better --lzma
+          strip: ${{ matrix.strip }}
         if: matrix.target != 'wasm32-unknown-unknown'
 
       - name: Get tag name
