@@ -16,6 +16,8 @@ Pretend to be busy or waiting for your computer when you should actually be doin
 
 ## Installation
 
+<a href="https://repology.org/project/genact/versions"><img align="right" src="https://repology.org/badge/vertical-allrepos/genact.svg" alt="Packaging status"></a>
+
 You don't have to install anything! For your convenience, prebuilt binaries for Linux, OSX and Windows are provided [here](https://github.com/svenstaro/genact/releases) that should run without any dependencies. **Additionally, there is a web version at https://svenstaro.github.io/genact/**
 
 It's compatible with FreeBSD, Linux, OSX, Windows 10 (it needs a recent Windows 10 to get ANSI support) and most modern web browsers that support WebAssembly.
