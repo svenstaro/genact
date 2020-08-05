@@ -58,7 +58,7 @@ or (on Docker)
 
 The help:
 
-    genact 0.7.0
+    genact 0.8.0
     Sven-Hendrik Haase <svenstaro@gmail.com>
     A nonsense activity generator
 
