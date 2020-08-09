@@ -646,7 +646,7 @@ name = "structopt"
 version = "0.3.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
- "clap 2.33.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "clap 2.33.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "lazy_static 1.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "structopt-derive 0.4.9 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
