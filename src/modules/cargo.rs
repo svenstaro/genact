@@ -3,10 +3,10 @@ use instant::Instant;
 use rand::prelude::*;
 use yansi::Paint;
 
+use crate::args::AppConfig;
 use crate::data::PACKAGES_LIST;
 use crate::generators::gen_package_version;
 use crate::io::{csleep, dprint};
-use crate::parse_args::AppConfig;
 
 pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();

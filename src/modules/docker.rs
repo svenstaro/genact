@@ -2,11 +2,10 @@
 use rand::prelude::*;
 use rand::Rng;
 
-use crate::data::DOCKER_PACKAGES_LIST;
-use crate::data::DOCKER_TAGS_LIST;
+use crate::args::AppConfig;
+use crate::data::{DOCKER_PACKAGES_LIST, DOCKER_TAGS_LIST};
 use crate::generators::gen_hex_string;
 use crate::io::{csleep, newline, print};
-use crate::parse_args::AppConfig;
 
 pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();

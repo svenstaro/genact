@@ -1,6 +1,6 @@
 //! Print some Sim City loading screen status quips
+use crate::args::AppConfig;
 use crate::io::{csleep, dprint, newline, print};
-use crate::parse_args::AppConfig;
 use rand::prelude::*;
 use yansi::Paint;
 

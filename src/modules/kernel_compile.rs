@@ -2,9 +2,9 @@
 use rand::prelude::*;
 use regex::Regex;
 
+use crate::args::AppConfig;
 use crate::data::CFILES_LIST;
 use crate::io::{csleep, newline, print};
-use crate::parse_args::AppConfig;
 
 /// Generate a build step for a header file
 fn gen_header(arch: &str, rng: &mut ThreadRng) -> String {

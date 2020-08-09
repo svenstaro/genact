@@ -1,6 +1,6 @@
 //! Pretend to run and orchestrate a botnet
+use crate::args::AppConfig;
 use crate::io::{csleep, cursor_up, dprint, erase_line, newline, print};
-use crate::parse_args::AppConfig;
 use rand::prelude::*;
 use yansi::Paint;
 
