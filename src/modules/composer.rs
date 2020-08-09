@@ -3,9 +3,9 @@ use rand::prelude::*;
 use rand_distr::ChiSquared;
 use yansi::Paint;
 
+use crate::args::AppConfig;
 use crate::data::COMPOSERS_LIST;
 use crate::io::{csleep, newline, print};
-use crate::parse_args::AppConfig;
 
 fn gen_package_version(rng: &mut ThreadRng) -> String {
     let chi = ChiSquared::new(1.0).unwrap();

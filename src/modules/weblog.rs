@@ -5,11 +5,10 @@ use fake::faker::lorem::en::*;
 use fake::Fake;
 use rand::prelude::*;
 
-use crate::data::EXTENSIONS_LIST;
-use crate::data::PACKAGES_LIST;
+use crate::args::AppConfig;
+use crate::data::{EXTENSIONS_LIST, PACKAGES_LIST};
 use crate::generators::gen_file_path;
 use crate::io::{csleep, newline, print};
-use crate::parse_args::AppConfig;
 static HTTP_CODES: &[u16] = &[200, 201, 400, 401, 403, 404, 500, 502, 503];
 
 pub async fn run(appconfig: &AppConfig) {

@@ -1,11 +1,11 @@
-/// Pretend to dump some random memory locations
+//! Pretend to dump some random memory locations
 use rand::prelude::*;
 use std::io::stdout;
 use std::io::Write;
 
+use crate::args::AppConfig;
 use crate::generators::gen_hex_string;
 use crate::io::{csleep, is_printable_ascii, newline, print};
-use crate::parse_args::AppConfig;
 
 pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();

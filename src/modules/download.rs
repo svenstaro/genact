@@ -3,11 +3,10 @@ use crate::io::dprint;
 use rand::prelude::*;
 use std::cmp::max;
 
-use crate::data::CFILES_LIST;
-use crate::data::EXTENSIONS_LIST;
+use crate::args::AppConfig;
+use crate::data::{CFILES_LIST, EXTENSIONS_LIST};
 use crate::generators::gen_file_name_with_ext;
 use crate::io::{csleep, erase_line, get_terminal_width, newline, print};
-use crate::parse_args::AppConfig;
 use file_size_opts::FileSizeOpts;
 use humansize::{file_size_opts, FileSize};
 use humantime::format_duration;
@@ -81,16 +80,16 @@ pub async fn run(appconfig: &AppConfig) {
             };
 
             print(format!(
-                "{file_name:<file_name_width$} {percent:>4.0}%{progress_bar} {bytes_downloaded:<10} {download_speed:<12} eta {eta:<10}",
-                file_name = file_name.chars().take(file_name_width).collect::<String>(),
-                percent = percent,
-                progress_bar = progress_bar.to_string(),
-                bytes_downloaded = bytes_incoming.file_size(size_opts).unwrap(),
-                download_speed = actual_download_speed.file_size(speed_opts).unwrap(),
-                eta = format_duration(eta).to_string(),
-                file_name_width = file_name_width,
+                    "{file_name:<file_name_width$} {percent:>4.0}%{progress_bar} {bytes_downloaded:<10} {download_speed:<12} eta {eta:<10}",
+                    file_name = file_name.chars().take(file_name_width).collect::<String>(),
+                    percent = percent,
+                    progress_bar = progress_bar.to_string(),
+                    bytes_downloaded = bytes_incoming.file_size(size_opts).unwrap(),
+                    download_speed = actual_download_speed.file_size(speed_opts).unwrap(),
+                    eta = format_duration(eta).to_string(),
+                    file_name_width = file_name_width,
             ))
-            .await;
+                .await;
             csleep(sleep_millis).await;
 
             bytes_downloaded += bytes_incoming;

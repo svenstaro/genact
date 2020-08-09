@@ -1,13 +1,14 @@
 use anyhow::Result;
 use yansi::Paint;
 
+use genact::args::parse_args;
+use genact::{exit_handler, run, ALL_MODULES};
+
 #[async_std::main]
 async fn main() -> Result<()> {
     Paint::enable_windows_ascii();
 
-    use genact::parse_args::parse_args;
-    use genact::{run, ALL_MODULES};
-    let appconfig = parse_args(&ALL_MODULES);
+    let appconfig = parse_args();
 
     if appconfig.list_modules_and_exit {
         println!("Available modules:");
@@ -17,11 +18,7 @@ async fn main() -> Result<()> {
         std::process::exit(0);
     }
 
-    use std::sync::atomic::Ordering;
-    ctrlc::set_handler(move || {
-        genact::CTRLC_PRESSED.store(true, Ordering::SeqCst);
-    })
-    .expect("Error setting Ctrl-C handler");
+    ctrlc::set_handler(exit_handler)?;
 
     run(appconfig).await;
 

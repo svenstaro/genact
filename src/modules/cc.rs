@@ -1,11 +1,11 @@
-/// Pretend to run a C compiler
+//! Pretend to run a C compiler
 use rand::prelude::*;
 use std::path::Path;
 
+use crate::args::AppConfig;
 use crate::data::{CFILES_LIST, PACKAGES_LIST};
 use crate::generators::gen_random_n_from_list_into_string;
 use crate::io::{csleep, newline, print};
-use crate::parse_args::AppConfig;
 
 /// Generate a `String` containing all of the `file_list`'s file's parents as -I flags
 fn generate_includes(file_list: &[&str], max: u32, rng: &mut ThreadRng) -> String {

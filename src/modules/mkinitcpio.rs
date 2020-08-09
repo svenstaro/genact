@@ -1,7 +1,7 @@
 //! Pretend to run mkinitcpio
+use crate::args::AppConfig;
 use crate::data::{BOOT_HOOKS_LIST, CFILES_LIST, COMPRESSION_ALGORITHMS_LIST, OS_RELEASES_LIST};
 use crate::io::{csleep, print};
-use crate::parse_args::AppConfig;
 use rand::prelude::*;
 use rand::seq::SliceRandom;
 use regex::Regex;
