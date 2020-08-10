@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased] - ReleaseDate
 - Refactor entrypoint, modules, and file structure
 - Use structopt instead of clap which should give better errors
+- Improve wasm download size
 
 ## [0.8.0] - 2020-08-05
 - Enhance download module
