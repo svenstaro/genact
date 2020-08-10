@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+
+## [0.8.1] - 2020-08-10
 - Refactor entrypoint, modules, and file structure
 - Use structopt instead of clap which should give better errors
 - Improve wasm download size
@@ -17,5 +19,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Rewrite web version using wasm-bindgen
 
 <!-- next-url -->
-[Unreleased]: https://github.com/svenstaro/genact/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/svenstaro/genact/compare/v0.8.1...HEAD
+[0.8.1]: https://github.com/svenstaro/genact/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/svenstaro/proby/compare/0.7.0...v0.8.0
