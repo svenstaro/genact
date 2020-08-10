@@ -309,7 +309,7 @@ dependencies = [
 
 [[package]]
 name = "genact"
-version = "0.9.0"
+version = "0.9.1-alpha.0"
 dependencies = [
  "anyhow 1.0.32 (registry+https://github.com/rust-lang/crates.io-index)",
  "async-std 1.6.2 (registry+https://github.com/rust-lang/crates.io-index)",
