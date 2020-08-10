@@ -89,7 +89,7 @@ jobs:
         if: matrix.target != 'wasm32-unknown-unknown'
 
       - name: wasm-pack build
-        run: wasm-pack build --target=web --no-typescript -d out
+        run: wasm-pack build --release --target=web --no-typescript -d out
         if: matrix.target == 'wasm32-unknown-unknown'
 
       - name: Copy static files out to wasm dir
