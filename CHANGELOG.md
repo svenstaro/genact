@@ -8,8 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
-- Refactor entrypoint
-- Use structopt instead of clap
+- Refactor entrypoint, modules, and file structure
+- Use structopt instead of clap which should give better errors
 
 ## [0.8.0] - 2020-08-05
 - Enhance download module
