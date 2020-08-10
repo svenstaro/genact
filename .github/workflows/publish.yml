@@ -100,7 +100,7 @@ jobs:
         uses: svenstaro/upx-action@v2
         with:
           file: ${{ matrix.artifact_name }}
-          args: --better --lzma
+          args: --best --lzma
           strip: ${{ matrix.strip }}
         if: matrix.target != 'wasm32-unknown-unknown'
 
