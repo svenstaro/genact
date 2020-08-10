@@ -4,6 +4,15 @@ use structopt::StructOpt;
 use crate::ALL_MODULES;
 
 #[cfg(not(target_arch = "wasm32"))]
+fn parse_speed_factor(s: &str) -> Result<f32, String> {
+    let value_as_float = s.parse::<f32>().map_err(|e| e.to_string())?;
+    if value_as_float < 0.01 {
+        return Err("Speed factor must be larger than 0.01".to_string());
+    }
+    Ok(value_as_float)
+}
+
+#[cfg(not(target_arch = "wasm32"))]
 #[derive(StructOpt)]
 #[structopt(
     name = "genact",
@@ -20,6 +29,10 @@ pub struct AppConfig {
     #[structopt(short, long, possible_values = &ALL_MODULES)]
     pub modules: Vec<String>,
 
+    /// Global speed factor
+    #[structopt(short, long, default_value = "1", parse(try_from_str = parse_speed_factor))]
+    pub speed_factor: f32,
+
     /// Exit after running for this long (format example: 2h10min)
     #[structopt(short, long, parse(try_from_str = humantime::parse_duration))]
     pub exit_after: Option<instant::Duration>,
@@ -29,6 +42,9 @@ pub struct AppConfig {
 pub struct AppConfig {
     /// Run only these modules
     pub modules: Vec<String>,
+
+    /// Global speed factor
+    pub speed_factor: f32,
 }
 
 impl AppConfig {
@@ -69,14 +85,19 @@ pub fn parse_args() -> AppConfig {
     let window = web_sys::window().expect("no global `window` exists");
     let location = window.location();
     let parsed_url = Url::parse(&location.href().unwrap()).unwrap();
-    let pairs = parsed_url.query_pairs();
-    let filtered = pairs.filter(|&(ref x, _)| x == "module");
-    for (_, query_val) in filtered {
+    let mut pairs = parsed_url.query_pairs();
+    let filtered_modules = pairs.filter(|&(ref k, _)| k == "module");
+    for (_, query_val) in filtered_modules {
         let actual_val = &&*query_val;
         if ALL_MODULES.contains(actual_val) {
             temp_modules.push(actual_val.to_string());
         }
     }
+    let speed_factor: f32 = pairs
+        .find(|&(ref k, _)| k == "speed-factor")
+        .map(|(_, v)| v.parse::<f32>().unwrap_or(1.0))
+        .unwrap_or(1.0);
+
     let modules_to_run = if temp_modules.is_empty() {
         ALL_MODULES.iter().map(|x| x.to_string()).collect()
     } else {
@@ -85,5 +106,6 @@ pub fn parse_args() -> AppConfig {
 
     AppConfig {
         modules: modules_to_run,
+        speed_factor,
     }
 }

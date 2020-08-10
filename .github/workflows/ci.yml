@@ -4,11 +4,10 @@ on: [push, pull_request]
 
 jobs:
   ci:
-    name: ${{ matrix.rust }} on ${{ matrix.os }} for ${{ matrix.target }}
+    name: ${{ matrix.os }} for ${{ matrix.target }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        rust: [stable, nightly]
         target:
           - x86_64-unknown-linux-musl
           - x86_64-pc-windows-msvc
@@ -32,7 +31,7 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
-          toolchain: ${{ matrix.rust }}
+          toolchain: stable
           override: true
           components: rustfmt, clippy
 

@@ -37,6 +37,7 @@ instant = { version = "0.1", features = ["now", "wasm-bindgen"] }
 console_error_panic_hook = "0.1"
 wasm-bindgen-futures = "0.4"
 js-sys = "0.3"
+futures = "0.3"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 structopt = "0.3"

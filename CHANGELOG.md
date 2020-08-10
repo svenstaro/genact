@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+- Add global speed [#132](https://github.com/svenstaro/genact/issues/132)
 
 ## [0.8.1] - 2020-08-10
 - Refactor entrypoint, modules, and file structure

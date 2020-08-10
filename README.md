@@ -58,7 +58,7 @@ or (on Docker)
 
     docker run -it --rm svenstaro/genact -h
 
-The help:
+### Usage
 
     genact 0.8.1
     Sven-Hendrik Haase <svenstaro@gmail.com>
@@ -78,9 +78,15 @@ The help:
                                          cargo, cc, composer, cryptomining, simcity,
                                          download, docker, memdump, mkinitcpio,
                                          kernel_compile, weblog]
+        -s, --speed-factor <speed-factor>    Global speed factor [default: 1]
+
+### Web usage
 
 In the web version, you can run specific modules by providing them as `?module`
 parameters like this: https://svenstaro.github.io/genact?module=cc&module=memdump
+
+You can also provide a `?speed-factor` like this:
+https://svenstaro.github.io/genact?speed-factor=5
 
 ## Building
 

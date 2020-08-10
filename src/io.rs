@@ -2,19 +2,25 @@
 
 use wasm_bindgen::prelude::*;
 
+use crate::SPEED_FACTOR;
+
 #[cfg(not(target_arch = "wasm32"))]
 pub async fn csleep(length: u64) {
     use std::time;
-    let sleep_length = time::Duration::from_millis(length as u64);
+    let speed_factor = *SPEED_FACTOR.lock().await;
+    let sleep_length = time::Duration::from_millis((1.0 / speed_factor * length as f32) as u64);
     async_std::task::sleep(sleep_length).await;
 }
 
 #[cfg(target_arch = "wasm32")]
 pub async fn csleep(length: u64) {
+    let speed_factor = *SPEED_FACTOR.lock().await;
+    let sleep_length = (1.0 / speed_factor * length as f32) as i32;
+
     let promise = js_sys::Promise::new(&mut move |resolve, _| {
         let window = web_sys::window().expect("should have a Window");
         window
-            .set_timeout_with_callback_and_timeout_and_arguments_0(&resolve, length as i32)
+            .set_timeout_with_callback_and_timeout_and_arguments_0(&resolve, sleep_length)
             .expect("don't expect error on setTimeout()");
     });
 

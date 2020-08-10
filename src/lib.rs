@@ -23,6 +23,7 @@ pub static ALL_MODULES: &[&str] = &[
     // "heartbeat",
 ];
 
+use futures::lock::Mutex;
 use instant::Instant;
 use rand::prelude::*;
 use std::sync::atomic::AtomicBool;
@@ -31,6 +32,10 @@ use args::AppConfig;
 
 lazy_static::lazy_static! {
     pub static ref CTRLC_PRESSED: AtomicBool = AtomicBool::new(false);
+}
+
+lazy_static::lazy_static! {
+    pub static ref SPEED_FACTOR: Mutex<f32> = Mutex::new(1.0);
 }
 
 lazy_static::lazy_static! {
@@ -80,7 +85,10 @@ use wasm_bindgen::prelude::*;
 pub async fn main() -> Result<(), JsValue> {
     use std::panic;
     panic::set_hook(Box::new(console_error_panic_hook::hook));
+
     let appconfig = args::parse_args();
+    *SPEED_FACTOR.lock().await = appconfig.speed_factor;
+
     run(appconfig).await;
     Ok(())
 }
