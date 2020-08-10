@@ -73,10 +73,11 @@ The help:
         -V, --version         Prints version information
 
     OPTIONS:
-        -e, --exitafter <EXITAFTER>    Exit after running for this long (format example: 2h10min)
-        -m, --modules <MODULE>...      Run only these modules [possible values: bootlog, botnet, cargo,
-                                       cc, composer, cryptomining, simcity, download, docker,
-                                       memdump, kernel_compile, weblog]
+        -e, --exit-after <exit-after>    Exit after running for this long (format example: 2h10min)
+        -m, --modules <modules>...       Run only these modules [possible values: bootlog, botnet,
+                                         cargo, cc, composer, cryptomining, simcity,
+                                         download, docker, memdump, mkinitcpio,
+                                         kernel_compile, weblog]
 
 In the web version, you can run specific modules by providing them as `?module`
 parameters like this: https://svenstaro.github.io/genact?module=cc&module=memdump
