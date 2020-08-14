@@ -43,31 +43,19 @@ jobs:
         if: matrix.target == 'wasm32-unknown-unknown'
 
       - name: wasm-pack build
-        run: wasm-pack build --target=web --no-typescript
+        run: wasm-pack build --release --target=web --no-typescript -d out-rofl
         if: matrix.target == 'wasm32-unknown-unknown'
 
-      - name: cargo build
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-        if: matrix.target != 'wasm32-unknown-unknown'
+      - name: Copy static files out to wasm dir
+        run: cp static/* out-rofl/
+        if: matrix.target == 'wasm32-unknown-unknown'
 
-      - name: cargo test
-        uses: actions-rs/cargo@v1
-        with:
-          command: test
-        if: matrix.target != 'wasm32-unknown-unknown'
+      - run: rm out-rofl/.gitignore
+        if: matrix.target == 'wasm32-unknown-unknown'
 
-      - name: cargo fmt
-        uses: actions-rs/cargo@v1
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          command: fmt
-          args: --all -- --check
-        if: matrix.target != 'wasm32-unknown-unknown'
-
-      - name: cargo clippy
-        uses: actions-rs/cargo@v1
-        with:
-          command: clippy
-          args: -- -D warnings
-        if: matrix.target != 'wasm32-unknown-unknown'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out-rofl
+        if: matrix.target == 'wasm32-unknown-unknown'
