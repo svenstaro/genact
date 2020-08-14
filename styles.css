@@ -1,0 +1,13 @@
+html, body {
+    background-color: black;
+    height: 100%;
+}
+
+#terminal {
+    height: 100%;
+    overflow: hidden
+}
+
+.xterm-viewport {
+    overflow: hidden !important;
+}

@@ -1,0 +1,1 @@
+export function get_terminal_width() { return window.xterm.cols }

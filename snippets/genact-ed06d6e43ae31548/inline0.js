@@ -1,0 +1,1 @@
+export function write_to_xterm(s) { window.xterm.write(s) }
