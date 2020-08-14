@@ -92,6 +92,9 @@ jobs:
         run: wasm-pack build --release --target=web --no-typescript -d out
         if: matrix.target == 'wasm32-unknown-unknown'
 
+      - run: rm out/.gitignore
+        if: matrix.target == 'wasm32-unknown-unknown'
+
       - name: Copy static files out to wasm dir
         run: cp static/* out/
         if: matrix.target == 'wasm32-unknown-unknown'
