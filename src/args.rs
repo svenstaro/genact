@@ -15,7 +15,7 @@ fn parse_speed_factor(s: &str) -> Result<f32, String> {
 #[cfg(not(target_arch = "wasm32"))]
 fn parse_min_1(s: &str) -> Result<u32, String> {
     let value_as_u32 = s.parse::<u32>().map_err(|e| e.to_string())?;
-    if value_as_u32 <= 0 {
+    if value_as_u32 == 0 {
         return Err("Must be larger than 0".to_string());
     }
     Ok(value_as_u32)
