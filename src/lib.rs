@@ -26,7 +26,7 @@ pub static ALL_MODULES: &[&str] = &[
 use futures::lock::Mutex;
 use instant::Instant;
 use rand::prelude::*;
-use std::sync::atomic::AtomicBool;
+use std::sync::atomic::{AtomicBool, AtomicU32};
 
 use args::AppConfig;
 
@@ -40,6 +40,10 @@ lazy_static::lazy_static! {
 
 lazy_static::lazy_static! {
     pub static ref STARTED_AT: Instant = Instant::now();
+}
+
+lazy_static::lazy_static! {
+    pub static ref MODULES_RAN: AtomicU32 = AtomicU32::new(0);
 }
 
 pub async fn run(appconfig: AppConfig) {
@@ -64,8 +68,13 @@ pub async fn run(appconfig: AppConfig) {
         }
 
         #[cfg(not(target_arch = "wasm32"))]
-        if appconfig.should_exit() {
-            exit_handler();
+        {
+            use std::sync::atomic::Ordering;
+            MODULES_RAN.fetch_add(1, Ordering::SeqCst);
+
+            if appconfig.should_exit() {
+                exit_handler();
+            }
         }
     }
 }

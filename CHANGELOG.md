@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+- Add `--exit-after-modules` options which can be used to make genact exit after running that many modules
 
 ## [0.9.0] - 2020-08-10
 - Add global speed [#132](https://github.com/svenstaro/genact/issues/132)

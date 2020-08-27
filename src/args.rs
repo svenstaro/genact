@@ -13,6 +13,15 @@ fn parse_speed_factor(s: &str) -> Result<f32, String> {
 }
 
 #[cfg(not(target_arch = "wasm32"))]
+fn parse_min_1(s: &str) -> Result<u32, String> {
+    let value_as_u32 = s.parse::<u32>().map_err(|e| e.to_string())?;
+    if value_as_u32 <= 0 {
+        return Err("Must be larger than 0".to_string());
+    }
+    Ok(value_as_u32)
+}
+
+#[cfg(not(target_arch = "wasm32"))]
 #[derive(StructOpt)]
 #[structopt(
     name = "genact",
@@ -34,8 +43,12 @@ pub struct AppConfig {
     pub speed_factor: f32,
 
     /// Exit after running for this long (format example: 2h10min)
-    #[structopt(short, long, parse(try_from_str = humantime::parse_duration))]
-    pub exit_after: Option<instant::Duration>,
+    #[structopt(long, parse(try_from_str = humantime::parse_duration))]
+    pub exit_after_time: Option<instant::Duration>,
+
+    /// Exit after running this many modules
+    #[structopt(long, parse(try_from_str = parse_min_1))]
+    pub exit_after_modules: Option<u32>,
 }
 
 #[cfg(target_arch = "wasm32")]
@@ -53,11 +66,19 @@ impl AppConfig {
         // Check whether CTRL-C was pressed.
         #[cfg(not(target_arch = "wasm32"))]
         {
-            use crate::STARTED_AT;
+            use crate::{MODULES_RAN, STARTED_AT};
+            use std::sync::atomic::Ordering;
 
             // Check if maximum running time is exceeded.
-            if let Some(ea) = self.exit_after {
-                if STARTED_AT.elapsed() > ea {
+            if let Some(eat) = self.exit_after_time {
+                if STARTED_AT.elapsed() > eat {
+                    return true;
+                }
+            }
+
+            // Check if maximum number of module runs has been reached.
+            if let Some(eam) = self.exit_after_modules {
+                if MODULES_RAN.load(Ordering::SeqCst) >= eam {
                     return true;
                 }
             }
