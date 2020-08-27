@@ -1,5 +1,5 @@
-import { write_to_xterm } from './snippets/genact-ed06d6e43ae31548/inline0.js';
-import * as __wbg_star0 from './snippets/genact-ed06d6e43ae31548/inline1.js';
+import { write_to_xterm } from './snippets/genact-8e2e9caae3fd5aef/inline0.js';
+import * as __wbg_star0 from './snippets/genact-8e2e9caae3fd5aef/inline1.js';
 
 let wasm;
 
@@ -270,7 +270,7 @@ async function init(input) {
     imports.wbg.__wbindgen_object_drop_ref = function(arg0) {
         takeObject(arg0);
     };
-    imports.wbg.__wbg_writetoxterm_42a3058d5dbce1d3 = function(arg0, arg1) {
+    imports.wbg.__wbg_writetoxterm_e0b2d7a37de04010 = function(arg0, arg1) {
         write_to_xterm(getStringFromWasm0(arg0, arg1));
     };
     imports.wbg.__wbg_new_59cb74e423758ede = function() {
@@ -441,7 +441,7 @@ async function init(input) {
         var ret = makeMutClosure(arg0, arg1, 125, __wbg_adapter_16);
         return addHeapObject(ret);
     };
-    imports['./snippets/genact-ed06d6e43ae31548/inline1.js'] = __wbg_star0;
+    imports['./snippets/genact-8e2e9caae3fd5aef/inline1.js'] = __wbg_star0;
 
     if (typeof input === 'string' || (typeof Request === 'function' && input instanceof Request) || (typeof URL === 'function' && input instanceof URL)) {
         input = fetch(input);
