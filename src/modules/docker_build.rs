@@ -1,14 +1,12 @@
 //! Module that pretends to build Docker images
 use rand::prelude::*;
 use rand::Rng;
-use humantime::Duration;
 
 use crate::io::{csleep, dprint};
 use crate::generators::gen_hex_string;
 use crate::data::DOCKER_PACKAGES_LIST;
 use crate::data::DOCKER_TAGS_LIST;
 use crate::args::AppConfig;
-use crate::args::parse_args;
 
 use crate::modules::bootlog;
 use crate::modules::botnet;
@@ -16,8 +14,6 @@ use crate::modules::cargo;
 use crate::modules::cc;
 use crate::modules::composer;
 use crate::modules::cryptomining;
-use crate::modules::docker;
-use crate::modules::docker_build;
 use crate::modules::download;
 use crate::modules::kernel_compile;
 use crate::modules::memdump;
@@ -43,7 +39,7 @@ pub async fn run(appconfig: &AppConfig) {
                 current_size = current_size
             ),
             0,
-        );
+        ).await;
 
         let remaining_size = target_size - current_size;
         if remaining_size <= 5.0 {
@@ -56,7 +52,7 @@ pub async fn run(appconfig: &AppConfig) {
             return;
         }
 
-        csleep(200);
+        csleep(200).await;
     }
 
     // Loop trough a set number of steps
@@ -95,8 +91,6 @@ pub async fn run(appconfig: &AppConfig) {
                 "mkinitcpio" => mkinitcpio::run(&docker_appconfig).await,
                 "cc" => cc::run(&docker_appconfig).await,
                 "download" => download::run(&docker_appconfig).await,
-                // "docker" => docker::run(&docker_appconfig).await,
-                // "docker_build" => docker_build::run(&docker_appconfig).await,
                 "memdump" => memdump::run(&docker_appconfig).await,
                 "composer" => composer::run(&docker_appconfig).await,
                 "kernel_compile" => kernel_compile::run(&docker_appconfig).await,
@@ -115,7 +109,7 @@ pub async fn run(appconfig: &AppConfig) {
         }
 
         current_step += 1;
-        csleep(rng.gen_range(300, 1000));
+        csleep(rng.gen_range(300, 1000)).await;
     }
 
     // Print the final lines
@@ -151,8 +145,6 @@ fn select_command() -> &'static str {
         "cryptomining",
         "simcity",
         "download",
-        // "docker",
-        // "docker_build",
         "memdump",
         "mkinitcpio",
         "kernel_compile",
@@ -173,8 +165,6 @@ fn get_module_signature(choice: &str) -> &str {
         "mkinitcpio" => mkinitcpio::get_signature(),
         "cc" => cc::get_signature(),
         "download" => download::get_signature(),
-        // "docker" => docker::get_signature(),
-        // "docker_build" => docker_build::get_signature(),
         "memdump" => memdump::get_signature(),
         "composer" => composer::get_signature(),
         "kernel_compile" => kernel_compile::get_signature(),
