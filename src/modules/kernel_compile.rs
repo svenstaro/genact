@@ -1,23 +1,16 @@
-/// Module that pretends to build a Linux kernel
+//! Pretend to build a Linux kernel
 use rand::prelude::*;
 use regex::Regex;
 
-use crate::utils::csleep;
-use crate::CFILES_LIST;
-use crate::parse_args::AppConfig;
+use crate::args::AppConfig;
+use crate::data::CFILES_LIST;
+use crate::io::{csleep, newline, print};
 
 /// Generate a build step for a header file
 fn gen_header(arch: &str, rng: &mut ThreadRng) -> String {
-    const RARE_CMDS: &[&str] = &[
-        "SYSTBL ",
-        "SYSHDR ",
-    ];
+    const RARE_CMDS: &[&str] = &["SYSTBL ", "SYSHDR "];
 
-    const CMDS: &[&str] = &[
-        "WRAP   ",
-        "CHK    ",
-        "UPD    ",
-    ];
+    const CMDS: &[&str] = &["WRAP   ", "CHK    ", "UPD    "];
 
     let cmd = if rng.gen_bool(1.0 / 15.0) {
         RARE_CMDS.choose(rng).unwrap_or(&"")
@@ -30,7 +23,9 @@ fn gen_header(arch: &str, rng: &mut ThreadRng) -> String {
 
     if file.starts_with("arch") {
         let re = Regex::new(r"arch/([a-z0-9_])+/").unwrap();
-        file = re.replace(&file, format!("arch/{}/", arch).as_str()).into_owned();
+        file = re
+            .replace(&file, format!("arch/{}/", arch).as_str())
+            .into_owned();
     }
 
     format!("  {} {}", cmd, file)
@@ -38,10 +33,7 @@ fn gen_header(arch: &str, rng: &mut ThreadRng) -> String {
 
 /// Generate a build step for an object file
 fn gen_object(arch: &str, rng: &mut ThreadRng) -> String {
-    const RARE_CMDS: &[&str] = &[
-        "HOSTCC ",
-        "AS     ",
-    ];
+    const RARE_CMDS: &[&str] = &["HOSTCC ", "AS     "];
 
     let cmd = if rng.gen_bool(1.0 / 15.0) {
         RARE_CMDS.choose(rng).unwrap_or(&"")
@@ -56,7 +48,9 @@ fn gen_object(arch: &str, rng: &mut ThreadRng) -> String {
 
     if file.starts_with("arch") {
         let re = Regex::new(r"arch/([a-z0-9_])+/").unwrap();
-        file = re.replace(&file, format!("arch/{}/", arch).as_str()).into_owned();
+        file = re
+            .replace(&file, format!("arch/{}/", arch).as_str())
+            .into_owned();
     }
 
     format!("  {} {}", cmd, file)
@@ -109,7 +103,7 @@ fn gen_line(arch: &str, rng: &mut ThreadRng) -> String {
     }
 }
 
-pub fn run(appconfig: &AppConfig) {
+pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
     let num_lines = rng.gen_range(50, 500);
 
@@ -152,33 +146,41 @@ pub fn run(appconfig: &AppConfig) {
         let line = gen_line(arch, &mut rng);
         let sleep_length = rng.gen_range(10, 1000);
 
-        println!("{}", line);
-        csleep(sleep_length);
+        print(line).await;
+        newline().await;
+        csleep(sleep_length).await;
 
         if appconfig.should_exit() {
             return;
         }
     }
 
-    println!("BUILD   arch/{}/boot/bzImage", arch);
+    print(format!("BUILD   arch/{}/boot/bzImage", arch)).await;
+    newline().await;
 
-    println!();
+    newline().await;
 
     let bytes: u32 = rng.gen_range(9000, 1_000_000);
     let padded_bytes: u32 = rng.gen_range(bytes, 1_100_000);
 
-    println!("Setup is {} bytes (padded to {} bytes).",
-             bytes,
-             padded_bytes);
+    print(format!(
+        "Setup is {} bytes (padded to {} bytes).",
+        bytes, padded_bytes
+    ))
+    .await;
+    newline().await;
 
     let system: u32 = rng.gen_range(300, 3000);
-    println!("System is {} kB", system);
+    print(format!("System is {} kB", system)).await;
+    newline().await;
 
     let crc: u32 = rng.gen_range(0x1000_0000, 0xffff_ffff);
 
-    println!("CRC {:x}", crc);
+    print(format!("CRC {:x}", crc)).await;
+    newline().await;
 
-    println!("Kernel: arch/{}/boot/bzImage is ready (#1)", arch);
+    print(format!("Kernel: arch/{}/boot/bzImage is ready (#1)", arch)).await;
+    newline().await;
 
-    println!();
+    newline().await;
 }

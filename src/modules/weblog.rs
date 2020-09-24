@@ -1,14 +1,17 @@
-/// Module that pretends to tail a web server log.
+//! Pretend to tail a web server log
+use chrono::prelude::*;
+use fake::faker::internet::en::*;
+use fake::faker::lorem::en::*;
+use fake::Fake;
 use rand::prelude::*;
 
-use crate::parse_args::AppConfig;
-use chrono::prelude::*;
-use crate::EXTENSIONS_LIST;
-use crate::PACKAGES_LIST;
-use crate::utils::{csleep, dprint, gen_file_path};
-static HTTP_CODES: &'static [u16] = &[200, 201, 400, 401, 403, 404, 500, 502, 503];
+use crate::args::AppConfig;
+use crate::data::{EXTENSIONS_LIST, PACKAGES_LIST};
+use crate::generators::gen_file_path;
+use crate::io::{csleep, newline, print};
+static HTTP_CODES: &[u16] = &[200, 201, 400, 401, 403, 404, 500, 502, 503];
 
-pub fn run(appconfig: &AppConfig) {
+pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
     let num_lines = rng.gen_range(50, 200);
     let mut burst_mode = false;
@@ -16,18 +19,18 @@ pub fn run(appconfig: &AppConfig) {
 
     for _ in 1..num_lines {
         let ip = if rng.gen_bool(0.5) {
-            fake!(Internet.ipv4)
+            IPv4().fake()
         } else {
-            fake!(Internet.ipv6).to_lowercase()
+            IPv6().fake::<String>().to_lowercase()
         };
         let date = Local::now().format("%e/%b/%Y:%T %z");
         let method = "GET";
-        let dir_candidates = fake!(Lorem.words(20));
+        let dir_candidates: Vec<String> = Words(20..21).fake();
         let path = gen_file_path(&mut rng, &PACKAGES_LIST, &EXTENSIONS_LIST, &dir_candidates);
         let http_code = HTTP_CODES.choose(&mut rng).unwrap_or(&200);
-        let size = fake!(Number.between(99, 5_000_000));
+        let size = rng.gen_range(99, 5_000_000);
         let referrer = "-";
-        let user_agent = fake!(Internet.user_agent);
+        let user_agent: String = UserAgent().fake();
         let line = format!(
             "{ip} - - [{date}] \"{method} {path} HTTP/1.0\" {http_code} {size} \"{referrer}\" \"{user_agent}\"",
             ip=ip,
@@ -51,14 +54,14 @@ pub fn run(appconfig: &AppConfig) {
             burst_mode = rng.gen_bool(1.0 / 20.0);
         }
 
-        dprint(line.to_string(), 0);
+        print(line.to_string()).await;
 
-        println!();
+        newline().await;
         if burst_mode {
             count_burst_lines += 1;
         }
 
-        csleep(line_sleep_length);
+        csleep(line_sleep_length).await;
 
         if appconfig.should_exit() {
             return;

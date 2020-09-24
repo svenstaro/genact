@@ -1,4 +1,0 @@
-default-target = "wasm32-unknown-emscripten"
-
-[target.emscripten]
-link-args = ["-s", "EMTERPRETIFY=1", "-s", "EMTERPRETIFY_ASYNC=1"]

@@ -1,12 +1,12 @@
-/// Module that pretends to boot a system.
+//! Pretend to boot a system
 use rand::prelude::*;
 use yansi::Paint;
 
-use crate::parse_args::AppConfig;
-use crate::utils::{csleep, dprint};
-use crate::BOOTLOG_LIST;
+use crate::args::AppConfig;
+use crate::data::BOOTLOG_LIST;
+use crate::io::{csleep, dprint};
 
-pub fn run(appconfig: &AppConfig) {
+pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
     let num_lines = rng.gen_range(50, 200);
     let mut burst_mode = false;
@@ -30,24 +30,24 @@ pub fn run(appconfig: &AppConfig) {
 
         let is_error = rng.gen_bool(0.01);
         if is_error {
-            dprint(format!("{}", Paint::red(format!("ERROR: {}", choice))), 10);
+            dprint(format!("{}", Paint::red(format!("ERROR: {}", choice))), 10).await;
         } else {
             let has_bold_word = rng.gen_bool(0.1);
             if has_bold_word {
                 let mut words: Vec<String> = choice.split_whitespace().map(String::from).collect();
                 words[0] = format!("{}", Paint::new(&words[0]).bold());
-                dprint(words.join(" ").to_string(), char_sleep_length);
+                dprint(words.join(" ").to_string(), char_sleep_length).await;
             } else {
-                dprint(choice.to_string(), char_sleep_length);
+                dprint(choice.to_string(), char_sleep_length).await;
             }
         }
 
-        println!();
+        dprint("\r\n", 0).await;
         if burst_mode {
             count_burst_lines += 1;
         }
 
-        csleep(line_sleep_length);
+        csleep(line_sleep_length).await;
 
         if appconfig.should_exit() {
             return;

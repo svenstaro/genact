@@ -1,10 +1,11 @@
-/// Module that pretends to run a C compiler.
+//! Pretend to run a C compiler
 use rand::prelude::*;
 use std::path::Path;
 
-use crate::parse_args::AppConfig;
-use crate::utils::{csleep, gen_random_n_from_list_into_string};
-use crate::{CFILES_LIST, PACKAGES_LIST};
+use crate::args::AppConfig;
+use crate::data::{CFILES_LIST, PACKAGES_LIST};
+use crate::generators::gen_random_n_from_list_into_string;
+use crate::io::{csleep, newline, print};
 
 /// Generate a `String` containing all of the `file_list`'s file's parents as -I flags
 fn generate_includes(file_list: &[&str], max: u32, rng: &mut ThreadRng) -> String {
@@ -29,7 +30,7 @@ fn generate_linker_flags(candidates: &[&str], n: usize, rng: &mut ThreadRng) -> 
     libraries.fold(String::new(), |acc, &x| acc + "-l" + x + " ")
 }
 
-pub fn run(appconfig: &AppConfig) {
+pub async fn run(appconfig: &AppConfig) {
     const COMPILERS: &[&str] = &["gcc", "clang"];
     const FLAGS_OPT: &[&str] = &["-O0", "-O1", "-O2", "-O3", "-Og", "-Os"];
     const FLAGS_WARN_BASE: &[&str] = &["-Wall", "-Wall -Wextra"];
@@ -101,7 +102,7 @@ pub fn run(appconfig: &AppConfig) {
 
     // Compile everything.
     for cfile in &chosen_files {
-        println!(
+        print(format!(
             "{compiler} -c {opt} {warn}{f}{arch} {includes}{defs} -o {output_file}",
             compiler = compiler,
             opt = opt,
@@ -111,10 +112,12 @@ pub fn run(appconfig: &AppConfig) {
             includes = includes,
             defs = defs_final,
             output_file = cfile.replace(".c", ".o")
-        );
+        ))
+        .await;
+        newline().await;
 
         let sleep_length = rng.gen_range(30, 200);
-        csleep(sleep_length);
+        csleep(sleep_length).await;
 
         if appconfig.should_exit() {
             return;
@@ -125,14 +128,16 @@ pub fn run(appconfig: &AppConfig) {
     let object_files = chosen_files
         .iter()
         .fold(String::new(), |acc, &x| acc + &x.replace(".c", ".o") + " ");
-    println!(
+    print(format!(
         "{compiler} -o {output_file} {object_files}{linker_flags}",
         compiler = compiler,
         output_file = package,
         object_files = object_files,
         linker_flags = linker_flags
-    );
+    ))
+    .await;
+    newline().await;
 
     let sleep_length = rng.gen_range(300, 1000);
-    csleep(sleep_length);
+    csleep(sleep_length).await;
 }
