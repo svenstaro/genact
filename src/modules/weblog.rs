@@ -12,7 +12,7 @@ use crate::io::{csleep, newline, print};
 static HTTP_CODES: &[u16] = &[200, 201, 400, 401, 403, 404, 500, 502, 503];
 
 pub fn get_signature() -> &'static str {
-    return &"tail -f /var/log/nginx/access.log";
+    &"tail -f /var/log/nginx/access.log";
 }
 
 pub async fn run(appconfig: &AppConfig) {

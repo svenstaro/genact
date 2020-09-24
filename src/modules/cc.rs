@@ -8,7 +8,7 @@ use crate::generators::gen_random_n_from_list_into_string;
 use crate::io::{csleep, newline, print};
 
 pub fn get_signature() -> &'static str {
-    return &"gcc app.c";
+    &"gcc app.c";
 }
 
 /// Generate a `String` containing all of the `file_list`'s file's parents as -I flags

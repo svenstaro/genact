@@ -7,7 +7,7 @@ use yansi::Paint;
 use crate::data::SIMCITY_LIST;
 
 pub fn get_signature() -> &'static str {
-    return &"./start-sumcity.sh";
+    &"./start-sumcity.sh";
 }
 
 pub async fn run(appconfig: &AppConfig) {

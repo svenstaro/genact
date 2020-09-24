@@ -11,7 +11,7 @@ use crate::generators::gen_hex_string;
 use crate::io::{csleep, newline, print};
 
 pub fn get_signature() -> &'static str {
-    return &"./cryptominer.sh --gpu all --provider stratum";
+    &"./cryptominer.sh --gpu all --provider stratum";
 }
 
 pub async fn run(appconfig: &AppConfig) {

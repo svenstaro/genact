@@ -13,7 +13,7 @@ use humantime::format_duration;
 use std::time::Duration;
 
 pub fn get_signature() -> &'static str {
-    return &"wget -i downloads.txt";
+    &"wget -i downloads.txt";
 }
 
 pub async fn run(appconfig: &AppConfig) {
