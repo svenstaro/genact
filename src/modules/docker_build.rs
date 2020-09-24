@@ -2,11 +2,11 @@
 use rand::prelude::*;
 use rand::Rng;
 
-use crate::io::{csleep, dprint};
-use crate::generators::gen_hex_string;
+use crate::args::AppConfig;
 use crate::data::DOCKER_PACKAGES_LIST;
 use crate::data::DOCKER_TAGS_LIST;
-use crate::args::AppConfig;
+use crate::generators::gen_hex_string;
+use crate::io::{csleep, dprint};
 
 use crate::modules::bootlog;
 use crate::modules::botnet;
@@ -39,7 +39,8 @@ pub async fn run(appconfig: &AppConfig) {
                 current_size = current_size
             ),
             0,
-        ).await;
+        )
+        .await;
 
         let remaining_size = target_size - current_size;
         if remaining_size <= 5.0 {
@@ -72,9 +73,7 @@ pub async fn run(appconfig: &AppConfig) {
         );
 
         if rand::random() {
-            println!(
-                " ---> Using cache"
-            );
+            println!(" ---> Using cache");
         } else {
             println!(
                 " ---> Running in {step_hash}",
@@ -117,10 +116,7 @@ pub async fn run(appconfig: &AppConfig) {
     let image: &&str = DOCKER_PACKAGES_LIST.choose(&mut rng).unwrap();
     let image_tag: &&str = DOCKER_TAGS_LIST.choose(&mut rng).unwrap();
 
-    println!(
-        "Successfully built {hash}",
-        hash = hash
-    );
+    println!("Successfully built {hash}", hash = hash);
 
     println!(
         "Successfully tagged {image}:{tag}",
@@ -170,5 +166,5 @@ fn get_module_signature(choice: &str) -> &str {
         "kernel_compile" => kernel_compile::get_signature(),
         "weblog" => weblog::get_signature(),
         _ => panic!("Unknown module!"),
-    }
+    };
 }
