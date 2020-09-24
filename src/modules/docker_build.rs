@@ -1,30 +1,35 @@
-/// Module that pretends to build Docker images
+//! Module that pretends to build Docker images
 use rand::prelude::*;
 use rand::Rng;
 use humantime::Duration;
 
-use crate::utils::{csleep, dprint, gen_hex_string};
-use crate::DOCKER_PACKAGES_LIST;
-use crate::DOCKER_TAGS_LIST;
-use crate::parse_args::AppConfig;
-use crate::parse_args::parse_args;
+use crate::io::{csleep, dprint};
+use crate::generators::gen_hex_string;
+use crate::data::DOCKER_PACKAGES_LIST;
+use crate::data::DOCKER_TAGS_LIST;
+use crate::args::AppConfig;
+use crate::args::parse_args;
 
-use crate::bootlog;
-use crate::botnet;
-use crate::cargo;
-use crate::cc;
-use crate::composer;
-use crate::cryptomining;
-use crate::docker;
-use crate::docker_build;
-use crate::download;
-use crate::kernel_compile;
-use crate::memdump;
-use crate::mkinitcpio;
-use crate::simcity;
-use crate::weblog;
+use crate::modules::bootlog;
+use crate::modules::botnet;
+use crate::modules::cargo;
+use crate::modules::cc;
+use crate::modules::composer;
+use crate::modules::cryptomining;
+use crate::modules::docker;
+use crate::modules::docker_build;
+use crate::modules::download;
+use crate::modules::kernel_compile;
+use crate::modules::memdump;
+use crate::modules::mkinitcpio;
+use crate::modules::simcity;
+use crate::modules::weblog;
 
-pub fn run(appconfig: &AppConfig) {
+pub fn get_signature() -> &'static str {
+    return &"docker build -f Dockerfile";
+}
+
+pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
 
     // Output the sending of the context to Docker
@@ -67,7 +72,7 @@ pub fn run(appconfig: &AppConfig) {
             "\rStep {current_step}/{total_steps} : {instruction}",
             current_step = current_step,
             total_steps = total_steps,
-            instruction = get_signature(command)
+            instruction = ["RUN", get_module_signature(command)].join(" ")
         );
 
         if rand::random() {
@@ -82,21 +87,20 @@ pub fn run(appconfig: &AppConfig) {
 
             let docker_appconfig = appconfig;
             match command {
-                "docker_build_copy" => docker_build_copy(),
-                "bootlog" => bootlog::run(&docker_appconfig),
-                "botnet" => botnet::run(&docker_appconfig),
-                "cargo" => cargo::run(&docker_appconfig),
-                "cryptomining" => cryptomining::run(&docker_appconfig),
-                "simcity" => simcity::run(&docker_appconfig),
-                "mkinitcpio" => mkinitcpio::run(&docker_appconfig),
-                "cc" => cc::run(&docker_appconfig),
-                "download" => download::run(&docker_appconfig),
-                // "docker" => docker::run(&docker_appconfig),
-                // "docker_build" => docker_build::run(&docker_appconfig),
-                "memdump" => memdump::run(&docker_appconfig),
-                "composer" => composer::run(&docker_appconfig),
-                "kernel_compile" => kernel_compile::run(&docker_appconfig),
-                "weblog" => weblog::run(&docker_appconfig),
+                "bootlog" => bootlog::run(&docker_appconfig).await,
+                "botnet" => botnet::run(&docker_appconfig).await,
+                "cargo" => cargo::run(&docker_appconfig).await,
+                "cryptomining" => cryptomining::run(&docker_appconfig).await,
+                "simcity" => simcity::run(&docker_appconfig).await,
+                "mkinitcpio" => mkinitcpio::run(&docker_appconfig).await,
+                "cc" => cc::run(&docker_appconfig).await,
+                "download" => download::run(&docker_appconfig).await,
+                // "docker" => docker::run(&docker_appconfig).await,
+                // "docker_build" => docker_build::run(&docker_appconfig).await,
+                "memdump" => memdump::run(&docker_appconfig).await,
+                "composer" => composer::run(&docker_appconfig).await,
+                "kernel_compile" => kernel_compile::run(&docker_appconfig).await,
+                "weblog" => weblog::run(&docker_appconfig).await,
                 _ => panic!("Unknown module!"),
             }
         }
@@ -139,7 +143,6 @@ fn select_command() -> &'static str {
     let mut rng = thread_rng();
 
     let available_modules = [
-        "docker_build_copy",
         "bootlog",
         "botnet",
         "cargo",
@@ -160,27 +163,22 @@ fn select_command() -> &'static str {
     return rand_choice;
 }
 
-fn get_signature(choice: &str) -> &str {
+fn get_module_signature(choice: &str) -> &str {
     return match choice {
-        "docker_build_copy" => "COPY ./config /app/config",
-        "bootlog" => "RUN ",
-        "botnet" => "RUN ",
-        "cargo" => "RUN ",
-        "cryptomining" => "RUN ",
-        "simcity" => "RUN ",
-        "mkinitcpio" => "RUN ",
-        "cc" => "RUN ",
-        "download" => "RUN ",
-        // "docker" => "RUN ",
-        // "docker_build" => "RUN ",
-        "memdump" => "RUN ",
-        "composer" => "RUN ",
-        "kernel_compile" => "RUN ",
-        "weblog" => "RUN ",
+        "bootlog" => bootlog::get_signature(),
+        "botnet" => botnet::get_signature(),
+        "cargo" => cargo::get_signature(),
+        "cryptomining" => cryptomining::get_signature(),
+        "simcity" => simcity::get_signature(),
+        "mkinitcpio" => mkinitcpio::get_signature(),
+        "cc" => cc::get_signature(),
+        "download" => download::get_signature(),
+        // "docker" => docker::get_signature(),
+        // "docker_build" => docker_build::get_signature(),
+        "memdump" => memdump::get_signature(),
+        "composer" => composer::get_signature(),
+        "kernel_compile" => kernel_compile::get_signature(),
+        "weblog" => weblog::get_signature(),
         _ => panic!("Unknown module!"),
     }
-}
-
-fn docker_build_copy() {
-    return
 }
