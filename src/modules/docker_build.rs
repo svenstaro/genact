@@ -148,11 +148,11 @@ fn select_command() -> &'static str {
     ];
 
     let rand_choice: &str = available_modules.choose(&mut rng).unwrap();
-    return rand_choice;
+    rand_choice
 }
 
 fn get_module_signature(choice: &str) -> &str {
-    return match choice {
+    match choice {
         "bootlog" => bootlog::get_signature(),
         "botnet" => botnet::get_signature(),
         "cargo" => cargo::get_signature(),
@@ -166,5 +166,5 @@ fn get_module_signature(choice: &str) -> &str {
         "kernel_compile" => kernel_compile::get_signature(),
         "weblog" => weblog::get_signature(),
         _ => panic!("Unknown module!"),
-    };
+    }
 }
