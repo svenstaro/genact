@@ -5,7 +5,7 @@ use rand::prelude::*;
 use yansi::Paint;
 
 pub fn get_signature() -> &'static str {
-    &"./botnet.sh";
+    "./botnet.sh"
 }
 
 pub async fn run(appconfig: &AppConfig) {

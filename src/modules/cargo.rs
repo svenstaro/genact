@@ -9,7 +9,7 @@ use crate::generators::gen_package_version;
 use crate::io::{csleep, dprint};
 
 pub fn get_signature() -> &'static str {
-    &"cargo run";
+    "cargo run"
 }
 
 pub async fn run(appconfig: &AppConfig) {

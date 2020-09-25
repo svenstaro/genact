@@ -8,7 +8,7 @@ use crate::generators::gen_hex_string;
 use crate::io::{csleep, newline, print};
 
 pub fn get_signature() -> &'static str {
-    &"docker image prune";
+    "docker image prune"
 }
 
 pub async fn run(appconfig: &AppConfig) {

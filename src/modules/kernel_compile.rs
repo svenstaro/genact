@@ -7,7 +7,7 @@ use crate::data::CFILES_LIST;
 use crate::io::{csleep, newline, print};
 
 pub fn get_signature() -> &'static str {
-    &"sudo make install";
+    "sudo make install"
 }
 
 /// Generate a build step for a header file

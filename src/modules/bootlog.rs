@@ -7,7 +7,7 @@ use crate::data::BOOTLOG_LIST;
 use crate::io::{csleep, dprint};
 
 pub fn get_signature() -> &'static str {
-    &"bcdedit /set {current} bootlog Yes && shutdown /r";
+    "bcdedit /set {current} bootlog Yes && shutdown /r"
 }
 
 pub async fn run(appconfig: &AppConfig) {

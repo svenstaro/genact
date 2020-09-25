@@ -22,7 +22,7 @@ use crate::modules::simcity;
 use crate::modules::weblog;
 
 pub fn get_signature() -> &'static str {
-    &"docker build -f Dockerfile";
+    "docker build -f Dockerfile"
 }
 
 pub async fn run(appconfig: &AppConfig) {
