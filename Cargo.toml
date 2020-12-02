@@ -46,5 +46,5 @@ async-std = { version = "1.7", features = ["attributes"] }
 term_size = "1.0.0-beta1"
 
 [dependencies.web-sys]
-version = "0.3.45"
+version = "0.3.46"
 features = ["Window", "Location", "console"]
