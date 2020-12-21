@@ -22,7 +22,7 @@ panic = 'abort'
 [dependencies]
 yansi = "0.5"
 rand = { version = "0.7.0", features = ["wasm-bindgen"] }
-rand_distr = "0.3.0"
+rand_distr = "0.4.0"
 chrono = { version = "0.4", features = ["wasmbind"] }
 url = "2.2"
 lazy_static = "1.4"
