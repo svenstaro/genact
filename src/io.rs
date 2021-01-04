@@ -73,7 +73,7 @@ pub async fn newline() {
 
 /// Return `true` if the given `a` is printable ASCII and `false` if it isn't.
 pub fn is_printable_ascii(a: u64) -> bool {
-    a >= 0x21 && a <= 0x7e
+    (0x21..=0x7e).contains(&a)
 }
 
 pub async fn cursor_up(n: u64) {
