@@ -63,7 +63,7 @@ pub async fn run(appconfig: &AppConfig) {
 
     let compiler = COMPILERS.choose(&mut rng).unwrap();
 
-    let num_cfiles = rng.gen_range(100, 1000);
+    let num_cfiles = rng.gen_range(100..1000);
     let mut chosen_files: Vec<&str> = CFILES_LIST
         .choose_multiple(&mut rng, num_cfiles)
         .cloned()
@@ -74,29 +74,29 @@ pub async fn run(appconfig: &AppConfig) {
 
     // Pick a bunch of warning flags.
     let warn = FLAGS_WARN_BASE.choose(&mut rng).unwrap().to_string();
-    let num_additional_warn_flags = rng.gen_range(0, FLAGS_WARN.len()) as u64;
+    let num_additional_warn_flags = rng.gen_range(0..FLAGS_WARN.len()) as u64;
     let warn_additional =
         gen_random_n_from_list_into_string(&mut rng, FLAGS_WARN, num_additional_warn_flags);
     let warn_final = warn + &warn_additional;
 
     // Pick a bunch of f flags
-    let num_f_flags = rng.gen_range(0, FLAGS_F.len()) as u64;
+    let num_f_flags = rng.gen_range(0..FLAGS_F.len()) as u64;
     let f = gen_random_n_from_list_into_string(&mut rng, FLAGS_F, num_f_flags);
 
     // Pick a bunch of architecture flags.
-    let num_arch_flags = rng.gen_range(0, FLAGS_ARCH.len()) as u64;
+    let num_arch_flags = rng.gen_range(0..FLAGS_ARCH.len()) as u64;
     let arch = gen_random_n_from_list_into_string(&mut rng, FLAGS_ARCH, num_arch_flags);
 
     // Get includes for the given files.
     let includes = generate_includes(chosen_files.as_slice(), 20, &mut rng);
 
     // Get random linker flags.
-    let num_linker_flags = rng.gen_range(0, 10);
+    let num_linker_flags = rng.gen_range(0..10);
     let linker_flags = generate_linker_flags(&PACKAGES_LIST, num_linker_flags, &mut rng);
 
     // Pick a bunch of defs
     let defs = FLAGS_DEF_BASE.choose(&mut rng).unwrap().to_string();
-    let num_def_flags = rng.gen_range(0, FLAGS_DEF.len()) as u64;
+    let num_def_flags = rng.gen_range(0..FLAGS_DEF.len()) as u64;
     let defs_additional = gen_random_n_from_list_into_string(&mut rng, FLAGS_DEF, num_def_flags);
     let defs_final = defs + &defs_additional;
 
@@ -116,7 +116,7 @@ pub async fn run(appconfig: &AppConfig) {
         .await;
         newline().await;
 
-        let sleep_length = rng.gen_range(30, 200);
+        let sleep_length = rng.gen_range(30..200);
         csleep(sleep_length).await;
 
         if appconfig.should_exit() {
@@ -138,6 +138,6 @@ pub async fn run(appconfig: &AppConfig) {
     .await;
     newline().await;
 
-    let sleep_length = rng.gen_range(300, 1000);
+    let sleep_length = rng.gen_range(300..1000);
     csleep(sleep_length).await;
 }

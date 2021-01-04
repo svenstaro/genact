@@ -8,9 +8,9 @@ pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
     let clusters = {
         let mut ret = vec![];
-        let num_clusters = rng.gen_range(8, 16 + 1);
+        let num_clusters = rng.gen_range(8..16 + 1);
         for _ in 0..num_clusters {
-            let num_nodes = rng.gen_range(100, 200 + 1);
+            let num_nodes = rng.gen_range(100..200 + 1);
             ret.push(num_nodes);
         }
         ret
@@ -28,7 +28,7 @@ pub async fn run(appconfig: &AppConfig) {
         ))
         .await;
         connected += 1;
-        csleep((rng.gen_range(0f64, 1.).powi(50) * 50.) as u64).await;
+        csleep((rng.gen_range(0f64..1.).powi(50) * 50.) as u64).await;
     }
     dprint("\r\n", 0).await;
 

@@ -10,8 +10,8 @@ use crate::io::{csleep, is_printable_ascii, newline, print};
 pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
 
-    let mut current_loc = (rng.gen_range(0, 2u64.pow(63)) / 16) * 16;
-    let num_lines = rng.gen_range(50, 200);
+    let mut current_loc = (rng.gen_range(0..2u64.pow(63)) / 16) * 16;
+    let num_lines = rng.gen_range(50..200);
     for _ in 1..num_lines {
         print(format!("{loc:016x}  ", loc = current_loc)).await;
         current_loc += 0x10;
@@ -26,7 +26,7 @@ pub async fn run(appconfig: &AppConfig) {
                 print(" ").await;
             }
             print(format!("{} ", val)).await;
-            let val_delay = rng.gen_range(0, 2);
+            let val_delay = rng.gen_range(0..2);
             stdout().flush().unwrap();
             csleep(val_delay).await;
         }
@@ -43,7 +43,7 @@ pub async fn run(appconfig: &AppConfig) {
         }
         print(format!(" |{ascii_repr}|", ascii_repr = ascii_repr)).await;
 
-        let row_delay = rng.gen_range(10, 200);
+        let row_delay = rng.gen_range(10..200);
         csleep(row_delay).await;
 
         if appconfig.should_exit() {
