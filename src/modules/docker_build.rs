@@ -29,7 +29,7 @@ pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
 
     // Output the sending of the context to Docker
-    let target_size = rng.gen_range(100.0, 1000.0);
+    let target_size = rng.gen_range(100.0..1000.0);
     let mut current_size = 0.0;
 
     while current_size <= target_size {
@@ -46,7 +46,7 @@ pub async fn run(appconfig: &AppConfig) {
         if remaining_size <= 5.0 {
             current_size += 5.0;
         } else {
-            current_size += rng.gen_range(5.0, 30.0);
+            current_size += rng.gen_range(5.0..30.0);
         }
 
         if appconfig.should_exit() {
@@ -57,7 +57,7 @@ pub async fn run(appconfig: &AppConfig) {
     }
 
     // Loop trough a set number of steps
-    let total_steps = rng.gen_range(30, 100);
+    let total_steps = rng.gen_range(30..100);
     let mut current_step = 1;
 
     while current_step <= total_steps {
@@ -108,7 +108,7 @@ pub async fn run(appconfig: &AppConfig) {
         }
 
         current_step += 1;
-        csleep(rng.gen_range(300, 1000)).await;
+        csleep(rng.gen_range(300..1000)).await;
     }
 
     // Print the final lines
