@@ -7,10 +7,6 @@ use crate::data::{DOCKER_PACKAGES_LIST, DOCKER_TAGS_LIST};
 use crate::generators::gen_hex_string;
 use crate::io::{csleep, newline, print};
 
-pub fn get_signature() -> &'static str {
-    "docker image prune"
-}
-
 pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
     let num_packages = rng.gen_range(20..100);

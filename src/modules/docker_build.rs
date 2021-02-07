@@ -21,16 +21,12 @@ use crate::modules::mkinitcpio;
 use crate::modules::simcity;
 use crate::modules::weblog;
 
-pub fn get_signature() -> &'static str {
-    "docker build -f Dockerfile"
-}
-
 pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
 
     // Output the sending of the context to Docker
-    let target_size = rng.gen_range(100.0..1000.0);
-    let mut current_size = 0.0;
+    let target_size: f64 = rng.gen_range(100.0..1000.0);
+    let mut current_size: f64 = 0.0;
 
     while current_size <= target_size {
         dprint(
