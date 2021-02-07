@@ -12,15 +12,15 @@ pub fn get_signature() -> &'static str {
 
 pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
-    let num_lines = rng.gen_range(50, 200);
+    let num_lines = rng.gen_range(50..200);
     let mut burst_mode = false;
     let mut count_burst_lines = 0;
 
     for _ in 1..num_lines {
         let choice = BOOTLOG_LIST.choose(&mut rng).unwrap_or(&"");
-        let mut line_sleep_length = rng.gen_range(10, 1000);
+        let mut line_sleep_length = rng.gen_range(10..1000);
         let mut char_sleep_length = 5;
-        let burst_lines = rng.gen_range(10, 50);
+        let burst_lines = rng.gen_range(10..50);
 
         if burst_mode && count_burst_lines < burst_lines {
             line_sleep_length = 30;

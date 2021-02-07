@@ -109,7 +109,7 @@ fn gen_line(arch: &str, rng: &mut ThreadRng) -> String {
 
 pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
-    let num_lines = rng.gen_range(50, 500);
+    let num_lines = rng.gen_range(50..500);
 
     const ARCHES: &[&str] = &[
         "alpha",
@@ -148,7 +148,7 @@ pub async fn run(appconfig: &AppConfig) {
 
     for _ in 1..num_lines {
         let line = gen_line(arch, &mut rng);
-        let sleep_length = rng.gen_range(10, 1000);
+        let sleep_length = rng.gen_range(10..1000);
 
         print(line).await;
         newline().await;
@@ -164,8 +164,8 @@ pub async fn run(appconfig: &AppConfig) {
 
     newline().await;
 
-    let bytes: u32 = rng.gen_range(9000, 1_000_000);
-    let padded_bytes: u32 = rng.gen_range(bytes, 1_100_000);
+    let bytes: u32 = rng.gen_range(9000..1_000_000);
+    let padded_bytes: u32 = rng.gen_range(bytes..1_100_000);
 
     print(format!(
         "Setup is {} bytes (padded to {} bytes).",
@@ -174,11 +174,11 @@ pub async fn run(appconfig: &AppConfig) {
     .await;
     newline().await;
 
-    let system: u32 = rng.gen_range(300, 3000);
+    let system: u32 = rng.gen_range(300..3000);
     print(format!("System is {} kB", system)).await;
     newline().await;
 
-    let crc: u32 = rng.gen_range(0x1000_0000, 0xffff_ffff);
+    let crc: u32 = rng.gen_range(0x1000_0000..0xffff_ffff);
 
     print(format!("CRC {:x}", crc)).await;
     newline().await;

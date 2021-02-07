@@ -20,7 +20,7 @@ pub async fn run(appconfig: &AppConfig) {
     let mut simcity = "";
 
     for _ in 0..500 {
-        let spinner_loops = rng.gen_range(1, MAX_SPINNER_LOOPS);
+        let spinner_loops = rng.gen_range(1..MAX_SPINNER_LOOPS);
 
         // Message chosen from "data/simcity.txt"
         // Thanks https://gist.github.com/erikcox/7e96d031d00d7ecb1a2f

@@ -23,7 +23,7 @@ fn gen_package_version(rng: &mut ThreadRng) -> String {
 
 pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
-    let num_packages = rng.gen_range(10, 100);
+    let num_packages = rng.gen_range(10..100);
     // Choose `num_packages` packages, non-repeating and in random order
     let chosen_names: Vec<_> = COMPOSERS_LIST
         .choose_multiple(&mut rng, num_packages)
@@ -48,7 +48,7 @@ pub async fn run(appconfig: &AppConfig) {
 
     for stage in &["Installing"] {
         for &(package_name, ref package_version) in &chosen_packages {
-            let sleep_length = rng.gen_range(100, 2000);
+            let sleep_length = rng.gen_range(100..2000);
 
             print(format!(
                 "  - {stage} {package_name} ({package_version}): Loading from cache",

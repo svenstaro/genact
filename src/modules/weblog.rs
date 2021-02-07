@@ -17,7 +17,7 @@ pub fn get_signature() -> &'static str {
 
 pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
-    let num_lines = rng.gen_range(50, 200);
+    let num_lines = rng.gen_range(50..200);
     let mut burst_mode = false;
     let mut count_burst_lines = 0;
 
@@ -32,7 +32,7 @@ pub async fn run(appconfig: &AppConfig) {
         let dir_candidates: Vec<String> = Words(20..21).fake();
         let path = gen_file_path(&mut rng, &PACKAGES_LIST, &EXTENSIONS_LIST, &dir_candidates);
         let http_code = HTTP_CODES.choose(&mut rng).unwrap_or(&200);
-        let size = rng.gen_range(99, 5_000_000);
+        let size = rng.gen_range(99..5_000_000);
         let referrer = "-";
         let user_agent: String = UserAgent().fake();
         let line = format!(
@@ -46,8 +46,8 @@ pub async fn run(appconfig: &AppConfig) {
             referrer=referrer,
             user_agent=user_agent
         );
-        let mut line_sleep_length = rng.gen_range(10, 1000);
-        let burst_lines = rng.gen_range(10, 50);
+        let mut line_sleep_length = rng.gen_range(10..1000);
+        let burst_lines = rng.gen_range(10..50);
 
         if burst_mode && count_burst_lines < burst_lines {
             line_sleep_length = 30;

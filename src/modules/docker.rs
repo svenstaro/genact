@@ -13,14 +13,14 @@ pub fn get_signature() -> &'static str {
 
 pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
-    let num_packages = rng.gen_range(20, 100);
+    let num_packages = rng.gen_range(20..100);
     // Choose `num_packages` packages, non-repeating and in random order
     let chosen_packages: Vec<_> = DOCKER_PACKAGES_LIST
         .choose_multiple(&mut rng, num_packages)
         .collect();
 
     for &package_name in &chosen_packages {
-        let sleep_length = rng.gen_range(500, 5000);
+        let sleep_length = rng.gen_range(500..5000);
         let package_tag: &&str = DOCKER_TAGS_LIST.choose(&mut rng).unwrap();
 
         print(format!(
@@ -39,7 +39,7 @@ pub async fn run(appconfig: &AppConfig) {
         .await;
         newline().await;
 
-        let num_hashes = rng.gen_range(10, 30);
+        let num_hashes = rng.gen_range(10..30);
         let mut index = 0;
         while index < num_hashes {
             print(format!(
