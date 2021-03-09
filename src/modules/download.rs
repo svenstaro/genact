@@ -12,6 +12,10 @@ use humansize::{file_size_opts, FileSize};
 use humantime::format_duration;
 use std::time::Duration;
 
+pub fn get_signature() -> &'static str {
+    "wget -i downloads.txt"
+}
+
 pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
 

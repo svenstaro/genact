@@ -76,7 +76,7 @@ or (on Docker)
         -e, --exit-after <exit-after>    Exit after running for this long (format example: 2h10min)
         -m, --modules <modules>...       Run only these modules [possible values: bootlog, botnet,
                                          cargo, cc, composer, cryptomining, simcity,
-                                         download, docker, memdump, mkinitcpio,
+                                         download, docker, docker_build, memdump, mkinitcpio,
                                          kernel_compile, weblog]
         -s, --speed-factor <speed-factor>    Global speed factor [default: 1]
 

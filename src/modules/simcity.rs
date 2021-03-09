@@ -6,6 +6,10 @@ use yansi::Paint;
 
 use crate::data::SIMCITY_LIST;
 
+pub fn get_signature() -> &'static str {
+    "./start-sumcity.sh"
+}
+
 pub async fn run(appconfig: &AppConfig) {
     const SPINNERS: &[&str] = &["/", "-", "\\", "|"];
     const SPINNER_SLEEP: u64 = 50;

@@ -4,6 +4,10 @@ use crate::io::{csleep, cursor_up, dprint, erase_line, newline, print};
 use rand::prelude::*;
 use yansi::Paint;
 
+pub fn get_signature() -> &'static str {
+    "./botnet.sh"
+}
+
 pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
     let clusters = {

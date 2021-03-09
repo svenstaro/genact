@@ -17,6 +17,10 @@ const REQUIRED_HOOKS: &[&str] = &[
     &"filesystems",
 ];
 
+pub fn get_signature() -> &'static str {
+    "mkinitcpio --generate /boot/initramfs-custom2.img --kernel 5.7.12-arch1-1"
+}
+
 async fn warn(msg: &str) {
     print(format!(
         "{}{}",

@@ -7,6 +7,10 @@ use crate::args::AppConfig;
 use crate::generators::gen_hex_string;
 use crate::io::{csleep, is_printable_ascii, newline, print};
 
+pub fn get_signature() -> &'static str {
+    "memdump -k -v"
+}
+
 pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
 

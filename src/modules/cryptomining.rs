@@ -10,6 +10,10 @@ use crate::args::AppConfig;
 use crate::generators::gen_hex_string;
 use crate::io::{csleep, newline, print};
 
+pub fn get_signature() -> &'static str {
+    "./cryptominer.sh --gpu all --provider stratum"
+}
+
 pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
     let num_lines = rng.gen_range(300..1000);

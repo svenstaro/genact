@@ -7,6 +7,10 @@ use crate::args::AppConfig;
 use crate::data::COMPOSERS_LIST;
 use crate::io::{csleep, newline, print};
 
+pub fn get_signature() -> &'static str {
+    "composer install"
+}
+
 fn gen_package_version(rng: &mut ThreadRng) -> String {
     let chi = ChiSquared::new(1.0).unwrap();
     format!(

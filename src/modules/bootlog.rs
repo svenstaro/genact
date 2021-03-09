@@ -6,6 +6,10 @@ use crate::args::AppConfig;
 use crate::data::BOOTLOG_LIST;
 use crate::io::{csleep, dprint};
 
+pub fn get_signature() -> &'static str {
+    "bcdedit /set {current} bootlog Yes && shutdown /r"
+}
+
 pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
     let num_lines = rng.gen_range(50..200);

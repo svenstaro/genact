@@ -6,6 +6,10 @@ use crate::args::AppConfig;
 use crate::data::CFILES_LIST;
 use crate::io::{csleep, newline, print};
 
+pub fn get_signature() -> &'static str {
+    "sudo make install"
+}
+
 /// Generate a build step for a header file
 fn gen_header(arch: &str, rng: &mut ThreadRng) -> String {
     const RARE_CMDS: &[&str] = &["SYSTBL ", "SYSHDR "];

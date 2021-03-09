@@ -8,6 +8,10 @@ use crate::data::PACKAGES_LIST;
 use crate::generators::gen_package_version;
 use crate::io::{csleep, dprint};
 
+pub fn get_signature() -> &'static str {
+    "cargo run"
+}
+
 pub async fn run(appconfig: &AppConfig) {
     let mut rng = thread_rng();
     let num_packages = rng.gen_range(10..100);

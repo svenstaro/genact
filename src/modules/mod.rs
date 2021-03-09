@@ -5,6 +5,7 @@ pub mod cc;
 pub mod composer;
 pub mod cryptomining;
 pub mod docker;
+pub mod docker_build;
 pub mod download;
 pub mod kernel_compile;
 pub mod memdump;
