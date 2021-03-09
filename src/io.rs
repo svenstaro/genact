@@ -32,7 +32,7 @@ extern "C" {
     pub fn write_to_xterm(s: &str);
 }
 
-/// Crossrint `s` with each letter delayed by `delay` milliseconds.
+/// Print `s` with each letter delayed by `delay` milliseconds.
 pub async fn dprint<S: Into<String>>(s: S, delay: u64) {
     // Construct a `Vec` of single characters converted to `String`s.
     let string_arr = s
