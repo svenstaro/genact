@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+- Add docker_build module [#103](https://github.com/svenstaro/genact/pull/103) (thanks @Kovah)
 
 ## [0.10.0] - 2020-08-27
 - Add `--exit-after-modules` options which can be used to make genact exit after running that many modules
