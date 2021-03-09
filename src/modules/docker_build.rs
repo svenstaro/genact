@@ -6,7 +6,7 @@ use crate::args::AppConfig;
 use crate::data::DOCKER_PACKAGES_LIST;
 use crate::data::DOCKER_TAGS_LIST;
 use crate::generators::gen_hex_string;
-use crate::io::{csleep, dprint};
+use crate::io::{csleep, dprint, newline, print};
 
 use crate::modules::bootlog;
 use crate::modules::botnet;
@@ -61,20 +61,24 @@ pub async fn run(appconfig: &AppConfig) {
         let command = select_command();
 
         // Print the current step with the instruction to run
-        println!(
+        print(format!(
             "\rStep {current_step}/{total_steps} : {instruction}",
             current_step = current_step,
             total_steps = total_steps,
-            instruction = ["RUN", get_module_signature(command)].join(" ")
-        );
+            instruction = ["RUN", get_module_signature(command)].join(" "),
+        ))
+        .await;
+        newline().await;
 
         if rand::random() {
-            println!(" ---> Using cache");
+            print(" ---> Using cache").await;
         } else {
-            println!(
+            print(format!(
                 " ---> Running in {step_hash}",
                 step_hash = gen_hex_string(&mut rng, 12),
-            );
+            ))
+            .await;
+            newline().await;
 
             let docker_appconfig = appconfig;
             match command {
@@ -94,10 +98,12 @@ pub async fn run(appconfig: &AppConfig) {
             }
         }
 
-        println!(
+        print(format!(
             " ---> {step_hash}",
             step_hash = gen_hex_string(&mut rng, 12),
-        );
+        ))
+        .await;
+        newline().await;
 
         if appconfig.should_exit() {
             return;
@@ -112,13 +118,14 @@ pub async fn run(appconfig: &AppConfig) {
     let image: &&str = DOCKER_PACKAGES_LIST.choose(&mut rng).unwrap();
     let image_tag: &&str = DOCKER_TAGS_LIST.choose(&mut rng).unwrap();
 
-    println!("Successfully built {hash}", hash = hash);
+    print(format!("Successfully built {hash}", hash = hash)).await;
 
-    println!(
+    print(format!(
         "Successfully tagged {image}:{tag}",
         image = image,
         tag = image_tag
-    );
+    ))
+    .await;
 
     if appconfig.should_exit() {
         return;
