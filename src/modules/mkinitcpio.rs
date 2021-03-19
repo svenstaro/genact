@@ -1,11 +1,14 @@
 //! Pretend to run mkinitcpio
-use crate::args::AppConfig;
-use crate::data::{BOOT_HOOKS_LIST, CFILES_LIST, COMPRESSION_ALGORITHMS_LIST, OS_RELEASES_LIST};
-use crate::io::{csleep, print};
+use async_trait::async_trait;
 use rand::prelude::*;
 use rand::seq::SliceRandom;
 use regex::Regex;
 use yansi::Paint;
+
+use crate::args::AppConfig;
+use crate::data::{BOOT_HOOKS_LIST, CFILES_LIST, COMPRESSION_ALGORITHMS_LIST, OS_RELEASES_LIST};
+use crate::io::{csleep, print};
+use crate::modules::Module;
 
 const REQUIRED_HOOKS: &[&str] = &[
     &"base",
@@ -16,10 +19,6 @@ const REQUIRED_HOOKS: &[&str] = &[
     &"fsck",
     &"filesystems",
 ];
-
-pub fn get_signature() -> &'static str {
-    "mkinitcpio --generate /boot/initramfs-custom2.img --kernel 5.7.12-arch1-1"
-}
 
 async fn warn(msg: &str) {
     print(format!(
@@ -125,51 +124,64 @@ async fn build(
     msg1("Image generation successful").await;
 }
 
-pub async fn run(appconfig: &AppConfig) {
-    let mut rng = thread_rng();
+pub struct Mkinitcpio;
 
-    // Select a few hooks from the list of all hooks (in order). Make sure the required default
-    // hooks are also included (also, in order).
-    let hooks = {
-        let mut ret: Vec<&str> = vec![];
-        for hook in BOOT_HOOKS_LIST.iter() {
-            if REQUIRED_HOOKS.contains(hook) || rng.gen_range(0..10) < 3 {
-                ret.push(&hook);
+#[async_trait(?Send)]
+impl Module for Mkinitcpio {
+    fn name(&self) -> &'static str {
+        "mkinitcpio"
+    }
+
+    fn signature(&self) -> String {
+        "mkinitcpio --generate /boot/initramfs-custom2.img --kernel 5.7.12-arch1-1".to_string()
+    }
+
+    async fn run(&self, appconfig: &AppConfig) {
+        let mut rng = thread_rng();
+
+        // Select a few hooks from the list of all hooks (in order). Make sure the required default
+        // hooks are also included (also, in order).
+        let hooks = {
+            let mut ret: Vec<&str> = vec![];
+            for hook in BOOT_HOOKS_LIST.iter() {
+                if REQUIRED_HOOKS.contains(hook) || rng.gen_range(0..10) < 3 {
+                    ret.push(&hook);
+                }
             }
-        }
-        ret
-    };
+            ret
+        };
 
-    // Find some "drivers" that cannot find firmware in fallback mode, by identifying files in the
-    // kernel under driverr/scsi/**/*.c and use their file name (without extension) as the kernel
-    // module name. It may not be 100% what happens, but it's close enough and looks reasonable.
-    let drivers = {
-        let mut ret: Vec<&str> = vec![];
+        // Find some "drivers" that cannot find firmware in fallback mode, by identifying files in the
+        // kernel under driverr/scsi/**/*.c and use their file name (without extension) as the kernel
+        // module name. It may not be 100% what happens, but it's close enough and looks reasonable.
+        let drivers = {
+            let mut ret: Vec<&str> = vec![];
 
-        let re = Regex::new(r"^drivers/scsi.*/([^/\.]+).c$").unwrap();
+            let re = Regex::new(r"^drivers/scsi.*/([^/\.]+).c$").unwrap();
 
-        let count = rng.gen_range(0..5);
-        while ret.len() < count {
-            let file = CFILES_LIST.choose(&mut rng).unwrap();
+            let count = rng.gen_range(0..5);
+            while ret.len() < count {
+                let file = CFILES_LIST.choose(&mut rng).unwrap();
 
-            if let Some(m) = re.captures(file) {
-                ret.push(m.get(1).unwrap().as_str());
+                if let Some(m) = re.captures(file) {
+                    ret.push(m.get(1).unwrap().as_str());
+                }
             }
-        }
-        ret
-    };
+            ret
+        };
 
-    // For now, the preset is always the same.
-    let preset = "linux";
-    let os_release = OS_RELEASES_LIST.choose(&mut rng).unwrap();
-    let zip = COMPRESSION_ALGORITHMS_LIST.choose(&mut rng).unwrap();
+        // For now, the preset is always the same.
+        let preset = "linux";
+        let os_release = OS_RELEASES_LIST.choose(&mut rng).unwrap();
+        let zip = COMPRESSION_ALGORITHMS_LIST.choose(&mut rng).unwrap();
 
-    build(
-        &hooks, preset, "default", zip, &drivers, os_release, &appconfig,
-    )
-    .await;
-    build(
-        &hooks, preset, "fallback", zip, &drivers, os_release, &appconfig,
-    )
-    .await;
+        build(
+            &hooks, preset, "default", zip, &drivers, os_release, &appconfig,
+        )
+        .await;
+        build(
+            &hooks, preset, "fallback", zip, &drivers, os_release, &appconfig,
+        )
+        .await;
+    }
 }
