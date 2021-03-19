@@ -4,8 +4,8 @@ pub mod cargo;
 pub mod cc;
 pub mod composer;
 pub mod cryptomining;
-pub mod docker;
 pub mod docker_build;
+pub mod docker_image_rm;
 pub mod download;
 pub mod kernel_compile;
 pub mod memdump;
@@ -34,7 +34,7 @@ lazy_static::lazy_static! {
         all_modules.insert("cc", Box::new(cc::Cc));
         all_modules.insert("composer", Box::new(composer::Composer));
         all_modules.insert("cryptomining", Box::new(cryptomining::Crytomining));
-        all_modules.insert("docker", Box::new(docker::Docker));
+        all_modules.insert("docker_image_rm", Box::new(docker_image_rm::DockerImageRm));
         all_modules.insert("docker_build", Box::new(docker_build::DockerBuild));
         all_modules.insert("download", Box::new(download::Download));
         all_modules.insert("kernel_compile", Box::new(kernel_compile::KernelCompile));

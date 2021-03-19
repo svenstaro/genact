@@ -9,12 +9,12 @@ use crate::generators::gen_hex_string;
 use crate::io::{csleep, newline, print};
 use crate::modules::Module;
 
-pub struct Docker;
+pub struct DockerImageRm;
 
 #[async_trait(?Send)]
-impl Module for Docker {
+impl Module for DockerImageRm {
     fn name(&self) -> &'static str {
-        "docker"
+        "docker_image_rm"
     }
 
     fn signature(&self) -> String {
