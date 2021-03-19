@@ -1,7 +1,7 @@
 #[cfg(not(target_arch = "wasm32"))]
 use structopt::StructOpt;
 
-use crate::ALL_MODULES;
+use crate::modules::ALL_MODULES;
 
 #[cfg(not(target_arch = "wasm32"))]
 fn parse_speed_factor(s: &str) -> Result<f32, String> {
@@ -35,7 +35,7 @@ pub struct AppConfig {
     pub list_modules_and_exit: bool,
 
     /// Run only these modules
-    #[structopt(short, long, possible_values = &ALL_MODULES)]
+    #[structopt(short, long, possible_values = &ALL_MODULES.keys().cloned().collect::<Vec<_>>())]
     pub modules: Vec<String>,
 
     /// Global speed factor
@@ -93,7 +93,7 @@ pub fn parse_args() -> AppConfig {
     let mut args = AppConfig::from_args();
 
     if args.modules.is_empty() {
-        args.modules = ALL_MODULES.iter().map(|x| x.to_string()).collect();
+        args.modules = ALL_MODULES.keys().map(|m| m.to_string()).collect();
     };
     args
 }
@@ -110,7 +110,7 @@ pub fn parse_args() -> AppConfig {
     let filtered_modules = pairs.filter(|&(ref k, _)| k == "module");
     for (_, query_val) in filtered_modules {
         let actual_val = &&*query_val;
-        if ALL_MODULES.contains(actual_val) {
+        if ALL_MODULES.keys().any(|x| x == actual_val) {
             temp_modules.push(actual_val.to_string());
         }
     }
@@ -120,7 +120,7 @@ pub fn parse_args() -> AppConfig {
         .unwrap_or(1.0);
 
     let modules_to_run = if temp_modules.is_empty() {
-        ALL_MODULES.iter().map(|x| x.to_string()).collect()
+        ALL_MODULES.keys().map(|m| m.to_string()).collect()
     } else {
         temp_modules
     };

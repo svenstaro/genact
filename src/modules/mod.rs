@@ -12,3 +12,36 @@ pub mod memdump;
 pub mod mkinitcpio;
 pub mod simcity;
 pub mod weblog;
+
+use async_trait::async_trait;
+use std::collections::HashMap;
+
+use crate::args::AppConfig;
+
+#[async_trait(?Send)]
+pub trait Module: Sync {
+    fn name(&self) -> &'static str;
+    fn signature(&self) -> String;
+    async fn run(&self, app_config: &AppConfig);
+}
+
+lazy_static::lazy_static! {
+    pub static ref ALL_MODULES: HashMap<&'static str, Box<dyn Module>> = {
+        let mut all_modules: HashMap<&'static str, Box<dyn Module>> = HashMap::new();
+        all_modules.insert("bootlog", Box::new(bootlog::Bootlog));
+        all_modules.insert("botnet", Box::new(botnet::Botnet));
+        all_modules.insert("cargo", Box::new(cargo::Cargo));
+        all_modules.insert("cc", Box::new(cc::Cc));
+        all_modules.insert("composer", Box::new(composer::Composer));
+        all_modules.insert("cryptomining", Box::new(cryptomining::Crytomining));
+        all_modules.insert("docker", Box::new(docker::Docker));
+        all_modules.insert("docker_build", Box::new(docker_build::DockerBuild));
+        all_modules.insert("download", Box::new(download::Download));
+        all_modules.insert("kernel_compile", Box::new(kernel_compile::KernelCompile));
+        all_modules.insert("memdump", Box::new(memdump::Memdump));
+        all_modules.insert("mkinitcpio", Box::new(mkinitcpio::Mkinitcpio));
+        all_modules.insert("simcity", Box::new(simcity::Simcity));
+        all_modules.insert("weblog", Box::new(weblog::Weblog));
+        all_modules
+    };
+}

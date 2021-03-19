@@ -2,27 +2,7 @@ pub mod args;
 mod data;
 mod generators;
 mod io;
-mod modules;
-
-pub static ALL_MODULES: &[&str] = &[
-    "bootlog",
-    "botnet",
-    "cargo",
-    "cc",
-    "composer",
-    "cryptomining",
-    "simcity",
-    "download",
-    "docker",
-    "docker_build",
-    "memdump",
-    "mkinitcpio",
-    "kernel_compile",
-    "weblog",
-    // "bruteforce",
-    // "initialize",
-    // "heartbeat",
-];
+pub mod modules;
 
 use futures::lock::Mutex;
 use instant::Instant;
@@ -30,6 +10,7 @@ use rand::prelude::*;
 use std::sync::atomic::{AtomicBool, AtomicU32};
 
 use args::AppConfig;
+use modules::{Module, ALL_MODULES};
 
 lazy_static::lazy_static! {
     pub static ref CTRLC_PRESSED: AtomicBool = AtomicBool::new(false);
@@ -49,25 +30,14 @@ lazy_static::lazy_static! {
 
 pub async fn run(appconfig: AppConfig) {
     let mut rng = thread_rng();
+    let selected_modules: Vec<&Box<dyn Module>> = appconfig
+        .modules
+        .iter()
+        .map(|m| &ALL_MODULES[m.as_str()])
+        .collect();
     loop {
-        let choice: &str = appconfig.modules.choose(&mut rng).unwrap();
-        match choice {
-            "bootlog" => modules::bootlog::run(&appconfig).await,
-            "botnet" => modules::botnet::run(&appconfig).await,
-            "cargo" => modules::cargo::run(&appconfig).await,
-            "cryptomining" => modules::cryptomining::run(&appconfig).await,
-            "simcity" => modules::simcity::run(&appconfig).await,
-            "mkinitcpio" => modules::mkinitcpio::run(&appconfig).await,
-            "cc" => modules::cc::run(&appconfig).await,
-            "download" => modules::download::run(&appconfig).await,
-            "docker" => modules::docker::run(&appconfig).await,
-            "docker_build" => modules::docker_build::run(&appconfig).await,
-            "memdump" => modules::memdump::run(&appconfig).await,
-            "composer" => modules::composer::run(&appconfig).await,
-            "kernel_compile" => modules::kernel_compile::run(&appconfig).await,
-            "weblog" => modules::weblog::run(&appconfig).await,
-            _ => panic!("Unknown module '{}'!", choice),
-        }
+        let choice = selected_modules.choose(&mut rng).unwrap();
+        choice.run(&appconfig).await;
 
         #[cfg(not(target_arch = "wasm32"))]
         {
