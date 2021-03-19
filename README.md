@@ -73,12 +73,13 @@ or (on Docker)
         -V, --version         Prints version information
 
     OPTIONS:
-        -e, --exit-after <exit-after>    Exit after running for this long (format example: 2h10min)
-        -m, --modules <modules>...       Run only these modules [possible values: bootlog, botnet,
-                                         cargo, cc, composer, cryptomining, simcity,
-                                         download, docker, docker_build, memdump, mkinitcpio,
-                                         kernel_compile, weblog]
-        -s, --speed-factor <speed-factor>    Global speed factor [default: 1]
+            --exit-after-modules <exit-after-modules>    Exit after running this many modules
+            --exit-after-time <exit-after-time>          Exit after running for this long (format example: 2h10min)
+        -m, --modules <modules>...
+                Run only these modules [possible values: botnet, bootlog, kernel_compile,
+                memdump, cargo, cc, composer, docker_build, cryptomining,
+                download, mkinitcpio, weblog, docker_image_rm, simcity]
+        -s, --speed-factor <speed-factor>                Global speed factor [default: 1]
 
 ### Web usage
 
