@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+
+## [0.11.0] - 2021-03-19
 - Add docker_build module [#103](https://github.com/svenstaro/genact/pull/103) (thanks @Kovah)
 - Refactored modules to implement a common trait
 
@@ -27,7 +29,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Rewrite web version using wasm-bindgen
 
 <!-- next-url -->
-[Unreleased]: https://github.com/svenstaro/genact/compare/v0.10.0...HEAD
+[Unreleased]: https://github.com/svenstaro/genact/compare/v0.11.0...HEAD
+[0.11.0]: https://github.com/svenstaro/genact/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/svenstaro/genact/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/svenstaro/genact/compare/v0.8.1...v0.9.0
 [0.8.1]: https://github.com/svenstaro/genact/compare/v0.8.0...v0.8.1
