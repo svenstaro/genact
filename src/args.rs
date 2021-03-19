@@ -110,7 +110,7 @@ pub fn parse_args() -> AppConfig {
     let filtered_modules = pairs.filter(|&(ref k, _)| k == "module");
     for (_, query_val) in filtered_modules {
         let actual_val = &&*query_val;
-        if ALL_MODULES_NAMES.contains(actual_val) {
+        if ALL_MODULES.keys().any(|x| x == actual_val) {
             temp_modules.push(actual_val.to_string());
         }
     }
@@ -120,7 +120,7 @@ pub fn parse_args() -> AppConfig {
         .unwrap_or(1.0);
 
     let modules_to_run = if temp_modules.is_empty() {
-        ALL_MODULES_NAMES
+        ALL_MODULES.keys().map(|m| m.to_string()).collect()
     } else {
         temp_modules
     };
