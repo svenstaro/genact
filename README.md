@@ -102,6 +102,7 @@ Then, just clone it like usual and `cargo run` to get output:
 
 This is mostly a note for me on how to release this thing:
 
+- Make sure `CHANGELOG.md` is up to date.
 - `cargo release --dry-run`
 - `cargo release`
 - Releases will automatically be deployed by Github Actions.
