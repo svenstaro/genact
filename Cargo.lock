@@ -806,9 +806,9 @@ dependencies = [
 
 [[package]]
 name = "progress_string"
-version = "0.1.1"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "17153a6b52029090248203e0dde9b65e4fdc40b1f9a1fcb4e0326fd1724fc60b"
+checksum = "4c47e8a9fc4c341c225c1f1246a8a51aa9090894149ec49b252507b0ece274df"
 
 [[package]]
 name = "quote"
