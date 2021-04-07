@@ -23,3 +23,4 @@ build-web:
 .PHONY: clean
 clean:
 	cargo clean
+	rm -rf out
