@@ -18,9 +18,9 @@ build-apple:
 
 .PHONY: build-web
 build-web:
-	wasm-pack build --release --target web --no-typescript -d out && cp static/* out/
+	trunk build --release
 
 .PHONY: clean
 clean:
 	cargo clean
-	rm -rf out
+	trunk clean

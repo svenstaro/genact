@@ -6,12 +6,12 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1" name="viewport" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@4.8.1/css/xterm.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@4.11.0/css/xterm.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css" />
     <link rel="shortcut icon" type="image/png" href="https://github.githubassets.com/images/icons/emoji/unicode/1f300.png" />
-    <link rel="stylesheet" href="styles.css" />
-    <script src="https://cdn.jsdelivr.net/npm/xterm@4.8.1/lib/xterm.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.4.0/lib/xterm-addon-fit.js"></script>
+    <link data-trunk rel="css" href="static/styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/xterm@4.11.0/lib/xterm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.5.0/lib/xterm-addon-fit.js"></script>
 </head>
 
 <body>
@@ -25,15 +25,6 @@
         xterm.open(document.getElementById('terminal'));
         fitAddon.fit();
         window.xterm = xterm;
-    </script>
-
-    <script type="module">
-        import init from './genact.js';
-
-        async function run() {
-            await init();
-        }
-        run();
     </script>
 </body>
 

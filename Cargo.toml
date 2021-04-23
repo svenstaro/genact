@@ -40,6 +40,7 @@ js-sys = "0.3"
 futures = "0.3"
 getrandom = { version = "0.2", features = ["js"] }
 async-trait = "0.1"
+async-std = "1"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 structopt = "0.3"

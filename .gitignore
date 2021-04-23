@@ -1,5 +1,4 @@
-target
-out
+target/
+dist/
 
-/target/
 **/*.rs.bk

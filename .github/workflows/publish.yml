@@ -72,7 +72,7 @@ jobs:
 
       - uses: actions-rs/install@v0.1
         with:
-          crate: wasm-pack
+          crate: trunk
           version: latest
           use-tool-cache: true
         if: matrix.target == 'wasm32-unknown-unknown'
@@ -88,8 +88,8 @@ jobs:
           use-cross: ${{ matrix.cross }}
         if: matrix.target != 'wasm32-unknown-unknown'
 
-      - name: wasm-pack build
-        run: wasm-pack build --release --target=web --no-typescript -d out
+      - name: trunk build
+        run: trunk build --release
         if: matrix.target == 'wasm32-unknown-unknown'
 
       - run: rm out/.gitignore
@@ -136,5 +136,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out
+          publish_dir: ./dist
         if: matrix.target == 'wasm32-unknown-unknown'
