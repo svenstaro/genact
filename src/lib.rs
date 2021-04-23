@@ -56,20 +56,3 @@ pub fn exit_handler() {
     println!("Saving work to disk...");
     std::process::exit(0);
 }
-
-#[cfg(target_arch = "wasm32")]
-use wasm_bindgen::prelude::*;
-
-// Called when the wasm module is instantiated
-#[cfg(target_arch = "wasm32")]
-#[wasm_bindgen(start)]
-pub async fn main() -> Result<(), JsValue> {
-    use std::panic;
-    panic::set_hook(Box::new(console_error_panic_hook::hook));
-
-    let appconfig = args::parse_args();
-    *SPEED_FACTOR.lock().await = appconfig.speed_factor;
-
-    run(appconfig).await;
-    Ok(())
-}
