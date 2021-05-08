@@ -33,6 +33,7 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
+          target: ${{ matrix.target }}
           components: rustfmt, clippy
 
       - uses: actions-rs/install@v0.1
