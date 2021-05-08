@@ -6,10 +6,3 @@ updates:
     interval: daily
     time: "04:00"
   open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: js-sys
-    versions:
-    - 0.3.48
-  - dependency-name: wasm-bindgen
-    versions:
-    - 0.2.71
