@@ -37,13 +37,13 @@ jobs:
 
       - uses: actions-rs/install@v0.1
         with:
-          crate: wasm-pack
+          crate: trunk
           version: latest
           use-tool-cache: true
         if: matrix.target == 'wasm32-unknown-unknown'
 
-      - name: wasm-pack build
-        run: wasm-pack build --target=web --no-typescript
+      - name: trunk build
+        run: trunk build --release
         if: matrix.target == 'wasm32-unknown-unknown'
 
       - name: cargo build
