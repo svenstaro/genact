@@ -10,9 +10,6 @@ keywords = ["fake", "nonsense", "useless"]
 categories = ["command-line-utilities", "command-line-interface"]
 edition = "2018"
 
-[lib]
-crate-type = ["cdylib", "rlib"]
-
 [profile.release]
 lto = true
 opt-level = 'z'
@@ -21,8 +18,8 @@ panic = 'abort'
 
 [dependencies]
 yansi = "0.5"
-rand = "0.8.3"
-rand_distr = "0.4.0"
+rand = "0.8"
+rand_distr = "0.4"
 chrono = { version = "0.4", features = ["wasmbind"] }
 url = "2.2"
 lazy_static = "1.4"
@@ -30,7 +27,7 @@ humantime = "2"
 humansize = "1"
 regex = "1.4"
 fake = { version = "2.4", features = ["chrono"] }
-wasm-bindgen = "0.2.73"
+wasm-bindgen = "0.2"
 anyhow = "1"
 progress_string = "0.2"
 instant = { version = "0.1", features = ["now", "wasm-bindgen"] }
@@ -46,8 +43,8 @@ async-std = "1"
 structopt = "0.3"
 ctrlc = { version = "3.1", features = ["termination"] }
 async-std = { version = "1.9", features = ["attributes"] }
-term_size = "1.0.0-beta1"
+term_size = "1.0.0-beta.2"
 
 [dependencies.web-sys]
-version = "0.3.50"
+version = "0.3"
 features = ["Window", "Location", "console"]

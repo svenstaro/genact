@@ -42,6 +42,13 @@ jobs:
           use-tool-cache: true
         if: matrix.target == 'wasm32-unknown-unknown'
 
+      - uses: actions-rs/install@v0.1
+        with:
+          crate: wasm-bindgen-cli
+          version: latest
+          use-tool-cache: true
+        if: matrix.target == 'wasm32-unknown-unknown'
+
       - name: trunk build
         run: trunk build --release
         if: matrix.target == 'wasm32-unknown-unknown'

@@ -77,6 +77,13 @@ jobs:
           use-tool-cache: true
         if: matrix.target == 'wasm32-unknown-unknown'
 
+      - uses: actions-rs/install@v0.1
+        with:
+          crate: wasm-bindgen-cli
+          version: latest
+          use-tool-cache: true
+        if: matrix.target == 'wasm32-unknown-unknown'
+
       - run: sudo apt install musl-tools
         if: matrix.os == 'ubuntu-latest' && matrix.target != 'wasm32-unknown-unknown'
 
