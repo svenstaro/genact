@@ -36,7 +36,7 @@ It's compatible with FreeBSD, Linux, OSX, Windows 10 (it needs a recent Windows 
     chmod +x genact-osx
     ./genact-osx
 
-**On Windows**: Download `genact-win.exe` from [the releases page](https://github.com/svenstaro/genact/releases) and double click it.
+**On Windows**: Download `genact-win.exe` from [the releases page](https://github.com/svenstaro/genact/releases) and double click it. Or get it from [Microsoft Store](https://www.microsoft.com/store/apps/9PLWR751PR73).
 
 **With Cargo**: If you have a somewhat recent version of Rust and Cargo installed, you can run
 
