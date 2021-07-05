@@ -36,6 +36,10 @@ It's compatible with FreeBSD, Linux, OSX, Windows 10 (it needs a recent Windows 
     chmod +x genact-osx
     ./genact-osx
 
+A homebrew package is also available. To install it this way, run
+
+    brew install genact
+
 **On Windows**: Download `genact-win.exe` from [the releases page](https://github.com/svenstaro/genact/releases) and double click it.
 
 **With Cargo**: If you have a somewhat recent version of Rust and Cargo installed, you can run
