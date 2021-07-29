@@ -41,7 +41,7 @@ impl Module for Weblog {
             let date = Local::now().format("%e/%b/%Y:%T %z");
             let method = "GET";
             let dir_candidates: Vec<String> = Words(20..21).fake();
-            let path = gen_file_path(&mut rng, &PACKAGES_LIST, &EXTENSIONS_LIST, &dir_candidates);
+            let path = gen_file_path(&mut rng, &PACKAGES_LIST, EXTENSIONS_LIST, &dir_candidates);
             let http_code = HTTP_CODES.choose(&mut rng).unwrap_or(&200);
             let size = rng.gen_range(99..5_000_000);
             let referrer = "-";

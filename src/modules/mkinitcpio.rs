@@ -11,13 +11,13 @@ use crate::io::{csleep, print};
 use crate::modules::Module;
 
 const REQUIRED_HOOKS: &[&str] = &[
-    &"base",
-    &"udev",
-    &"autodetect",
-    &"modconf",
-    &"block",
-    &"fsck",
-    &"filesystems",
+    "base",
+    "udev",
+    "autodetect",
+    "modconf",
+    "block",
+    "fsck",
+    "filesystems",
 ];
 
 async fn warn(msg: &str) {
@@ -145,7 +145,7 @@ impl Module for Mkinitcpio {
             let mut ret: Vec<&str> = vec![];
             for hook in BOOT_HOOKS_LIST.iter() {
                 if REQUIRED_HOOKS.contains(hook) || rng.gen_range(0..10) < 3 {
-                    ret.push(&hook);
+                    ret.push(hook);
                 }
             }
             ret
@@ -176,11 +176,11 @@ impl Module for Mkinitcpio {
         let zip = COMPRESSION_ALGORITHMS_LIST.choose(&mut rng).unwrap();
 
         build(
-            &hooks, preset, "default", zip, &drivers, os_release, &appconfig,
+            &hooks, preset, "default", zip, &drivers, os_release, appconfig,
         )
         .await;
         build(
-            &hooks, preset, "fallback", zip, &drivers, os_release, &appconfig,
+            &hooks, preset, "fallback", zip, &drivers, os_release, appconfig,
         )
         .await;
     }

@@ -87,7 +87,7 @@ impl Module for DockerBuild {
                 .await;
                 newline().await;
 
-                chosen_module.run(&appconfig).await;
+                chosen_module.run(appconfig).await;
             }
 
             print(format!(
