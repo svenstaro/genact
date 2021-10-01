@@ -19,7 +19,7 @@
 
 You don't have to install anything! For your convenience, prebuilt binaries for Linux, OSX and Windows are provided [here](https://github.com/svenstaro/genact/releases) that should run without any dependencies. **Additionally, there is a web version at https://svenstaro.github.io/genact/**
 
-It's compatible with FreeBSD, Linux, OSX, Windows 10 (it needs a recent Windows 10 to get ANSI support) and most modern web browsers that support WebAssembly.
+It's compatible with FreeBSD, Linux, macOS, Windows 10 (it needs a recent Windows 10 to get ANSI support) and most modern web browsers that support WebAssembly.
 
 **On FreeBSD**: You don't have to do anything special here. Just run
 
@@ -31,7 +31,7 @@ It's compatible with FreeBSD, Linux, OSX, Windows 10 (it needs a recent Windows 
     chmod +x genact-linux
     ./genact-linux
 
-**On OSX**: Download `genact-osx` from [the releases page](https://github.com/svenstaro/genact/releases) and run
+**On macOS**: Download `genact-osx` from [the releases page](https://github.com/svenstaro/genact/releases) and run
 
     chmod +x genact-osx
     ./genact-osx
@@ -39,6 +39,10 @@ It's compatible with FreeBSD, Linux, OSX, Windows 10 (it needs a recent Windows 
 A homebrew package is also available. To install it this way, run
 
     brew install genact
+    
+On macOS, you can also install via MacPorts:
+
+    sudo port install genact
 
 **On Windows**: Download `genact-win.exe` from [the releases page](https://github.com/svenstaro/genact/releases) and double click it.
 
