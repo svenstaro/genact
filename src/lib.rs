@@ -14,17 +14,8 @@ use modules::{Module, ALL_MODULES};
 
 lazy_static::lazy_static! {
     pub static ref CTRLC_PRESSED: AtomicBool = AtomicBool::new(false);
-}
-
-lazy_static::lazy_static! {
     pub static ref SPEED_FACTOR: Mutex<f32> = Mutex::new(1.0);
-}
-
-lazy_static::lazy_static! {
     pub static ref STARTED_AT: Instant = Instant::now();
-}
-
-lazy_static::lazy_static! {
     pub static ref MODULES_RAN: AtomicU32 = AtomicU32::new(0);
 }
 
