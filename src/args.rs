@@ -1,5 +1,5 @@
 #[cfg(not(target_arch = "wasm32"))]
-use structopt::StructOpt;
+use clap::Parser;
 
 use crate::modules::ALL_MODULES;
 
@@ -22,32 +22,27 @@ fn parse_min_1(s: &str) -> Result<u32, String> {
 }
 
 #[cfg(not(target_arch = "wasm32"))]
-#[derive(StructOpt)]
-#[structopt(
-    name = "genact",
-    author,
-    about,
-    global_settings = &[structopt::clap::AppSettings::ColoredHelp],
-)]
+#[derive(Parser)]
+#[clap(name = "genact", author, about, version)]
 pub struct AppConfig {
     /// List available modules
-    #[structopt(short, long = "list-modules")]
+    #[clap(short, long = "list-modules")]
     pub list_modules_and_exit: bool,
 
     /// Run only these modules
-    #[structopt(short, long, possible_values = &ALL_MODULES.keys().cloned().collect::<Vec<_>>())]
+    #[clap(short, long, possible_values = ALL_MODULES.keys().cloned().collect::<Vec<_>>())]
     pub modules: Vec<String>,
 
     /// Global speed factor
-    #[structopt(short, long, default_value = "1", parse(try_from_str = parse_speed_factor))]
+    #[clap(short, long, default_value = "1", parse(try_from_str = parse_speed_factor))]
     pub speed_factor: f32,
 
     /// Exit after running for this long (format example: 2h10min)
-    #[structopt(long, parse(try_from_str = humantime::parse_duration))]
+    #[clap(long, parse(try_from_str = humantime::parse_duration))]
     pub exit_after_time: Option<instant::Duration>,
 
     /// Exit after running this many modules
-    #[structopt(long, parse(try_from_str = parse_min_1))]
+    #[clap(long, parse(try_from_str = parse_min_1))]
     pub exit_after_modules: Option<u32>,
 }
 
@@ -90,7 +85,7 @@ impl AppConfig {
 
 #[cfg(not(target_arch = "wasm32"))]
 pub fn parse_args() -> AppConfig {
-    let mut args = AppConfig::from_args();
+    let mut args = AppConfig::parse();
 
     if args.modules.is_empty() {
         args.modules = ALL_MODULES.keys().map(|m| m.to_string()).collect();
