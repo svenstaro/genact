@@ -46,6 +46,10 @@ On macOS, you can also install via MacPorts:
 
 **On Windows**: Download `genact-win.exe` from [the releases page](https://github.com/svenstaro/genact/releases) and double click it.
 
+It is also available on Scoop:
+
+    scoop install genact
+
 **With Cargo**: If you have a somewhat recent version of Rust and Cargo installed, you can run
 
     cargo install genact
