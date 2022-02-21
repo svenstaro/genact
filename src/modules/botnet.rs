@@ -45,7 +45,7 @@ impl Module for Botnet {
             connected += 1;
             csleep((rng.gen_range(0f64..1.).powi(50) * 50.) as u64).await;
         }
-        dprint("\r\n", 0).await;
+        newline().await;
 
         csleep(300).await;
 

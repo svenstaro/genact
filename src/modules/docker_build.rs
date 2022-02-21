@@ -7,7 +7,7 @@ use crate::args::AppConfig;
 use crate::data::DOCKER_PACKAGES_LIST;
 use crate::data::DOCKER_TAGS_LIST;
 use crate::generators::gen_hex_string;
-use crate::io::{csleep, dprint, newline, print};
+use crate::io::{csleep, newline, print};
 use crate::modules::Module;
 use crate::ALL_MODULES;
 
@@ -31,13 +31,10 @@ impl Module for DockerBuild {
         let mut current_size: f64 = 0.0;
 
         while current_size <= target_size {
-            dprint(
-                format!(
-                    "\rSending build context to Docker daemon  {current_size:>4.2}MB",
-                    current_size = current_size
-                ),
-                0,
-            )
+            print(format!(
+                "\rSending build context to Docker daemon  {current_size:>4.2}MB",
+                current_size = current_size
+            ))
             .await;
 
             let remaining_size = target_size - current_size;

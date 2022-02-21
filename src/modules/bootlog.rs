@@ -5,7 +5,7 @@ use yansi::Paint;
 
 use crate::args::AppConfig;
 use crate::data::BOOTLOG_LIST;
-use crate::io::{csleep, dprint};
+use crate::io::{csleep, dprint, newline};
 use crate::modules::Module;
 
 pub struct Bootlog;
@@ -57,7 +57,7 @@ impl Module for Bootlog {
                 }
             }
 
-            dprint("\r\n", 0).await;
+            newline().await;
             if burst_mode {
                 count_burst_lines += 1;
             }

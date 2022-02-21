@@ -7,7 +7,7 @@ use yansi::Paint;
 
 use crate::args::AppConfig;
 use crate::data::{BOOT_HOOKS_LIST, CFILES_LIST, COMPRESSION_ALGORITHMS_LIST, OS_RELEASES_LIST};
-use crate::io::{csleep, print};
+use crate::io::{csleep, newline, print};
 use crate::modules::Module;
 
 const REQUIRED_HOOKS: &[&str] = &[
@@ -27,7 +27,7 @@ async fn warn(msg: &str) {
         Paint::new(msg).bold()
     ))
     .await;
-    print("\r\n").await;
+    newline().await;
 }
 
 async fn msg1(msg: &str) {
@@ -37,7 +37,7 @@ async fn msg1(msg: &str) {
         Paint::new(msg).bold()
     ))
     .await;
-    print("\r\n").await;
+    newline().await;
 }
 
 async fn msg2(msg: &str) {
@@ -47,7 +47,7 @@ async fn msg2(msg: &str) {
         Paint::new(msg).bold()
     ))
     .await;
-    print("\r\n").await;
+    newline().await;
 }
 
 async fn build(
