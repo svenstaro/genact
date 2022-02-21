@@ -71,7 +71,7 @@ or (on Docker)
 
 ### Usage
 
-    genact 0.11.1
+    genact 0.12.0
     Sven-Hendrik Haase <svenstaro@gmail.com>
     A nonsense activity generator
 
