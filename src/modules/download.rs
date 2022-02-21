@@ -101,7 +101,7 @@ impl Module for Download {
                     progress_bar = progress_bar,
                     bytes_downloaded = bytes_incoming.file_size(size_opts).unwrap(),
                     download_speed = actual_download_speed.file_size(speed_opts).unwrap(),
-                    eta = format_duration(eta).to_string(),
+                    eta = format_duration(eta),
                     file_name_width = file_name_width,
             ))
                 .await;

@@ -7,6 +7,8 @@ static BOOT_HOOKS: &str = include_str!("../data/boot_hooks.txt");
 static OS_RELEASES: &str = include_str!("../data/os_releases.txt");
 static DOCKER_PACKAGES: &str = include_str!("../data/docker_packages.txt");
 static DOCKER_TAGS: &str = include_str!("../data/docker_tags.txt");
+static ANSIBLE_ROLES: &str = include_str!("../data/ansible_roles.txt");
+static ANSIBLE_TASKS: &str = include_str!("../data/ansible_tasks.txt");
 
 lazy_static::lazy_static! {
     pub static ref BOOTLOG_LIST: Vec<&'static str> = BOOTLOG.lines().collect();
@@ -18,6 +20,8 @@ lazy_static::lazy_static! {
     pub static ref OS_RELEASES_LIST: Vec<&'static str> = OS_RELEASES.lines().collect();
     pub static ref DOCKER_PACKAGES_LIST: Vec<&'static str> = DOCKER_PACKAGES.lines().collect();
     pub static ref DOCKER_TAGS_LIST: Vec<&'static str> = DOCKER_TAGS.lines().collect();
+    pub static ref ANSIBLE_ROLES_LIST: Vec<&'static str> = ANSIBLE_ROLES.lines().collect();
+    pub static ref ANSIBLE_TASKS_LIST: Vec<&'static str> = ANSIBLE_TASKS.lines().collect();
 }
 
 pub static EXTENSIONS_LIST: &[&str] = &[

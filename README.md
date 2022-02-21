@@ -39,7 +39,7 @@ It's compatible with FreeBSD, Linux, macOS, Windows 10 (it needs a recent Window
 A homebrew package is also available. To install it this way, run
 
     brew install genact
-    
+
 On macOS, you can also install via MacPorts:
 
     sudo port install genact
@@ -71,26 +71,22 @@ or (on Docker)
 
 ### Usage
 
-    genact 0.11.0
+    genact 0.11.1
     Sven-Hendrik Haase <svenstaro@gmail.com>
     A nonsense activity generator
 
     USAGE:
-        genact [FLAGS] [OPTIONS]
-
-    FLAGS:
-        -h, --help            Prints help information
-        -l, --list-modules    List available modules
-        -V, --version         Prints version information
+        genact [OPTIONS]
 
     OPTIONS:
-            --exit-after-modules <exit-after-modules>    Exit after running this many modules
-            --exit-after-time <exit-after-time>          Exit after running for this long (format example: 2h10min)
-        -m, --modules <modules>...
-                Run only these modules [possible values: botnet, bootlog, kernel_compile,
-                memdump, cargo, cc, composer, docker_build, cryptomining,
-                download, mkinitcpio, weblog, docker_image_rm, simcity]
-        -s, --speed-factor <speed-factor>                Global speed factor [default: 1]
+            --exit-after-modules <EXIT_AFTER_MODULES>    Exit after running this many modules
+            --exit-after-time <EXIT_AFTER_TIME>          Exit after running for this long (format example: 2h10min)
+        -h, --help                                       Print help information
+        -l, --list-modules                               List available modules
+        -m, --modules <MODULES>                          Run only these modules [possible values: weblog, mkinitcpio, simcity, memdump, composer, ansible, bootlog, docker_build, download, botnet,
+                                                         kernel_compile, cargo, cc, docker_image_rm, cryptomining]
+        -s, --speed-factor <SPEED_FACTOR>                Global speed factor [default: 1]
+        -V, --version                                    Print version information
 
 ### Web usage
 
