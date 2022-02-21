@@ -26,11 +26,11 @@ fn gen_header(arch: &str, rng: &mut ThreadRng) -> String {
     if file.starts_with("arch") {
         let re = Regex::new(r"arch/([a-z0-9_])+/").unwrap();
         file = re
-            .replace(&file, format!("arch/{}/", arch).as_str())
+            .replace(&file, format!("arch/{arch}/").as_str())
             .into_owned();
     }
 
-    format!("  {} {}", cmd, file)
+    format!("  {cmd} {file}")
 }
 
 /// Generate a build step for an object file
@@ -51,11 +51,11 @@ fn gen_object(arch: &str, rng: &mut ThreadRng) -> String {
     if file.starts_with("arch") {
         let re = Regex::new(r"arch/([a-z0-9_])+/").unwrap();
         file = re
-            .replace(&file, format!("arch/{}/", arch).as_str())
+            .replace(&file, format!("arch/{arch}/").as_str())
             .into_owned();
     }
 
-    format!("  {} {}", cmd, file)
+    format!("  {cmd} {file}")
 }
 
 /// Generate a 'special' build step
@@ -91,7 +91,7 @@ fn gen_special(arch: &str, rng: &mut ThreadRng) -> String {
     let special = SPECIALS.choose(rng).unwrap_or(&"").to_string();
     let special = special.replace("ARCH", arch);
 
-    format!("  {}", special)
+    format!("  {special}")
 }
 
 /// Generates a line from `make` output
@@ -169,7 +169,7 @@ impl Module for KernelCompile {
             }
         }
 
-        print(format!("BUILD   arch/{}/boot/bzImage", arch)).await;
+        print(format!("BUILD   arch/{arch}/boot/bzImage")).await;
         newline().await;
 
         newline().await;
@@ -178,22 +178,21 @@ impl Module for KernelCompile {
         let padded_bytes: u32 = rng.gen_range(bytes..1_100_000);
 
         print(format!(
-            "Setup is {} bytes (padded to {} bytes).",
-            bytes, padded_bytes
+            "Setup is {bytes} bytes (padded to {padded_bytes} bytes)."
         ))
         .await;
         newline().await;
 
         let system: u32 = rng.gen_range(300..3000);
-        print(format!("System is {} kB", system)).await;
+        print(format!("System is {system} kB")).await;
         newline().await;
 
         let crc: u32 = rng.gen_range(0x1000_0000..0xffff_ffff);
 
-        print(format!("CRC {:x}", crc)).await;
+        print(format!("CRC {crc:x}")).await;
         newline().await;
 
-        print(format!("Kernel: arch/{}/boot/bzImage is ready (#1)", arch)).await;
+        print(format!("Kernel: arch/{arch}/boot/bzImage is ready (#1)")).await;
         newline().await;
 
         newline().await;

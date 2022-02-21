@@ -62,12 +62,8 @@ async fn build(
     let mut rng = thread_rng();
 
     msg1(
-        format!(
-            "Building image from preset: /etc/mkinitcpio.d/{preset}.preset: '{mode}'",
-            preset = preset,
-            mode = mode
-        )
-        .as_ref(),
+        format!("Building image from preset: /etc/mkinitcpio.d/{preset}.preset: '{mode}'",)
+            .as_ref(),
     )
     .await;
 
@@ -81,24 +77,16 @@ async fn build(
         }
     );
 
-    msg2(
-        format!(
-            "-k /boot/vmlinuz-{preset} -c /etc/mkinitcpio.conf -g {image}",
-            preset = preset,
-            image = image
-        )
-        .as_ref(),
-    )
-    .await;
-    msg1(format!("Starting build: {}", os_release).as_ref()).await;
+    msg2(format!("-k /boot/vmlinuz-{preset} -c /etc/mkinitcpio.conf -g {image}",).as_ref()).await;
+    msg1(format!("Starting build: {os_release}").as_ref()).await;
 
     for hook in hooks {
-        msg2(format!("Running build hook: [{}]", hook).as_ref()).await;
+        msg2(format!("Running build hook: [{hook}]").as_ref()).await;
         csleep(rng.gen_range(50..1000)).await;
 
         if *hook == "block" && mode == "fallback" {
             for driver in drivers {
-                warn(format!("Possibly missing firmware for module: {}", driver).as_ref()).await;
+                warn(format!("Possibly missing firmware for module: {driver}").as_ref()).await;
             }
         }
 
@@ -110,15 +98,7 @@ async fn build(
     msg1("Generating module dependencies").await;
     csleep(rng.gen_range(200..500)).await;
 
-    msg1(
-        format!(
-            "Creating {zip}-compressed initcpio image: {image}",
-            image = image,
-            zip = zip
-        )
-        .as_ref(),
-    )
-    .await;
+    msg1(format!("Creating {zip}-compressed initcpio image: {image}",).as_ref()).await;
     csleep(rng.gen_range(500..2500)).await;
 
     msg1("Image generation successful").await;

@@ -62,7 +62,7 @@ impl Module for Simcity {
             'outer: for _ in 0..spinner_loops {
                 for spinner in SPINNERS {
                     // Output a message, with a checkbox in front and spinner behind
-                    let msg = format!("{}... {}", simcity, spinner);
+                    let msg = format!("{simcity}... {spinner}");
 
                     // on first print, text appears letter by letter
                     if first {
@@ -105,7 +105,7 @@ impl Module for Simcity {
 
             // End of loop, the line has been removed, conclude the status
             dprint(checked_checkbox, 10).await;
-            print(color_func(format!("{}... {}", simcity, resolution)).to_string()).await;
+            print(color_func(format!("{simcity}... {resolution}")).to_string()).await;
 
             if appconfig.should_exit() {
                 print("\nALL DONE\n").await;

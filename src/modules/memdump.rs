@@ -27,7 +27,7 @@ impl Module for Memdump {
         let mut current_loc = (rng.gen_range(0..2u64.pow(63)) / 16) * 16;
         let num_lines = rng.gen_range(50..200);
         for _ in 1..num_lines {
-            print(format!("{loc:016x}  ", loc = current_loc)).await;
+            print(format!("{current_loc:016x}  ")).await;
             current_loc += 0x10;
 
             let values = (0..16)
@@ -39,7 +39,7 @@ impl Module for Memdump {
                 if n == 8 {
                     print(" ").await;
                 }
-                print(format!("{} ", val)).await;
+                print(format!("{val} ")).await;
                 let val_delay = rng.gen_range(0..2);
                 stdout().flush().unwrap();
                 csleep(val_delay).await;
@@ -55,7 +55,7 @@ impl Module for Memdump {
                     ascii_repr.push('.');
                 }
             }
-            print(format!(" |{ascii_repr}|", ascii_repr = ascii_repr)).await;
+            print(format!(" |{ascii_repr}|")).await;
 
             let row_delay = rng.gen_range(10..200);
             csleep(row_delay).await;

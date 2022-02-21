@@ -48,14 +48,6 @@ impl Module for Weblog {
             let user_agent: String = UserAgent().fake();
             let line = format!(
                 "{ip} - - [{date}] \"{method} {path} HTTP/1.0\" {http_code} {size} \"{referrer}\" \"{user_agent}\"",
-                ip=ip,
-                date=date,
-                method=method,
-                path=path,
-                http_code=http_code,
-                size=size,
-                referrer=referrer,
-                user_agent=user_agent
             );
             let mut line_sleep_length = rng.gen_range(10..1000);
             let burst_lines = rng.gen_range(10..50);
