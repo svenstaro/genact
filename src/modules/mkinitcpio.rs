@@ -6,7 +6,7 @@ use regex::Regex;
 use yansi::Paint;
 
 use crate::args::AppConfig;
-use crate::data::{BOOT_HOOKS_LIST, CFILES_LIST, COMPRESSION_ALGORITHMS_LIST, OS_RELEASES_LIST};
+use crate::data::{BOOT_HOOKS_LIST, CFILES_LIST, COMPRESSION_FORMATS_LIST, OS_RELEASES_LIST};
 use crate::io::{csleep, newline, print};
 use crate::modules::Module;
 
@@ -153,7 +153,7 @@ impl Module for Mkinitcpio {
         // For now, the preset is always the same.
         let preset = "linux";
         let os_release = OS_RELEASES_LIST.choose(&mut rng).unwrap();
-        let zip = COMPRESSION_ALGORITHMS_LIST.choose(&mut rng).unwrap();
+        let zip = COMPRESSION_FORMATS_LIST.choose(&mut rng).unwrap();
 
         build(
             &hooks, preset, "default", zip, &drivers, os_release, appconfig,

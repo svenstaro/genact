@@ -25,8 +25,9 @@ lazy_static::lazy_static! {
 }
 
 pub static EXTENSIONS_LIST: &[&str] = &[
-    "gif", "webm", "mp4", "html", "php", "md", "png", "jpg", "ogg", "mp3", "flac", "iso", "zip",
-    "rar", "tar.gz", "tar.bz2", "tar.xz", "deb", "rpm", "exe",
+    "gif", "mkv", "webm", "mp4", "html", "php", "md", "png", "jpg", "opus", "ogg", "mp3", "flac",
+    "iso", "zip", "rar", "tar.gz", "tar.bz2", "tar.xz", "tar.zstd", "deb", "rpm", "exe",
 ];
 
-pub static COMPRESSION_ALGORITHMS_LIST: &[&str] = &["gzip", "bzip2", "lzma", "xz", "lzop", "lz4"];
+pub static COMPRESSION_FORMATS_LIST: &[&str] =
+    &["gzip", "bzip2", "lzma", "xz", "lzop", "lz4", "zstd"];
