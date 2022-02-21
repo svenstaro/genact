@@ -33,7 +33,6 @@ impl Module for DockerBuild {
         while current_size <= target_size {
             print(format!(
                 "\rSending build context to Docker daemon  {current_size:>4.2}MB",
-                current_size = current_size
             ))
             .await;
 
@@ -67,8 +66,6 @@ impl Module for DockerBuild {
             // Print the current step with the instruction to run
             print(format!(
                 "\rStep {current_step}/{total_steps} : {instruction}",
-                current_step = current_step,
-                total_steps = total_steps,
                 instruction = ["RUN", &chosen_module.signature()].join(" "),
             ))
             .await;
@@ -107,14 +104,8 @@ impl Module for DockerBuild {
         let image: &&str = DOCKER_PACKAGES_LIST.choose(&mut rng).unwrap();
         let image_tag: &&str = DOCKER_TAGS_LIST.choose(&mut rng).unwrap();
 
-        print(format!("Successfully built {hash}", hash = hash)).await;
-
-        print(format!(
-            "Successfully tagged {image}:{tag}",
-            image = image,
-            tag = image_tag
-        ))
-        .await;
+        print(format!("Successfully built {hash}")).await;
+        print(format!("Successfully tagged {image}:{image_tag}",)).await;
 
         if appconfig.should_exit() {
             return;

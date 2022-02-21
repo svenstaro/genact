@@ -42,8 +42,6 @@ impl Module for Cargo {
                 print(format!(
                     "{stage:>12} {package_name} v{package_version}",
                     stage = Paint::green(stage).bold(),
-                    package_name = package_name,
-                    package_version = package_version
                 ))
                 .await;
                 newline().await;
@@ -61,7 +59,6 @@ impl Module for Cargo {
             format!(
                 "{stage:>12} release [optimized] target(s) in {seconds:.2} secs",
                 stage = Paint::green("Finished").bold(),
-                seconds = seconds
             ),
             0,
         )

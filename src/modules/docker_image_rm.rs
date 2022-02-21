@@ -33,17 +33,10 @@ impl Module for DockerImageRm {
             let sleep_length = rng.gen_range(500..5000);
             let package_tag: &&str = DOCKER_TAGS_LIST.choose(&mut rng).unwrap();
 
-            print(format!(
-                "Untagged: {package_name}:{package_tag}",
-                package_name = package_name,
-                package_tag = package_tag,
-            ))
-            .await;
+            print(format!("Untagged: {package_name}:{package_tag}",)).await;
             newline().await;
             print(format!(
                 "Untagged: {package_name}:{package_tag}@sha256:{hash}",
-                package_name = package_name,
-                package_tag = package_tag,
                 hash = gen_hex_string(&mut rng, 64)
             ))
             .await;

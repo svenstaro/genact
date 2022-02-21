@@ -38,8 +38,6 @@ impl Module for Botnet {
         while connected <= size {
             print(format!(
                 "\rEstablishing connections: {connected:4}/{size:4}",
-                connected = connected,
-                size = size
             ))
             .await;
             connected += 1;
@@ -50,11 +48,7 @@ impl Module for Botnet {
         csleep(300).await;
 
         for (i, nodes) in clusters.iter().enumerate() {
-            dprint(
-                format!("  Cluster #{i:02} ({nodes:3} nodes)", i = i, nodes = nodes),
-                10,
-            )
-            .await;
+            dprint(format!("  Cluster #{i:02} ({nodes:3} nodes)"), 10).await;
             newline().await;
             csleep(100).await;
             if appconfig.should_exit() {
@@ -68,18 +62,13 @@ impl Module for Botnet {
                 let nodes_with_status = clusters.iter().zip(onlines.iter());
                 for (i, (nodes, online)) in nodes_with_status.enumerate() {
                     erase_line().await;
-                    print(format!(
-                        "  Cluster #{i:02} ({nodes:3} nodes) [{status:}]",
-                        i = i,
-                        nodes = nodes,
-                        status = if *online {
-                            Paint::green("online")
-                        } else {
-                            Paint::yellow("booting")
-                        }
-                        .bold(),
-                    ))
-                    .await;
+                    let status = if *online {
+                        Paint::green("online")
+                    } else {
+                        Paint::yellow("booting")
+                    }
+                    .bold();
+                    print(format!("  Cluster #{i:02} ({nodes:3} nodes) [{status:}]",)).await;
                     newline().await;
                 }
             }
@@ -106,7 +95,7 @@ impl Module for Botnet {
 
         for task in &tasks {
             csleep(300).await;
-            dprint(format!("+ {} ", task), 10).await;
+            dprint(format!("+ {task} "), 10).await;
             csleep(600).await;
             dprint("[done]", 10).await;
             newline().await;
