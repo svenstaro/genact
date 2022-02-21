@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+- Add Ansible module [#301](https://github.com/svenstaro/genact/issues/301)
 
 ## [0.11.0] - 2021-03-19
 - Add docker_build module [#103](https://github.com/svenstaro/genact/pull/103) (thanks @Kovah)

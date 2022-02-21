@@ -1,3 +1,4 @@
+pub mod ansible;
 pub mod bootlog;
 pub mod botnet;
 pub mod cargo;
@@ -28,6 +29,7 @@ pub trait Module: Sync {
 lazy_static::lazy_static! {
     pub static ref ALL_MODULES: HashMap<&'static str, Box<dyn Module>> = {
         let mut all_modules: HashMap<&'static str, Box<dyn Module>> = HashMap::new();
+        all_modules.insert("ansible", Box::new(ansible::Ansible));
         all_modules.insert("bootlog", Box::new(bootlog::Bootlog));
         all_modules.insert("botnet", Box::new(botnet::Botnet));
         all_modules.insert("cargo", Box::new(cargo::Cargo));
