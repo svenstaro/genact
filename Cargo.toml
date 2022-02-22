@@ -40,7 +40,7 @@ async-trait = "0.1"
 async-std = "1"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
-clap = { version = "3.1.0", features = ["derive", "wrap_help"] }
+clap = { version = "3.1.1", features = ["derive", "wrap_help"] }
 ctrlc = { version = "3.2", features = ["termination"] }
 async-std = { version = "1.10", features = ["attributes"] }
 term_size = "1.0.0-beta.2"
