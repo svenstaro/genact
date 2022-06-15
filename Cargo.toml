@@ -26,7 +26,7 @@ lazy_static = "1.4"
 humantime = "2"
 humansize = "1"
 regex = "1.5"
-fake = { version = "2.4", features = ["chrono"] }
+fake = { version = "2.5", features = ["chrono"] }
 wasm-bindgen = "0.2"
 anyhow = "1"
 progress_string = "0.2"
