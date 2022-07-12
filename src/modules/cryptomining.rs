@@ -14,6 +14,7 @@ use crate::modules::Module;
 
 pub struct Crytomining;
 
+#[allow(clippy::format_push_string)]
 #[async_trait(?Send)]
 impl Module for Crytomining {
     fn name(&self) -> &'static str {
