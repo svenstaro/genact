@@ -29,8 +29,8 @@ impl Module for RkHunter {
     async fn run(&self, appconfig: &AppConfig) {
         let mut rng = thread_rng();
         let check_positive_probability = 0.05;
-        let short_check_probability = 0.15;
-        let info_probability = 0.05;
+        let short_check_probability = 0.25;
+        let info_probability = 0.10;
 
         print(format!(
             "Running Rootkit Hunter version {version} on localhost\r\n",
@@ -70,13 +70,26 @@ impl Module for RkHunter {
 
             let mut rootkit_found = false;
             let num_checks = rng.gen_range(2..30);
-            let checks: Vec<&&str> = RKHUNTER_CHECKS_LIST
+            let mut checks: Vec<&&str> = RKHUNTER_CHECKS_LIST
                 .choose_multiple(&mut rng, num_checks)
                 .collect();
 
+            checks.sort();
+
+            // Generate additional short checks with a probability of 15%
+            if rng.gen_bool(short_check_probability) {
+                let num_short_checks = rng.gen_range(1..4);
+                let mut short_checks: Vec<&&str> = RKHUNTER_CHECKS_SHORT_LIST
+                    .choose_multiple(&mut rng, num_short_checks)
+                    .collect();
+
+                short_checks.sort();
+                checks.append(&mut short_checks);
+            }
+
             // Calculate the right padding for checks to properly align the check status, with a
-            // minimum width of 20 characters
-            let mut check_pad = 20;
+            // minimum width of 40 characters
+            let mut check_pad = 40;
             for &check in &checks {
                 check_pad = if check.len() > check_pad { check.len() } else { check_pad }
             }
@@ -90,39 +103,19 @@ impl Module for RkHunter {
                 }
 
                 // Prepare check and status
-                let check_status = if check_positive { Paint::red("Found") } else { Paint::default("Not found") };
-                print(format!("{rk_pad}  {check:<check_pad$} [ {check_status} ]\r\n")).await;
-            }
-
-            // Generate additional short checks with a probability of 15%
-            if rng.gen_bool(short_check_probability) {
-
-                let num_short_checks = 1..rng.gen_range(1..5);
-                for _ in num_short_checks {
-                    csleep(rng.gen_range(300..1000)).await;
-
-                    // Specify if a check was positive with a chance of 10%
-                    let check_positive = rng.gen_bool(check_positive_probability);
-                    if check_positive {
-                        rootkit_found = true;
-                    }
-
-                    // Prepare check and status
-                    let check = RKHUNTER_CHECKS_SHORT_LIST.iter().choose(&mut rng).unwrap();
-                    let mut check_status = if check_positive { Paint::red("Warning") } else { Paint::default("Ok") };
-                    if rng.gen_bool(0.1) {
-                        check_status = Paint::default("Skipped");
-                    }
-
-                    print(format!("{rk_pad}  {check:<check_pad$} [ {check_status} ]\r\n")).await;
+                let mut check_status = if check_positive { Paint::red("Found") } else { Paint::default("Not found") };
+                if rng.gen_bool(0.01) {
+                    check_status = Paint::default("Skipped");
                 }
+
+                print(format!("{rk_pad}  {check:<check_pad$} [ {check_status} ]\r\n")).await;
             }
 
             // Display final info line with probability of 5%
             if rng.gen_bool(info_probability) {
                 csleep(rng.gen_range(300..600)).await;
                 let info = RKHUNTER_INFOS_LIST.iter().choose(&mut rng).unwrap();
-                print(format!("{rk_pad}  {info}\r\n")).await;
+                print(format!("Info: {info}\r\n")).await;
             }
 
             if is_rootkit {
