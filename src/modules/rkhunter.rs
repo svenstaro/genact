@@ -149,7 +149,7 @@ impl Module for RkHunter {
             }
 
             if is_rootkit {
-                check_pad = check_pad + 2;
+                check_pad += 2;
                 print(format!(
                     "  {rootkit:<check_pad$} [ {status} ]\r\n",
                     status = if rootkit_found {
