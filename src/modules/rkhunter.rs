@@ -35,26 +35,45 @@ impl Module for RkHunter {
         print(format!(
             "Running Rootkit Hunter version {version} on localhost\r\n",
             version = gen_package_version(&mut rng)
-        )).await;
+        ))
+        .await;
         newline().await;
+        csleep(500).await;
         print(format!(
             "Info: Start date is {date}",
             date = Utc::now().format("%a %d %b %Y %I:%M:%S %p %Z\r\n")
-        )).await;
+        ))
+        .await;
         newline().await;
         print("Info: Detected operating system is 'Linux'\r\n").await;
         print(format!(
             "Found O/S name: Ubuntu {version}",
             version = gen_package_version(&mut rng)
-        )).await;
+        ))
+        .await;
+        csleep(500).await;
         print("Info: Environment shell is /bin/bash; rkhunter is using dash\r\n").await;
         print("Info: Using configuration file '/etc/rkhunter.conf'\r\n").await;
         print("Info: Installation directory is '/usr'\r\n").await;
         print("Info: Using language 'en'\r\n").await;
         print("Info: Using '/var/lib/rkhunter/db' as the database directory\r\n").await;
-        print("Info: Using '/usr/share/rkhunter/scripts' as the support script directory\r\n").await;
-        print("Info: Using language 'en'\r\n").await;
-
+        print("Info: Using '/usr/share/rkhunter/scripts' as the support script directory\r\n")
+            .await;
+        print("Info: Using '/var/lib/rkhunter/db' as the database directory\r\n").await;
+        print("Info: Using '/usr/share/rkhunter/scripts' as the support script directory\r\n")
+            .await;
+        print("Info: Using '/usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin /usr/games /usr/local/games /snap/bin /usr/libexec' as the command directories\r\n").await;
+        print("Info: Using '/var/lib/rkhunter/tmp' as the temporary directory\r\n").await;
+        print("Info: No mail-on-warning address configured\r\n").await;
+        newline().await;
+        csleep(500).await;
+        print("Checking if the O/S has changed since last time...\r\n").await;
+        csleep(500).await;
+        print("Info: Nothing seems to have changed.\r\n").await;
+        print("Info: Locking is not being used\r\n").await;
+        newline().await;
+        csleep(500).await;
+        print("Starting system checks...\r\n").await;
         newline().await;
 
         loop {
@@ -91,7 +110,11 @@ impl Module for RkHunter {
             // minimum width of 40 characters
             let mut check_pad = 40;
             for &check in &checks {
-                check_pad = if check.len() > check_pad { check.len() } else { check_pad }
+                check_pad = if check.len() > check_pad {
+                    check.len()
+                } else {
+                    check_pad
+                }
             }
 
             for &check in &checks {
@@ -103,12 +126,19 @@ impl Module for RkHunter {
                 }
 
                 // Prepare check and status
-                let mut check_status = if check_positive { Paint::red("Found") } else { Paint::default("Not found") };
+                let mut check_status = if check_positive {
+                    Paint::red("Found")
+                } else {
+                    Paint::default("Not found")
+                };
                 if rng.gen_bool(0.01) {
                     check_status = Paint::default("Skipped");
                 }
 
-                print(format!("{rk_pad}  {check:<check_pad$} [ {check_status} ]\r\n")).await;
+                print(format!(
+                    "{rk_pad}  {check:<check_pad$} [ {check_status} ]\r\n"
+                ))
+                .await;
             }
 
             // Display final info line with probability of 5%
@@ -122,8 +152,13 @@ impl Module for RkHunter {
                 check_pad = check_pad + 2;
                 print(format!(
                     "  {rootkit:<check_pad$} [ {status} ]\r\n",
-                    status = if rootkit_found { Paint::red("Found") } else { Paint::default("Not found") })
-                ).await;
+                    status = if rootkit_found {
+                        Paint::red("Found")
+                    } else {
+                        Paint::default("Not found")
+                    }
+                ))
+                .await;
             }
 
             newline().await;
