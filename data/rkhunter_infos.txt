@@ -1,0 +1,21 @@
+A running 'rsyslog' daemon has been found.
+A running 'systemd-journald' daemon has been found.
+Check skipped - file '/etc/inetd.conf' does not exist.
+Check skipped - tripwire not installed
+Found a systemd configuration file: /etc/systemd/journald.conf
+Found an rsyslog configuration file: /etc/rsyslog.conf
+Found an SSH configuration file: /etc/ssh/sshd_config
+Found file '/usr/bin/egrep': it is whitelisted for the 'script replacement' check.
+Found file '/usr/bin/fgrep': it is whitelisted for the 'script replacement' check.
+Found file '/usr/bin/which': it is whitelisted for the 'script replacement' check.
+Found password file: /etc/passwd
+Found shadow file: /etc/shadow
+No empty log file names configured.
+Rkhunter option ALLOW_SSH_PROT_V1 set to '2'.
+Rkhunter option ALLOW_SSH_ROOT_USER set to 'no'.
+SCAN_MODE_DEV set to 'THOROUGH'
+Test 'apps' disabled at users request.
+Test 'deleted_files' disabled at users request.
+Test 'hidden_procs' disabled at users request.
+Test 'suspscan' disabled at users request.
+The minimum shared memory segment size to be checked (in bytes): 1048576 (1.0MB)

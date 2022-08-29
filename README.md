@@ -83,8 +83,9 @@ or (on Docker)
             --exit-after-time <EXIT_AFTER_TIME>          Exit after running for this long (format example: 2h10min)
         -h, --help                                       Print help information
         -l, --list-modules                               List available modules
-        -m, --modules <MODULES>                          Run only these modules [possible values: weblog, mkinitcpio, simcity, memdump, composer, ansible, bootlog, docker_build, download, botnet,
-                                                         kernel_compile, cargo, cc, docker_image_rm, cryptomining]
+        -m, --modules <MODULES>                          Run only these modules [possible values: kernel_compile, cryptomining, weblog, memdump,
+                                                         docker_image_rm, mkinitcpio, download, composer, botnet, rkhunter, simcity, bootlog,
+                                                         cargo, cc, ansible, docker_build]
         -s, --speed-factor <SPEED_FACTOR>                Global speed factor [default: 1]
         -V, --version                                    Print version information
 
