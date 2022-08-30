@@ -6,8 +6,6 @@ use yansi::Paint;
 
 use crate::args::AppConfig;
 use crate::data::RKHUNTER_CHECKS_LIST;
-use crate::data::RKHUNTER_CHECKS_SHORT_LIST;
-use crate::data::RKHUNTER_INFOS_LIST;
 use crate::data::RKHUNTER_ROOTKITS_LIST;
 use crate::data::RKHUNTER_TASKS_LIST;
 use crate::generators::gen_package_version;
@@ -29,8 +27,6 @@ impl Module for RkHunter {
     async fn run(&self, appconfig: &AppConfig) {
         let mut rng = thread_rng();
         let check_positive_probability = 0.05;
-        let short_check_probability = 0.25;
-        let info_probability = 0.10;
 
         print(format!(
             "Running Rootkit Hunter version {version} on localhost\r\n",
@@ -95,17 +91,6 @@ impl Module for RkHunter {
 
             checks.sort();
 
-            // Generate additional short checks with a probability of 15%
-            if rng.gen_bool(short_check_probability) {
-                let num_short_checks = rng.gen_range(1..4);
-                let mut short_checks: Vec<&&str> = RKHUNTER_CHECKS_SHORT_LIST
-                    .choose_multiple(&mut rng, num_short_checks)
-                    .collect();
-
-                short_checks.sort();
-                checks.append(&mut short_checks);
-            }
-
             // Calculate the right padding for checks to properly align the check status, with a
             // minimum width of 40 characters
             let mut check_pad = 40;
@@ -139,13 +124,6 @@ impl Module for RkHunter {
                     "{rk_pad}  {check:<check_pad$} [ {check_status} ]\r\n"
                 ))
                 .await;
-            }
-
-            // Display final info line with probability of 5%
-            if rng.gen_bool(info_probability) {
-                csleep(rng.gen_range(300..600)).await;
-                let info = RKHUNTER_INFOS_LIST.iter().choose(&mut rng).unwrap();
-                print(format!("Info: {info}\r\n")).await;
             }
 
             if is_rootkit {
