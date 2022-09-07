@@ -180,5 +180,5 @@ jobs:
         run: podman manifest push genact docker.io/svenstaro/genact:latest
 
       - name: podman manifest push tag version
-        run: podman manifest push genact docker.io/svenstaro/genact:${{ needs.binaries.outputs.version }}
+        run: podman manifest push genact docker.io/svenstaro/genact:${{ needs.publish.outputs.version }}
         if: startsWith(github.ref_name, 'v')
