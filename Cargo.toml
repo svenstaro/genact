@@ -14,7 +14,7 @@ edition = "2018"
 lto = true
 opt-level = 'z'
 codegen-units = 1
-panic = 'abort'
+strip = true
 
 [dependencies]
 yansi = "0.5"

@@ -1,0 +1,184 @@
+name: Build release binaries (and publish them if this is a tag)
+
+on: [push, pull_request]
+
+jobs:
+  publish:
+    name: Binary ${{ matrix.target }} (on ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    outputs:
+      version: ${{ steps.extract_version.outputs.version }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+            cross: true
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            cross: true
+          - os: ubuntu-latest
+            target: aarch64-unknown-linux-musl
+            cross: true
+          - os: ubuntu-latest
+            target: aarch64-unknown-linux-gnu
+            cross: true
+          - os: ubuntu-latest
+            target: armv7-unknown-linux-musleabihf
+            cross: true
+          - os: ubuntu-latest
+            target: armv7-unknown-linux-gnueabihf
+            cross: true
+          - os: ubuntu-latest
+            target: arm-unknown-linux-musleabihf
+            cross: true
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            cross: false
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            cross: false
+          - os: ubuntu-latest
+            target: x86_64-unknown-freebsd
+            cross: true
+          - os: ubuntu-latest
+            target: wasm32-unknown-unknown
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: ${{ matrix.target }}
+          override: true
+
+      - uses: actions-rs/install@v0.1
+        with:
+          crate: trunk
+          version: latest
+          use-tool-cache: true
+        if: matrix.target == 'wasm32-unknown-unknown'
+
+      - uses: actions-rs/install@v0.1
+        with:
+          crate: wasm-bindgen-cli
+          version: latest
+          use-tool-cache: true
+        if: matrix.target == 'wasm32-unknown-unknown'
+
+      - run: sudo apt install musl-tools
+        if: startsWith(matrix.os, 'ubuntu') && matrix.target != 'wasm32-unknown-unknown'
+
+      - name: cargo build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --locked --target=${{ matrix.target }}
+          use-cross: ${{ matrix.cross }}
+        if: matrix.target != 'wasm32-unknown-unknown'
+
+      - name: trunk build
+        run: trunk build --release
+        if: matrix.target == 'wasm32-unknown-unknown'
+
+      - name: Set exe extension for Windows
+        run: echo "EXE=.exe" >> $env:GITHUB_ENV
+        if: startsWith(matrix.os, 'windows')
+
+      - name: Compress binaries
+        uses: svenstaro/upx-action@v2
+        with:
+          file: target/${{ matrix.target }}/release/genact${{ env.EXE }}
+          args: --best --lzma
+          strip: false  # We're stripping already in Cargo.toml
+        if: matrix.target != 'wasm32-unknown-unknown' && matrix.target != 'x86_64-unknown-freebsd'
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.target }}
+          path: target/${{ matrix.target }}/release/genact${{ env.EXE }}
+        if: matrix.target != 'wasm32-unknown-unknown'
+
+      - name: Get version from tag
+        id: extract_version
+        run: |
+          echo ::set-output name=version::${GITHUB_REF_NAME#v}
+        shell: bash
+        if: matrix.target != 'wasm32-unknown-unknown'
+
+      - name: Get CHANGELOG.md entry
+        id: changelog_reader
+        uses: mindsers/changelog-reader-action@v2
+        with:
+          version: ${{ steps.extract_version.outputs.version }}
+          path: ./CHANGELOG.md
+        if: startsWith(github.ref_name, 'v') && github.ref_type == 'tag' && matrix.target != 'wasm32-unknown-unknown'
+
+      - name: Release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: target/${{ matrix.target }}/release/genact${{ env.EXE }}
+          tag: ${{ github.ref_name }}
+          asset_name: genact-${{ steps.extract_version.outputs.version }}-${{ matrix.target }}${{ env.EXE }}
+          body: ${{ steps.changelog_reader.outputs.log_entry }}
+        if: startsWith(github.ref_name, 'v') && github.ref_type == 'tag' && matrix.target != 'wasm32-unknown-unknown'
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+        if: startsWith(github.ref_name, 'v') && github.ref_type == 'tag' && matrix.target == 'wasm32-unknown-unknown'
+
+  container-images:
+    name: Publish images
+    runs-on: ubuntu-latest
+    needs: publish
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Download artifact aarch64-unknown-linux-gnu
+        uses: actions/download-artifact@v3
+        with:
+          name: aarch64-unknown-linux-gnu
+          path: target/aarch64-unknown-linux-gnu/release
+
+      - name: Download artifact x86_64-unknown-linux-gnu
+        uses: actions/download-artifact@v3
+        with:
+          name: x86_64-unknown-linux-gnu
+          path: target/x86_64-unknown-linux-gnu/release
+
+      - name: Download artifact armv7-unknown-linux-gnueabihf
+        uses: actions/download-artifact@v3
+        with:
+          name: armv7-unknown-linux-gnueabihf
+          path: target/armv7-unknown-linux-gnueabihf/release
+
+      - name: podman login
+        run: podman login --username ${{ secrets.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_TOKEN }} docker.io
+
+      - name: podman build linux/arm64
+        run: podman build --format docker --platform linux/arm64/v8 --manifest genact -f Containerfile target/aarch64-unknown-linux-gnu/release
+
+      - name: podman build linux/amd64
+        run: podman build --format docker --platform linux/amd64 --manifest genact -f Containerfile target/x86_64-unknown-linux-gnu/release
+
+      - name: podman build linux/arm
+        run: podman build --format docker --platform linux/arm/v7 --manifest genact -f Containerfile target/armv7-unknown-linux-gnueabihf/release
+
+      - run: podman manifest inspect genact
+
+      - name: podman manifest push latest
+        run: podman manifest push genact docker.io/svenstaro/genact:latest
+
+      - name: podman manifest push tag version
+        run: podman manifest push genact docker.io/svenstaro/genact:${{ needs.binaries.outputs.version }}
+        if: startsWith(github.ref_name, 'v')

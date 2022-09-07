@@ -4,24 +4,11 @@ on: [push, pull_request]
 
 jobs:
   ci:
-    name: ${{ matrix.os }} for ${{ matrix.target }}
+    name: ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        target:
-          - x86_64-unknown-linux-musl
-          - x86_64-pc-windows-msvc
-          - x86_64-apple-darwin
-          - wasm32-unknown-unknown
-        include:
-          - os: ubuntu-latest
-            target: x86_64-unknown-linux-musl
-          - os: windows-latest
-            target: x86_64-pc-windows-msvc
-          - os: macos-latest
-            target: x86_64-apple-darwin
-          - os: ubuntu-latest
-            target: wasm32-unknown-unknown
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
       - name: Checkout code
@@ -33,49 +20,26 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
-          target: ${{ matrix.target }}
           components: rustfmt, clippy
-
-      - uses: actions-rs/install@v0.1
-        with:
-          crate: trunk
-          version: latest
-          use-tool-cache: true
-        if: matrix.target == 'wasm32-unknown-unknown'
-
-      - uses: actions-rs/install@v0.1
-        with:
-          crate: wasm-bindgen-cli
-          version: latest
-          use-tool-cache: true
-        if: matrix.target == 'wasm32-unknown-unknown'
-
-      - name: trunk build
-        run: trunk build --release
-        if: matrix.target == 'wasm32-unknown-unknown'
 
       - name: cargo build
         uses: actions-rs/cargo@v1
         with:
           command: build
-        if: matrix.target != 'wasm32-unknown-unknown'
 
       - name: cargo test
         uses: actions-rs/cargo@v1
         with:
           command: test
-        if: matrix.target != 'wasm32-unknown-unknown'
 
       - name: cargo fmt
         uses: actions-rs/cargo@v1
         with:
           command: fmt
           args: --all -- --check
-        if: matrix.target != 'wasm32-unknown-unknown'
 
       - name: cargo clippy
         uses: actions-rs/cargo@v1
         with:
           command: clippy
           args: -- -D warnings
-        if: matrix.target != 'wasm32-unknown-unknown'
