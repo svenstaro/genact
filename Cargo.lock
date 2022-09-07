@@ -488,7 +488,7 @@ dependencies = [
 
 [[package]]
 name = "genact"
-version = "0.12.0"
+version = "1.0.0"
 dependencies = [
  "anyhow",
  "async-std",
