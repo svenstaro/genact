@@ -1,7 +1,7 @@
 # genact - a nonsense activity generator
 
 [![CI](https://github.com/svenstaro/genact/workflows/CI/badge.svg)](https://github.com/svenstaro/genact/actions)
-[![DockerHub](https://img.shields.io/docker/cloud/build/svenstaro/genact.svg?style=flat)](https://cloud.docker.com/repository/docker/svenstaro/genact)
+[![Docker Hub](https://img.shields.io/docker/pulls/svenstaro/genact)](https://cloud.docker.com/repository/docker/svenstaro/genact/)
 [![Crates.io](https://img.shields.io/crates/v/genact.svg)](https://crates.io/crates/genact)
 [![license](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/svenstaro/genact/blob/master/LICENSE)
 [![Stars](https://img.shields.io/github/stars/svenstaro/genact.svg)](https://github.com/svenstaro/genact/stargazers)
