@@ -9,6 +9,9 @@ static DOCKER_PACKAGES: &str = include_str!("../data/docker_packages.txt");
 static DOCKER_TAGS: &str = include_str!("../data/docker_tags.txt");
 static ANSIBLE_ROLES: &str = include_str!("../data/ansible_roles.txt");
 static ANSIBLE_TASKS: &str = include_str!("../data/ansible_tasks.txt");
+static RKHUNTER_CHECKS: &str = include_str!("../data/rkhunter_checks.txt");
+static RKHUNTER_ROOTKITS: &str = include_str!("../data/rkhunter_rootkits.txt");
+static RKHUNTER_TASKS: &str = include_str!("../data/rkhunter_tasks.txt");
 
 lazy_static::lazy_static! {
     pub static ref BOOTLOG_LIST: Vec<&'static str> = BOOTLOG.lines().collect();
@@ -22,6 +25,9 @@ lazy_static::lazy_static! {
     pub static ref DOCKER_TAGS_LIST: Vec<&'static str> = DOCKER_TAGS.lines().collect();
     pub static ref ANSIBLE_ROLES_LIST: Vec<&'static str> = ANSIBLE_ROLES.lines().collect();
     pub static ref ANSIBLE_TASKS_LIST: Vec<&'static str> = ANSIBLE_TASKS.lines().collect();
+    pub static ref RKHUNTER_CHECKS_LIST: Vec<&'static str> = RKHUNTER_CHECKS.lines().collect();
+    pub static ref RKHUNTER_ROOTKITS_LIST: Vec<&'static str> = RKHUNTER_ROOTKITS.lines().collect();
+    pub static ref RKHUNTER_TASKS_LIST: Vec<&'static str> = RKHUNTER_TASKS.lines().collect();
 }
 
 pub static EXTENSIONS_LIST: &[&str] = &[

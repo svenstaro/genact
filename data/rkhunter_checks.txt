@@ -1,0 +1,271 @@
+Checking for directory '/dev/ptyas'
+Checking for directory '/dev/ptyxx'
+Checking for directory '/lib/backup'
+Checking for directory '/lib/backup/txt'
+Checking for directory '/lib/lblip.tk'
+Checking for directory '/lib/ldd.so/bktools'
+Checking for directory '/lib/security/.config/ssh'
+Checking for directory '/omgxochi'
+Checking for directory '/unde/vrei/tu/sa/te/ascunzi/in/server'
+Checking for directory '/usr/bin/take'
+Checking for directory '/usr/doc/.spool'
+Checking for directory '/usr/doc/backup'
+Checking for directory '/usr/doc/backup/txt'
+Checking for directory '/usr/doc/kern'
+Checking for directory '/usr/doc/sys'
+Checking for directory '/usr/doc/work'
+Checking for directory '/usr/lib/kterm'
+Checking for directory '/usr/man/man1/..<SP><SP>/.dir'
+Checking for directory '/usr/sbin/...'
+Checking for directory '/usr/share/.gun'
+Checking for directory '/usr/share/man/man1/.1c'
+Checking for directory '/usr/src/.lib'
+Checking for directory '/usr/X11R6/include/X11/...'
+Checking for directory '/usr/X11R6/lib/X11/.fonts/misc/...'
+Checking for directory '/var/local/^^'
+Checking for directory '/var/lock/subsys/...datafile...'
+Checking for directory '/var/lock/subsys/...datafile.../...datafile...'
+Checking for directory '/var/lock/subsys/...datafile.../...datafile.../bin'
+Checking for directory '/var/lock/subsys/...datafile.../...datafile.../lib/security'
+Checking for directory '/var/lock/subsys/...datafile.../...datafile.../usr/bin'
+Checking for directory '/var/lock/subsys/...datafile.../...datafile.../usr/sbin'
+Checking for directory '/var/log/ssh'
+Checking for directory '/xochikit'
+Checking for file '/bin/kr4p'
+Checking for file '/dev/ptyxx/.addr'
+Checking for file '/dev/ptyxx/.file'
+Checking for file '/dev/ptyxx/.log'
+Checking for file '/dev/ptyxx/.proc'
+Checking for file '/etc/cron.hourly/gcc.sh'
+Checking for file '/etc/init.d/DbSecuritySpt'
+Checking for file '/etc/khubd.p2/.p2rc'
+Checking for file '/etc/khubd.p2/.phalanx2'
+Checking for file '/etc/khubd.p2/.sniff'
+Checking for file '/etc/khubd.p2/sshgrab.py'
+Checking for file '/etc/ksapd'
+Checking for file '/etc/ksapdd'
+Checking for file '/etc/kysapd'
+Checking for file '/etc/kysapdd'
+Checking for file '/etc/lolzz.p2/.p2rc'
+Checking for file '/etc/lolzz.p2/.phalanx2'
+Checking for file '/etc/lolzz.p2/.sniff'
+Checking for file '/etc/lolzz.p2/sshgrab.py'
+Checking for file '/etc/rc.d/init.d/DbSecuritySpt'
+Checking for file '/etc/rc.d/init.d/IptabLes'
+Checking for file '/etc/rc.d/init.d/IptabLex'
+Checking for file '/etc/rc.d/rc0.d/S55IptabLex'
+Checking for file '/etc/rc.d/rc1.d/S55IptabLex'
+Checking for file '/etc/rc.d/rc2.d/S55IptabLex'
+Checking for file '/etc/rc.d/rc3.d/S55IptabLex'
+Checking for file '/etc/rc.d/rc4.d/S55IptabLex'
+Checking for file '/etc/rc.d/rc5.d/S55IptabLex'
+Checking for file '/etc/rc.d/rc6.d/S55IptabLex'
+Checking for file '/etc/rewgtf3er4t'
+Checking for file '/etc/sdmfdsfhjfe'
+Checking for file '/etc/sfewfesfs'
+Checking for file '/etc/sfewfesfsh'
+Checking for file '/etc/sksapd'
+Checking for file '/etc/sksapdd'
+Checking for file '/etc/skysapd'
+Checking for file '/etc/skysapdd'
+Checking for file '/etc/smarvtd'
+Checking for file '/etc/whitptabil'
+Checking for file '/etc/xfsdx'
+Checking for file '/etc/xfsdxd'
+Checking for file '/lib/defs/p'
+Checking for file '/lib/defs/q'
+Checking for file '/lib/defs/r'
+Checking for file '/lib/defs/s'
+Checking for file '/lib/defs/t'
+Checking for file '/lib/libns2.so'
+Checking for file '/lib/libns5.so'
+Checking for file '/lib/libpw3.so'
+Checking for file '/lib/libpw5.so'
+Checking for file '/lib/libsbr.so'
+Checking for file '/lib/libslr.so'
+Checking for file '/lib/tls/libkeyutils.so.1'
+Checking for file '/lib64/libns2.so'
+Checking for file '/lib64/libns5.so'
+Checking for file '/lib64/libpw3.so'
+Checking for file '/lib64/libpw5.so'
+Checking for file '/lib64/libsbr.so'
+Checking for file '/lib64/libslr.so'
+Checking for file '/lib64/tls/libkeyutils.so.1'
+Checking for file '/root/2016ttfacai'
+Checking for file '/tmp/bill.lock'
+Checking for file '/tmp/gates.lock'
+Checking for file '/tmp/gates.lod'
+Checking for file '/tmp/moni.lock'
+Checking for file '/tmp/moni.lod'
+Checking for file '/tmp/notify.file'
+Checking for file '/usr/bin/.sshd'
+Checking for file '/usr/bin/bsd-port/getty'
+Checking for file '/usr/bin/bsd-port/getty.lock'
+Checking for file '/usr/bin/bsd-port/udevd.lock'
+Checking for file '/usr/bin/chsh2'
+Checking for file '/usr/bin/n3tstat'
+Checking for file '/usr/bin/pojie'
+Checking for file '/usr/bin/slice2'
+Checking for file '/usr/doc/kern/adore.o'
+Checking for file '/usr/doc/kern/ava'
+Checking for file '/usr/doc/kern/string.o'
+Checking for file '/usr/doc/kern/var'
+Checking for file '/usr/doc/sys/crond'
+Checking for file '/usr/doc/sys/qrt'
+Checking for file '/usr/doc/sys/run'
+Checking for file '/usr/lib/.ark?'
+Checking for file '/usr/lib/elm/arobia/elm'
+Checking for file '/usr/lib/elm/arobia/elm/hk'
+Checking for file '/usr/lib/elm/arobia/elm/hk.pub'
+Checking for file '/usr/lib/elm/arobia/elm/sc'
+Checking for file '/usr/lib/elm/arobia/elm/sd.pp'
+Checking for file '/usr/lib/elm/arobia/elm/sdco'
+Checking for file '/usr/lib/elm/arobia/elm/srsd'
+Checking for file '/usr/lib/libamplify.so'
+Checking for file '/usr/man/man3/.../TeLeKiT/bin/sniff'
+Checking for file '/usr/man/man3/.../TeLeKiT/bin/teleulo'
+Checking for file '/usr/man/man3/.../TeLeKiT/bin/telnetd'
+Checking for file '/usr/sbin/arobia'
+Checking for file '/usr/sbin/idrun'
+Checking for file '/usr/sbin/kfd'
+Checking for file '/usr/secure'
+Checking for file '/var/log/ssh/old'
+Checking for kernel symbol 'find_sys_call_tbl'
+Checking for kernel symbol 'funces'
+Checking for kernel symbol 'h4x_delete_module'
+Checking for kernel symbol 'h4x_getdents64'
+Checking for kernel symbol 'h4x_kill'
+Checking for kernel symbol 'h4x_open'
+Checking for kernel symbol 'h4x_read'
+Checking for kernel symbol 'h4x_rename'
+Checking for kernel symbol 'h4x_rmdir'
+Checking for kernel symbol 'h4x_tcp4_seq_show'
+Checking for kernel symbol 'h4x_write'
+Checking for kernel symbol 'hide_module'
+Checking for kernel symbol 'ixinit'
+Checking for kernel symbol 'kernel_unlink'
+Checking for kernel symbol 'rootme'
+Checking for kernel symbol 'tricks'
+Checking for string '#<HIDE_.*>'
+Checking for string '/bin/envpc'
+Checking for string '/dev/ida/.inet'
+Checking for string '/dev/proc/fuckit'
+Checking for string '/dev/ptyxx/.file'
+Checking for string '/dev/ptyxx/.proc'
+Checking for string '/dev/sgk'
+Checking for string '/etc/.xsyslog'
+Checking for string '/lib/.ssyslog'
+Checking for string '/lib/.xsyslog'
+Checking for string '/lib/ldd.so/tkps'
+Checking for string '/lib/libext'
+Checking for string '/tmp/.sendmail'
+Checking for string '/usr/bin/hdparm?-t1?-X53?-p'
+Checking for string '/usr/bin/rcpc'
+Checking for string '/usr/bin/xstat'
+Checking for string '/usr/include/gpm2.h'
+Checking for string '/usr/include/openssl'
+Checking for string '/usr/lib/.tbd'
+Checking for string '/usr/lib/ldlibdu.so'
+Checking for string '/usr/sbin/login'
+Checking for string '\$.*\$\!.*\!\!\$'
+Checking for string 'backdoor'
+Checking for string 'backdoor.h'
+Checking for string 'backdoor_active'
+Checking for string 'cocacola'
+Checking for string 'in.inetd'
+Checking for string 'IptabLes'
+Checking for string 'IptabLex'
+Checking for string 'joao'
+Checking for string 'L4m3r0x'
+Checking for string 'libproc.so.2.0.7'
+Checking for string 'magic_pass_active'
+Checking for string 'phalanx'
+Checking for string 'sendmail'
+Checking for string 't0rnkit'
+Checking for string 'vt200'
+Checking for TCP port 1524
+Checking for TCP port 1984
+Checking for TCP port 2006
+Checking for TCP port 2128
+Checking for TCP port 6666
+Checking for TCP port 6667
+Checking for TCP port 6668
+Checking for TCP port 6669
+Checking for TCP port 7000
+Checking for TCP port 13000
+Checking for TCP port 14856
+Checking for TCP port 25000
+Checking for TCP port 29812
+Checking for TCP port 31337
+Checking for TCP port 32982
+Checking for TCP port 33369
+Checking for TCP port 47018
+Checking for TCP port 47107
+Checking for TCP port 60922
+Checking for TCP port 62883
+Checking for TCP port 65535
+Checking for UDP port 2001
+Scanning for string /dev/.lib
+Scanning for string /dev/.lib/lib
+Scanning for string /dev/.lib/lib/lib
+Scanning for string /dev/.lib/lib/lib/dev
+Scanning for string /dev/.lib/lib/scan
+Scanning for string /usr/include/.../.bash_history
+Scanning for string /usr/include/.../bkit-dl
+Scanning for string /usr/include/.../bkit-get
+Scanning for string /usr/include/.../bkit-screen
+Scanning for string /usr/include/.../bkit-sleep
+Scanning for string /usr/include/.../proc.h
+Scanning for string /usr/lib/.../bkit-adore.o
+Scanning for string /usr/lib/.../bkit-ssh/bkit-mots
+Scanning for string /usr/lib/.../bkit-ssh/bkit-pw
+Scanning for string /usr/lib/.../bkit-ssh/bkit-shdcfg
+Scanning for string /usr/lib/.../bkit-ssh/bkit-shhk
+Scanning for string /usr/lib/.../bkit-ssh/bkit-shrs
+Scanning for string /usr/lib/.../du
+Scanning for string /usr/lib/.../find
+Scanning for string /usr/lib/.../ls
+Scanning for string /usr/lib/.../lsof
+Scanning for string /usr/lib/.../netstat
+Scanning for string /usr/lib/.../psr
+Scanning for string /usr/lib/.../pstree
+Scanning for string /usr/lib/.../slocate
+Scanning for string /usr/lib/.../top
+Scanning for string /usr/lib/.../uconf.inv
+Scanning for string /usr/sbin/.../bkit-ava
+Scanning for string /usr/sbin/.../bkit-d
+Scanning for string /usr/sbin/.../bkit-f
+Scanning for string /usr/sbin/.../bkit-shd
+Scanning for string /usr/sbin/ntpsx
+Checking /dev for suspicious file types
+Checking for a running system logging daemon
+Checking for a system logging configuration file
+Checking for an SSH configuration file
+Checking for empty log files
+Checking for group file changes
+Checking for hidden file extensions
+Checking for hidden files and directories
+Checking for local host name
+Checking for login backdoors
+Checking for missing log files
+Checking for other suspicious configuration settings
+Checking for passwd file
+Checking for passwd file changes
+Checking for passwordless accounts
+Checking for preloaded libraries
+Checking for preloading variables
+Checking for promiscuous interfaces
+Checking for root equivalent (UID 0) accounts
+Checking for sniffer log files
+Checking for suspicious (large) shared memory segments
+Checking for suspicious directories
+Checking for system startup files
+Checking hard link count on '/sbin/init'
+Checking if SSH protocol v1 is allowed
+Checking if syslog remote logging is allowed
+Checking LD_LIBRARY_PATH variable
+Checking root account shell history files
+Checking system commands...
+Checking system startup files for malware
+Checking the local host...
+Running skdet command

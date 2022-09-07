@@ -11,6 +11,7 @@ pub mod download;
 pub mod kernel_compile;
 pub mod memdump;
 pub mod mkinitcpio;
+pub mod rkhunter;
 pub mod simcity;
 pub mod weblog;
 
@@ -42,6 +43,7 @@ lazy_static::lazy_static! {
         all_modules.insert("kernel_compile", Box::new(kernel_compile::KernelCompile));
         all_modules.insert("memdump", Box::new(memdump::Memdump));
         all_modules.insert("mkinitcpio", Box::new(mkinitcpio::Mkinitcpio));
+        all_modules.insert("rkhunter", Box::new(rkhunter::RkHunter));
         all_modules.insert("simcity", Box::new(simcity::Simcity));
         all_modules.insert("weblog", Box::new(weblog::Weblog));
         all_modules

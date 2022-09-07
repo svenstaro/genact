@@ -1,0 +1,15 @@
+Performing 'shared libraries' checks
+Performing 'strings' command checks
+Performing additional rootkit checks
+Performing check for backdoor ports
+Performing check of known rootkit files and directories
+Performing check of possible rootkit files and directories
+Performing checks on the network interfaces
+Performing checks on the network ports
+Performing file properties checks
+Performing filesystem checks
+Performing group and account checks
+Performing malware checks
+Performing system boot checks
+Performing system configuration file checks
+Performing trojan specific checks

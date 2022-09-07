@@ -1,0 +1,28 @@
+AjaKit Rootkit
+Apache Worm
+Ambient (ark) Rootkit
+beX2 Rootkit
+cb Rootkit
+Danny-Boy's Abuse Kit
+Diamorphine LKM
+Dreams Rootkit
+Flea Linux Rootkit
+KBeast Rootkit
+Li0n Worm
+Lockit / LJK2 Rootkit
+Phalanx Rootkit
+Portacelo Rootkit
+RH-Sharpe's Rootkit
+Scalper Worm
+Sebek LKM
+SHV4 Rootkit
+Sneakin Rootkit
+T0rn Rootkit
+Tuxtendo Rootkit
+URK
+Vampire Rootkit
+VcKit Rootkit
+Volc Rootkit
+Xzibit Rootkit
+zaRwT.KiT Rootkit
+ZK Rootkit
