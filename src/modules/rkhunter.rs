@@ -1,13 +1,11 @@
-//! Pretend to install composer packages
+//! Pretend to detect rootkits using rkhunter
 use async_trait::async_trait;
 use chrono::Utc;
 use rand::prelude::*;
 use yansi::Paint;
 
 use crate::args::AppConfig;
-use crate::data::RKHUNTER_CHECKS_LIST;
-use crate::data::RKHUNTER_ROOTKITS_LIST;
-use crate::data::RKHUNTER_TASKS_LIST;
+use crate::data::{RKHUNTER_CHECKS_LIST, RKHUNTER_ROOTKITS_LIST, RKHUNTER_TASKS_LIST};
 use crate::generators::gen_package_version;
 use crate::io::{csleep, newline, print};
 use crate::modules::Module;
