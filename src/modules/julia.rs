@@ -246,6 +246,7 @@ impl Module for Julia {
         csleep(rng.gen_range(150..500)).await;
 
         let now = Instant::now();
+
         print(format!(
             "{:>12} project...",
             Paint::green("Precompiling").bold()
@@ -253,18 +254,32 @@ impl Module for Julia {
         .await;
         newline().await;
 
-        print(format!(
-            "  {} [====================================>    ]  30/34",
-            Paint::cyan("Progress").bold()
-        ))
-        .await;
+        let mut bar = progress_string::BarBuilder::new()
+            .total(num_packages)
+            .width(41)
+            .full_char('=')
+            .include_numbers()
+            .get_bar();
+
+        print(format!("  {} {}", Paint::cyan("Progress").bold(), bar)).await;
         newline().await;
 
-        csleep(rng.gen_range(1000..10000)).await;
+        for i in 1..=num_packages {
+            bar.replace(i);
+
+            cursor_up(1).await;
+            erase_line().await;
+            print(format!("  {} {}", Paint::cyan("Progress").bold(), bar)).await;
+            newline().await;
+
+            csleep(rng.gen_range(50..1000)).await;
+        }
 
         let elapsed = now.elapsed();
         let seconds = elapsed.as_secs() as f32;
 
+        cursor_up(1).await;
+        erase_line().await;
         print(format!(
             "  {num_packages} dependencies successfully precompiled in {seconds:.0} seconds ({} already precompiled)",
             rng.gen_range(10..500)
