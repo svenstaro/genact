@@ -21,7 +21,7 @@ yansi = "0.5"
 rand = "0.8"
 rand_distr = "0.4"
 chrono = { version = "0.4", features = ["wasmbind"] }
-url = "2.2"
+url = "2.3"
 lazy_static = "1.4"
 humantime = "2"
 humansize = "1"
