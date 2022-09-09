@@ -43,7 +43,7 @@ impl Module for Julia {
         let project = if rng.gen::<f32>() < 0.3f32 {
             "@v1.7"
         } else {
-            &JULIA_PACKAGES_LIST.choose(&mut rng).unwrap().name
+            JULIA_PACKAGES_LIST.choose(&mut rng).unwrap().name
         };
 
         print(format!(
@@ -190,12 +190,12 @@ impl Module for Julia {
 
         csleep(rng.gen_range(250..1000)).await;
 
-        if project.starts_with('@') {
+        if let Some(project) = project.strip_prefix('@') {
             if rng.gen::<f32>() < 0.9f32 {
                 print(format!(
                     "{:>12} `~/.julia/environments/{}/Project.toml`",
                     Paint::green("Updating").bold(),
-                    &project[1..]
+                    project
                 ))
                 .await;
                 newline().await;
@@ -203,7 +203,7 @@ impl Module for Julia {
                 print(format!(
                     "{:>12} to `~/.julia/environments/{}/Project.toml`",
                     Paint::green("No Changes").bold(),
-                    &project[1..]
+                    project
                 ))
                 .await;
                 newline().await;
@@ -214,7 +214,7 @@ impl Module for Julia {
             print(format!(
                 "{:>12} `~/.julia/environments/{}/Manifest.toml`",
                 Paint::green("Updating").bold(),
-                &project[1..]
+                project
             ))
             .await;
             newline().await;
