@@ -435,6 +435,80 @@ impl Module for Julia {
         .await;
         newline().await;
 
+        if rng.gen::<f32>() < 0.25f32 {
+            csleep(rng.gen_range(50..250)).await;
+
+            print(format!(
+                "{} We haven't cleaned this depot up for a bit, running Pkg.gc()...",
+                Paint::cyan("[ Info:").bold(),
+            ))
+            .await;
+            newline().await;
+
+            csleep(rng.gen_range(100..250)).await;
+
+            print(format!(
+                "{:>12} manifest files: {} found",
+                Paint::green("Active").bold(),
+                rng.gen_range(1..10)
+            ))
+            .await;
+            newline().await;
+
+            csleep(rng.gen_range(100..250)).await;
+
+            print(format!(
+                "{:>12} artifact files: {} found",
+                Paint::green("Active").bold(),
+                rng.gen_range(10..200)
+            ))
+            .await;
+            newline().await;
+
+            csleep(rng.gen_range(100..250)).await;
+
+            print(format!(
+                "{:>12} scratchspaces: {} found",
+                Paint::green("Active").bold(),
+                rng.gen_range(10..20)
+            ))
+            .await;
+            newline().await;
+
+            csleep(rng.gen_range(100..250)).await;
+
+            print(format!(
+                "{:>12} {} package installations ({:.3} MiB)",
+                Paint::green("Deleted").bold(),
+                rng.gen_range(2..100),
+                rng.gen_range(10f32..250f32)
+            ))
+            .await;
+            newline().await;
+
+            csleep(rng.gen_range(100..250)).await;
+
+            print(format!(
+                "{:>12} {} artifact installations ({:.3} MiB)",
+                Paint::green("Deleted").bold(),
+                rng.gen_range(2..10),
+                rng.gen_range(10f32..250f32)
+            ))
+            .await;
+            newline().await;
+
+            csleep(rng.gen_range(100..250)).await;
+
+            print(format!(
+                "{:>12} {} scratchspaces ({:.3} byte)",
+                Paint::green("Deleted").bold(),
+                rng.gen_range(2..10),
+                rng.gen_range(10f32..1000f32)
+            ))
+            .await;
+            newline().await;
+        }
+
         csleep(rng.gen_range(50..250)).await;
 
         newline().await;
