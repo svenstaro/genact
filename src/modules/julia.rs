@@ -219,6 +219,34 @@ impl Module for Julia {
             .await;
             newline().await;
         } else {
+            let old_format = rng.gen::<f32>() < 0.25f32;
+
+            if old_format {
+                print(format!(
+                    "{} The active manifest file at `~/Documents/code/julia/projects/{}.jl/Manifest.toml` has an old format that is being maintained.",
+                    Paint::yellow("┌ Warning:").bold(),
+                    project
+                ))
+                .await;
+                newline().await;
+                print(format!(
+                    "{} To update to the new format run `Pkg.upgrade_manifest()` which will upgrade the format without re-resolving.",
+                    Paint::yellow("│").bold()
+                ))
+                .await;
+                newline().await;
+                print(format!(
+                    "{} {}",
+                    Paint::yellow("└").bold(),
+                    Paint::fixed(
+                        8,
+                        "@ Pkg.Types /builddir/build/BUILD/julia-1.7.3/build/usr/share/julia/stdlib/v1.7/Pkg/src/manifest.jl:287"
+                    )
+                ))
+                .await;
+                newline().await;
+            }
+
             if rng.gen::<f32>() < 0.9f32 {
                 print(format!(
                     "{:>12} `~/Documents/code/julia/projects/{}.jl/Project.toml`",
@@ -246,6 +274,28 @@ impl Module for Julia {
             ))
             .await;
             newline().await;
+
+            if old_format {
+                print(format!(
+                    "{} The active manifest file is an older format with no julia version entry. Dependencies may have been resolved with a different julia version.",
+                    Paint::yellow("┌ Warning:").bold(),
+                ))
+                .await;
+                newline().await;
+                print(format!(
+                    "{} {}",
+                    Paint::yellow("└").bold(),
+                    Paint::fixed(
+                        8,
+                        format!(
+                            "@ ~/Documents/code/julia/projects/{}.jl/Manifest.toml:0",
+                            project
+                        )
+                    )
+                ))
+                .await;
+                newline().await;
+            }
         }
 
         csleep(rng.gen_range(10..100)).await;
