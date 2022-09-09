@@ -1,4 +1,4 @@
-name: Build release binaries (and publish them if this is a tag)
+name: Build/publish release binaries
 
 on: [push, pull_request]
 
