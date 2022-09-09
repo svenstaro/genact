@@ -2,13 +2,30 @@
 use async_trait::async_trait;
 use instant::Instant;
 use rand::prelude::*;
+use std::fmt::Display;
 use yansi::Paint;
 
 use crate::args::AppConfig;
 use crate::data::JULIA_PACKAGES_LIST;
 use crate::generators::gen_hex_string;
-use crate::io::{csleep, cursor_up, dprint, erase_line, newline, print};
+use crate::io::{csleep, cursor_up, dprint, erase_line, newline};
 use crate::modules::Module;
+
+// Redefine a more efficient `crate::io::print` function that doesn't type one character at a time.
+async fn print<S: Into<String>>(s: S) {
+    #[cfg(target_arch = "wasm32")]
+    {
+        write_to_xterm(s.into().as_str());
+    }
+
+    #[cfg(not(target_arch = "wasm32"))]
+    {
+        use std::io::stdout;
+        use std::io::Write;
+        print!("{}", s.into());
+        stdout().flush().unwrap();
+    }
+}
 
 #[derive(Debug)]
 pub struct Package<'a> {
@@ -32,13 +49,15 @@ impl Module for Julia {
     async fn run(&self, appconfig: &AppConfig) {
         let mut rng = thread_rng();
 
-        // Choose `num_packages` packages, non-repeating and in random order
+        // Choose `num_packages` packages and `num_artifacts` artifacts
+        // non-repeating and in random order
         let num_packages = rng.gen_range(10..150);
         let num_artifacts = rng.gen_range(1..10);
-        let all_packages: Vec<_> = JULIA_PACKAGES_LIST
+        let all_packages: Vec<&Package> = JULIA_PACKAGES_LIST
             .choose_multiple(&mut rng, num_packages + num_artifacts)
             .collect();
-        let (chosen_packages, chosen_artifacts) = all_packages.split_at(num_packages);
+        let (packages, artifacts) = all_packages.split_at(num_packages);
+
         // root project of the julia session
         let project = if rng.gen::<f32>() < 0.3f32 {
             "@v1.7"
@@ -46,9 +65,86 @@ impl Module for Julia {
             JULIA_PACKAGES_LIST.choose(&mut rng).unwrap().name
         };
 
-        print(format!(
-            r#"
-               {gu}
+        // julia startup
+        print_banner().await;
+        csleep(rng.gen_range(50..150)).await;
+        print_julia_prompt(false).await;
+
+        // wait user input
+        csleep(rng.gen_range(500..2500)).await;
+
+        // enter pkg mode
+        print_pkg_prompt(project, true).await;
+
+        // wait user input
+        csleep(rng.gen_range(500..1500)).await;
+
+        // type "update" and press enter
+        dprint("up", rng.gen_range(100..500)).await;
+        dprint("date", rng.gen_range(100..500)).await;
+        csleep(rng.gen_range(500..1500)).await;
+        newline().await;
+
+        // wait Pkg.update() startup time
+        csleep(rng.gen_range(200..1000)).await;
+
+        log_action("Updating", "registry at `~/.julia/registries/General.toml`").await;
+        csleep(rng.gen_range(1500..5000)).await;
+
+        log_action("Resolving", "package versions...").await;
+        csleep(rng.gen_range(500..2500)).await;
+
+        install_packages(packages).await;
+
+        csleep(rng.gen_range(250..1000)).await;
+
+        download_artifacts(artifacts).await;
+
+        csleep(rng.gen_range(250..1000)).await;
+
+        update_project_and_manifest(project).await;
+
+        csleep(rng.gen_range(10..100)).await;
+
+        report_packages(packages).await;
+
+        csleep(rng.gen_range(150..500)).await;
+
+        build_artifacts(artifacts).await;
+
+        csleep(rng.gen_range(150..500)).await;
+
+        precompile(packages).await;
+
+        if rng.gen::<f32>() < 0.25f32 {
+            gc().await;
+        }
+
+        csleep(rng.gen_range(50..250)).await;
+
+        print_pkg_prompt(project, false).await;
+
+        // wait user input
+        csleep(rng.gen_range(500..5000)).await;
+
+        // exit pkg mode
+        print_julia_prompt(true).await;
+
+        // wait user input
+        csleep(rng.gen_range(1000..7000)).await;
+
+        // quit julia
+        newline().await;
+
+        if appconfig.should_exit() {
+            return;
+        }
+    }
+}
+
+async fn print_banner() {
+    print(format!(
+        r#"               {gu}
    {bu}       _ {ru}{g}{mu}     |  Documentation: https://docs.julialang.org
   {b}     | {r} {m}    |
    _ _   _| |_  __ _   |  Type "?" for help, "]?" for Pkg help.
@@ -56,479 +152,407 @@ impl Module for Julia {
   | | |_| | | | (_| |  |  Version 1.7.3 (2022-05-06)
  _/ |\__'_|_|_|\__'_|  |  Fedora 35 build
 |__/                   |
-
 "#,
-            r = Paint::red("(_)").bold(),
-            ru = Paint::red("_").bold(),
-            g = Paint::green("(_)").bold(),
-            gu = Paint::green("_").bold(),
-            b = Paint::blue("(_)").bold(),
-            bu = Paint::blue("_").bold(),
-            m = Paint::magenta("(_)").bold(),
-            mu = Paint::magenta("_").bold(),
-        ))
-        .await;
-        print(format!("{}", Paint::green("julia> ").bold())).await;
+        r = Paint::red("(_)").bold(),
+        ru = Paint::red("_").bold(),
+        g = Paint::green("(_)").bold(),
+        gu = Paint::green("_").bold(),
+        b = Paint::blue("(_)").bold(),
+        bu = Paint::blue("_").bold(),
+        m = Paint::magenta("(_)").bold(),
+        mu = Paint::magenta("_").bold(),
+    ))
+    .await;
+}
 
-        csleep(rng.gen_range(500..2500)).await;
-
+async fn print_julia_prompt(overwrite: bool) {
+    if overwrite {
         erase_line().await;
-        print(format!(
-            "{} ",
-            Paint::blue(format!("({}) pkg>", project)).bold()
-        ))
-        .await;
-        csleep(rng.gen_range(500..1500)).await;
-        dprint("update", rng.gen_range(100..500)).await;
+    } else {
         newline().await;
+    }
+    print(format!("{} ", Paint::green("julia>").bold())).await;
+}
 
-        csleep(rng.gen_range(200..1000)).await;
-
-        print(format!(
-            "{:>12} registry at `~/.julia/registries/General.toml`",
-            Paint::green("Updating").bold()
-        ))
-        .await;
+async fn print_pkg_prompt(project: &str, overwrite: bool) {
+    if overwrite {
+        erase_line().await;
+    } else {
         newline().await;
+    }
+    print(format!(
+        "{} ",
+        Paint::blue(format!("({}) pkg>", project)).bold()
+    ))
+    .await;
+}
 
-        csleep(rng.gen_range(1500..5000)).await;
+async fn log_action(action: impl Display, message: impl Display) {
+    print(format!("{:>12} {}", Paint::green(action).bold(), message)).await;
+    newline().await;
+}
 
-        print(format!(
-            "{:>12} package versions...",
-            Paint::green("Resolving").bold()
-        ))
-        .await;
-        newline().await;
+async fn log_progress(bar: &progress_string::Bar) {
+    print(format!("{:>10} {}", Paint::cyan("Progress").bold(), bar)).await;
+    newline().await;
+}
 
-        csleep(rng.gen_range(500..2500)).await;
+async fn install_packages(packages: &[&Package<'_>]) {
+    let mut rng = thread_rng();
 
-        let max_name_length = chosen_packages.iter().map(|p| p.name.len()).max().unwrap();
-        for package in chosen_packages {
-            if rng.gen::<f32>() < 0.1f32 {
-                print(format!(
-                    "{:>12} {name} {empty:─>width$} v{version}",
-                    Paint::green("Installing").bold(),
-                    name = package.name,
-                    width = max_name_length - package.name.len() + 1,
-                    empty = "",
-                    version = package.versions.last().unwrap()
-                ))
-                .await;
-                newline().await;
+    let max_name_length = packages.iter().map(|p| p.name.len()).max().unwrap();
+    for package in packages {
+        let package_and_version = format!(
+            "{name} {empty:─>width$} v{version}",
+            name = package.name,
+            width = max_name_length - package.name.len() + 1,
+            empty = "",
+            version = package.versions.last().unwrap()
+        );
 
-                csleep(rng.gen_range(250..1000)).await;
+        if rng.gen::<f32>() < 0.1f32 {
+            log_action("Installing", &package_and_version).await;
 
-                cursor_up(1).await;
-                erase_line().await;
-            } else {
-                csleep(rng.gen_range(10..100)).await;
-            }
+            csleep(rng.gen_range(250..1000)).await;
 
-            print(format!(
-                "{:>12} {name} {empty:─>width$} v{version}",
-                Paint::green("Installed").bold(),
-                name = package.name,
-                width = max_name_length - package.name.len() + 1,
-                empty = "",
-                version = package.versions.last().unwrap()
-            ))
-            .await;
-            newline().await;
+            cursor_up(1).await;
+            erase_line().await;
+        } else {
+            csleep(rng.gen_range(10..200)).await;
         }
 
-        csleep(rng.gen_range(250..1000)).await;
+        log_action("Installed", &package_and_version).await;
+    }
+}
 
-        for artifact in chosen_artifacts {
-            print(format!(
-                "{:>12} artifact: {name}",
-                Paint::green("Downloading").bold(),
-                name = artifact.name,
-            ))
-            .await;
-            newline().await;
+async fn download_artifacts(artifacts: &[&Package<'_>]) {
+    let mut rng = thread_rng();
 
-            csleep(rng.gen_range(100..150)).await;
+    for artifact in artifacts {
+        csleep(rng.gen_range(50..100)).await;
 
-            let mut bar = progress_string::BarBuilder::new()
-                .total(10000)
-                .width(41)
-                .full_char('=')
-                .include_percent()
-                .get_bar();
+        log_action("Downloading", format!("artifact: {}", artifact.name)).await;
 
+        csleep(rng.gen_range(100..150)).await;
+
+        let mut bar = progress_string::BarBuilder::new()
+            .total(10000)
+            .width(41)
+            .full_char('=')
+            .include_percent()
+            .get_bar();
+
+        print(format!("{:>15} {}", Paint::cyan("Downloading").bold(), bar)).await;
+        newline().await;
+
+        while bar.current_partial < bar.total {
+            let add = rng.gen_range(0..=500.min(bar.total - bar.current_partial));
+            bar.update(add);
+
+            cursor_up(1).await;
+            erase_line().await;
             print(format!("{:>15} {}", Paint::cyan("Downloading").bold(), bar)).await;
             newline().await;
 
-            while bar.current_partial < bar.total {
-                let add = rng.gen_range(0..=500.min(bar.total - bar.current_partial));
-                bar.update(add);
+            csleep(rng.gen_range(50..75)).await;
+        }
+        cursor_up(1).await;
+        erase_line().await;
+        csleep(rng.gen_range(100..200)).await;
+        cursor_up(1).await;
+        erase_line().await;
 
-                cursor_up(1).await;
-                erase_line().await;
-                print(format!("{:>15} {}", Paint::cyan("Downloading").bold(), bar)).await;
-                newline().await;
+        log_action("Downloaded", format!("artifact: {}", artifact.name)).await;
+    }
+}
 
-                csleep(rng.gen_range(50..75)).await;
-            }
+async fn update_project_and_manifest(project: &str) {
+    let mut rng = thread_rng();
 
-            cursor_up(1).await;
-            erase_line().await;
-            csleep(rng.gen_range(100..200)).await;
-            cursor_up(1).await;
-            erase_line().await;
+    let project_path;
+    let manifest_path;
 
+    if let Some(project) = project.strip_prefix('@') {
+        project_path = format!("~/.julia/environments/{}/Project.toml", project);
+        manifest_path = format!("~/.julia/environments/{}/Manifest.toml", project);
+    } else {
+        project_path = format!(
+            "~/Documents/code/julia/projects/{}.jl/Project.toml",
+            project
+        );
+        manifest_path = format!(
+            "~/Documents/code/julia/projects/{}.jl/Manifest.toml",
+            project
+        );
+    }
+
+    let old_format = rng.gen::<f32>() < 0.25f32;
+
+    if old_format {
+        print_old_manifest_format_before(&manifest_path).await;
+    }
+
+    if rng.gen::<f32>() < 0.9f32 {
+        log_action("Updating", format!("`{}`", project_path)).await;
+    } else {
+        log_action("No Changes", format!("to `{}`", project_path)).await;
+    }
+
+    csleep(rng.gen_range(10..100)).await;
+
+    log_action("Updating", format!("`{}`", manifest_path)).await;
+
+    if old_format {
+        print_old_manifest_format_after(&manifest_path).await;
+    }
+}
+
+async fn print_old_manifest_format_before(manifest_path: &str) {
+    print(format!(
+        "{} The active manifest file at `{}` has an old format that is being maintained.",
+        Paint::yellow("┌ Warning:").bold(),
+        manifest_path
+    ))
+    .await;
+    newline().await;
+    print(format!(
+        "{} To update to the new format run `Pkg.upgrade_manifest()` which will upgrade the format without re-resolving.",
+        Paint::yellow("│").bold()
+    ))
+    .await;
+    newline().await;
+    print(format!(
+        "{} {}",
+        Paint::yellow("└").bold(),
+        Paint::fixed(8, "@ Pkg.Types /builddir/build/BUILD/julia-1.7.3/build/usr/share/julia/stdlib/v1.7/Pkg/src/manifest.jl:287")
+    ))
+    .await;
+    newline().await;
+}
+
+async fn print_old_manifest_format_after(manifest_path: &str) {
+    print(format!(
+        "{} The active manifest file is an older format with no julia version entry. Dependencies may have been resolved with a different julia version.",
+        Paint::yellow("┌ Warning:").bold(),
+    ))
+    .await;
+    newline().await;
+    print(format!(
+        "{} {}",
+        Paint::yellow("└").bold(),
+        Paint::fixed(8, format!("@ {}:0", manifest_path))
+    ))
+    .await;
+    newline().await;
+}
+
+async fn report_packages(packages: &[&Package<'_>]) {
+    let mut rng = thread_rng();
+
+    for package in packages {
+        if package.versions.len() > 1 && rng.gen::<f32>() < 0.75f32 {
+            // update package
             print(format!(
-                "{:>12} artifact: {name}",
-                Paint::green("Downloaded").bold(),
-                name = artifact.name,
+                "  {} {}",
+                Paint::fixed(8, format!("[{}]", &package.id[0..8])),
+                Paint::fixed(
+                    11, // bright yellow
+                    format!(
+                        "↑ {} v{} ⇒ v{}",
+                        package.name,
+                        package.versions[rng.gen_range(0..package.versions.len() - 1)],
+                        package.versions.last().unwrap()
+                    )
+                )
             ))
             .await;
             newline().await;
-
-            csleep(rng.gen_range(100..200)).await;
-        }
-
-        csleep(rng.gen_range(250..1000)).await;
-
-        if let Some(project) = project.strip_prefix('@') {
-            if rng.gen::<f32>() < 0.9f32 {
-                print(format!(
-                    "{:>12} `~/.julia/environments/{}/Project.toml`",
-                    Paint::green("Updating").bold(),
-                    project
-                ))
-                .await;
-                newline().await;
-            } else {
-                print(format!(
-                    "{:>12} to `~/.julia/environments/{}/Project.toml`",
-                    Paint::green("No Changes").bold(),
-                    project
-                ))
-                .await;
-                newline().await;
-            }
-
-            csleep(rng.gen_range(10..100)).await;
-
+        } else if rng.gen::<f32>() < 0.9f32 {
+            // add package
             print(format!(
-                "{:>12} `~/.julia/environments/{}/Manifest.toml`",
-                Paint::green("Updating").bold(),
-                project
+                "  {} {}",
+                Paint::fixed(8, format!("[{}]", &package.id[0..8])),
+                Paint::fixed(
+                    10, // bright green
+                    format!("+ {} v{}", package.name, package.versions.last().unwrap())
+                )
             ))
             .await;
             newline().await;
         } else {
-            let old_format = rng.gen::<f32>() < 0.25f32;
-
-            if old_format {
-                print(format!(
-                    "{} The active manifest file at `~/Documents/code/julia/projects/{}.jl/Manifest.toml` has an old format that is being maintained.",
-                    Paint::yellow("┌ Warning:").bold(),
-                    project
-                ))
-                .await;
-                newline().await;
-                print(format!(
-                    "{} To update to the new format run `Pkg.upgrade_manifest()` which will upgrade the format without re-resolving.",
-                    Paint::yellow("│").bold()
-                ))
-                .await;
-                newline().await;
-                print(format!(
-                    "{} {}",
-                    Paint::yellow("└").bold(),
-                    Paint::fixed(
-                        8,
-                        "@ Pkg.Types /builddir/build/BUILD/julia-1.7.3/build/usr/share/julia/stdlib/v1.7/Pkg/src/manifest.jl:287"
-                    )
-                ))
-                .await;
-                newline().await;
-            }
-
-            if rng.gen::<f32>() < 0.9f32 {
-                print(format!(
-                    "{:>12} `~/Documents/code/julia/projects/{}.jl/Project.toml`",
-                    Paint::green("Updating").bold(),
-                    project
-                ))
-                .await;
-                newline().await;
-            } else {
-                print(format!(
-                    "{:>12} to `~/Documents/code/julia/projects/{}.jl/Project.toml`",
-                    Paint::green("No Changes").bold(),
-                    project
-                ))
-                .await;
-                newline().await;
-            }
-
-            csleep(rng.gen_range(10..100)).await;
-
+            // remove package
             print(format!(
-                "{:>12} `~/Documents/code/julia/projects/{}.jl/Manifest.toml`",
-                Paint::green("Updating").bold(),
-                project
+                "  {} {}",
+                Paint::fixed(8, format!("[{}]", &package.id[0..8])),
+                Paint::fixed(
+                    9, // bright red
+                    format!("- {} v{}", package.name, package.versions.last().unwrap())
+                )
             ))
             .await;
             newline().await;
-
-            if old_format {
-                print(format!(
-                    "{} The active manifest file is an older format with no julia version entry. Dependencies may have been resolved with a different julia version.",
-                    Paint::yellow("┌ Warning:").bold(),
-                ))
-                .await;
-                newline().await;
-                print(format!(
-                    "{} {}",
-                    Paint::yellow("└").bold(),
-                    Paint::fixed(
-                        8,
-                        format!(
-                            "@ ~/Documents/code/julia/projects/{}.jl/Manifest.toml:0",
-                            project
-                        )
-                    )
-                ))
-                .await;
-                newline().await;
-            }
         }
 
         csleep(rng.gen_range(10..100)).await;
+    }
+}
 
-        for package in chosen_packages {
-            if package.versions.len() > 1 && rng.gen::<f32>() < 0.75f32 {
-                // update package
-                print(format!(
-                    "  {} {}",
-                    Paint::fixed(8, format!("[{}]", &package.id[0..8])),
-                    Paint::fixed(
-                        11,
-                        format!(
-                            "↑ {} v{} ⇒ v{}",
-                            package.name,
-                            package.versions[rng.gen_range(0..package.versions.len() - 1)],
-                            package.versions.last().unwrap()
-                        )
-                    )
-                ))
-                .await;
-                newline().await;
-            } else if rng.gen::<f32>() < 0.9f32 {
-                // add package
-                print(format!(
-                    "  {} {}",
-                    Paint::fixed(8, format!("[{}]", &package.id[0..8])),
-                    Paint::fixed(
-                        10,
-                        format!("+ {} v{}", package.name, package.versions.last().unwrap())
-                    )
-                ))
-                .await;
-                newline().await;
-            } else {
-                // remove package
-                print(format!(
-                    "  {} {}",
-                    Paint::fixed(8, format!("[{}]", &package.id[0..8])),
-                    Paint::fixed(
-                        9,
-                        format!("- {} v{}", package.name, package.versions.last().unwrap())
-                    )
-                ))
-                .await;
-                newline().await;
-            }
+async fn build_artifacts(artifacts: &[&Package<'_>]) {
+    let mut rng = thread_rng();
 
-            csleep(rng.gen_range(10..100)).await;
-        }
+    let mut bar = progress_string::BarBuilder::new()
+        .total(artifacts.len())
+        .width(41)
+        .full_char('=')
+        .include_numbers()
+        .get_bar();
 
-        csleep(rng.gen_range(150..500)).await;
+    log_progress(&bar).await;
 
-        let mut bar = progress_string::BarBuilder::new()
-            .total(num_artifacts)
-            .width(41)
-            .full_char('=')
-            .include_numbers()
-            .get_bar();
+    let max_name_length = artifacts.iter().map(|p| p.name.len()).max().unwrap();
+    for artifact in artifacts {
+        bar.update(1);
 
-        print(format!("{:>10} {}", Paint::cyan("Progress").bold(), bar)).await;
-        newline().await;
+        cursor_up(1).await;
+        erase_line().await;
 
-        let max_name_length = chosen_artifacts.iter().map(|p| p.name.len()).max().unwrap();
-        for artifact in chosen_artifacts {
-            bar.update(1);
-
-            cursor_up(1).await;
-            erase_line().await;
-
-            print(format!(
-                "{:>12} {name} {empty:─>width$}→ `~/.julia/scratchspaces/{}-{}-{}-{}-{}/{}/build.log`",
-                Paint::green("Building").bold(),
-                gen_hex_string(&mut rng,8),
-                gen_hex_string(&mut rng,4),
-                gen_hex_string(&mut rng,4),
-                gen_hex_string(&mut rng,4),
-                gen_hex_string(&mut rng,12),
-                gen_hex_string(&mut rng,40),
+        log_action(
+            "Building",
+            format!(
+                "{name} {empty:─>width$}→ `~/.julia/scratchspaces/{}-{}-{}-{}-{}/{}/build.log`",
+                gen_hex_string(&mut rng, 8),
+                gen_hex_string(&mut rng, 4),
+                gen_hex_string(&mut rng, 4),
+                gen_hex_string(&mut rng, 4),
+                gen_hex_string(&mut rng, 12),
+                gen_hex_string(&mut rng, 40),
                 name = artifact.name,
                 width = max_name_length - artifact.name.len() + 1,
                 empty = "",
-            ))
-            .await;
-            newline().await;
-
-            print(format!("{:>10} {}", Paint::cyan("Progress").bold(), bar)).await;
-            newline().await;
-
-            csleep(rng.gen_range(500..5000)).await;
-        }
-
-        cursor_up(1).await;
-        erase_line().await;
-
-        csleep(rng.gen_range(150..500)).await;
-
-        let now = Instant::now();
-
-        print(format!(
-            "{:>12} project...",
-            Paint::green("Precompiling").bold()
-        ))
+            ),
+        )
         .await;
-        newline().await;
 
-        let mut bar = progress_string::BarBuilder::new()
-            .total(num_packages)
-            .width(41)
-            .full_char('=')
-            .include_numbers()
-            .get_bar();
+        log_progress(&bar).await;
 
-        print(format!("{:>10} {}", Paint::cyan("Progress").bold(), bar)).await;
-        newline().await;
+        csleep(rng.gen_range(500..5000)).await;
+    }
 
-        for i in 1..=num_packages {
-            bar.replace(i);
+    // erase progress bar
+    cursor_up(1).await;
+    erase_line().await;
+}
 
-            cursor_up(1).await;
-            erase_line().await;
-            print(format!("{:>10} {}", Paint::cyan("Progress").bold(), bar)).await;
-            newline().await;
+async fn precompile(packages: &[&Package<'_>]) {
+    let mut rng = thread_rng();
 
-            csleep(rng.gen_range(50..1000)).await;
-        }
+    let num_packages = packages.len();
 
-        let elapsed = now.elapsed();
-        let seconds = elapsed.as_secs() as f32;
+    let now = Instant::now();
+
+    log_action("Precompiling", "project...").await;
+
+    let mut bar = progress_string::BarBuilder::new()
+        .total(num_packages)
+        .width(41)
+        .full_char('=')
+        .include_numbers()
+        .get_bar();
+
+    log_progress(&bar).await;
+
+    for i in 1..=num_packages {
+        bar.replace(i);
 
         cursor_up(1).await;
         erase_line().await;
-        print(format!(
+        log_progress(&bar).await;
+
+        csleep(rng.gen_range(50..1000)).await;
+    }
+
+    let elapsed = now.elapsed();
+    let seconds = elapsed.as_secs() as f32;
+
+    cursor_up(1).await;
+    erase_line().await;
+    print(format!(
             "  {num_packages} dependencies successfully precompiled in {seconds:.0} seconds ({} already precompiled)",
             rng.gen_range(10..500)
         ))
         .await;
-        newline().await;
+    newline().await;
+}
 
-        if rng.gen::<f32>() < 0.25f32 {
-            csleep(rng.gen_range(50..250)).await;
+async fn gc() {
+    let mut rng = thread_rng();
 
-            print(format!(
-                "{} We haven't cleaned this depot up for a bit, running Pkg.gc()...",
-                Paint::cyan("[ Info:").bold(),
-            ))
-            .await;
-            newline().await;
+    csleep(rng.gen_range(50..250)).await;
 
-            csleep(rng.gen_range(100..250)).await;
+    print(format!(
+        "{} We haven't cleaned this depot up for a bit, running Pkg.gc()...",
+        Paint::cyan("[ Info:").bold(),
+    ))
+    .await;
+    newline().await;
 
-            print(format!(
-                "{:>12} manifest files: {} found",
-                Paint::green("Active").bold(),
-                rng.gen_range(1..10)
-            ))
-            .await;
-            newline().await;
+    csleep(rng.gen_range(100..250)).await;
 
-            csleep(rng.gen_range(100..250)).await;
+    log_action(
+        "Active",
+        format!("manifest files: {} found", rng.gen_range(1..10)),
+    )
+    .await;
 
-            print(format!(
-                "{:>12} artifact files: {} found",
-                Paint::green("Active").bold(),
-                rng.gen_range(10..200)
-            ))
-            .await;
-            newline().await;
+    csleep(rng.gen_range(100..250)).await;
 
-            csleep(rng.gen_range(100..250)).await;
+    log_action(
+        "Active",
+        format!("artifact files: {} found", rng.gen_range(10..200)),
+    )
+    .await;
 
-            print(format!(
-                "{:>12} scratchspaces: {} found",
-                Paint::green("Active").bold(),
-                rng.gen_range(10..20)
-            ))
-            .await;
-            newline().await;
+    csleep(rng.gen_range(100..250)).await;
 
-            csleep(rng.gen_range(100..250)).await;
+    log_action(
+        "Active",
+        format!("scratchspaces: {} found", rng.gen_range(10..20)),
+    )
+    .await;
 
-            print(format!(
-                "{:>12} {} package installations ({:.3} MiB)",
-                Paint::green("Deleted").bold(),
-                rng.gen_range(2..100),
-                rng.gen_range(10f32..250f32)
-            ))
-            .await;
-            newline().await;
+    csleep(rng.gen_range(100..250)).await;
 
-            csleep(rng.gen_range(100..250)).await;
+    log_action(
+        "Deleted",
+        format!(
+            "{} package installations ({:.3} MiB)",
+            rng.gen_range(2..100),
+            rng.gen_range(10f32..250f32)
+        ),
+    )
+    .await;
 
-            print(format!(
-                "{:>12} {} artifact installations ({:.3} MiB)",
-                Paint::green("Deleted").bold(),
-                rng.gen_range(2..10),
-                rng.gen_range(10f32..250f32)
-            ))
-            .await;
-            newline().await;
+    csleep(rng.gen_range(100..250)).await;
 
-            csleep(rng.gen_range(100..250)).await;
+    log_action(
+        "Deleted",
+        format!(
+            "{} artifact installations ({:.3} MiB)",
+            rng.gen_range(2..10),
+            rng.gen_range(10f32..250f32)
+        ),
+    )
+    .await;
 
-            print(format!(
-                "{:>12} {} scratchspaces ({:.3} byte)",
-                Paint::green("Deleted").bold(),
-                rng.gen_range(2..10),
-                rng.gen_range(10f32..1000f32)
-            ))
-            .await;
-            newline().await;
-        }
+    csleep(rng.gen_range(100..250)).await;
 
-        csleep(rng.gen_range(50..250)).await;
-
-        newline().await;
-        print(format!(
-            "{} ",
-            Paint::blue(format!("({}) pkg>", project)).bold()
-        ))
-        .await;
-
-        csleep(rng.gen_range(500..5000)).await;
-
-        erase_line().await;
-        print(format!("{}", Paint::green("julia> ").bold())).await;
-
-        csleep(rng.gen_range(1000..7000)).await;
-
-        newline().await;
-
-        if appconfig.should_exit() {
-            return;
-        }
-    }
+    log_action(
+        "Deleted",
+        format!(
+            "{} scratchspaces ({:.3} byte)",
+            rng.gen_range(2..10),
+            rng.gen_range(10f32..1000f32)
+        ),
+    )
+    .await;
 }
