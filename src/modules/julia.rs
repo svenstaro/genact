@@ -6,7 +6,7 @@ use yansi::Paint;
 
 use crate::args::AppConfig;
 use crate::data::JULIA_PACKAGES_LIST;
-// use crate::generators::gen_package_version;
+use crate::generators::gen_hex_string;
 use crate::io::{csleep, cursor_up, dprint, erase_line, newline, print};
 use crate::modules::Module;
 
@@ -34,9 +34,11 @@ impl Module for Julia {
 
         // Choose `num_packages` packages, non-repeating and in random order
         let num_packages = rng.gen_range(10..150);
-        let chosen_packages: Vec<_> = JULIA_PACKAGES_LIST
-            .choose_multiple(&mut rng, num_packages)
+        let num_artifacts = rng.gen_range(1..10);
+        let all_packages: Vec<_> = JULIA_PACKAGES_LIST
+            .choose_multiple(&mut rng, num_packages + num_artifacts)
             .collect();
+        let (chosen_packages, chosen_artifacts) = all_packages.split_at(num_packages);
         // root project of the julia session
         let project = if rng.gen::<f32>() < 0.3f32 {
             "@v1.7"
@@ -101,7 +103,7 @@ impl Module for Julia {
         csleep(rng.gen_range(500..2500)).await;
 
         let max_name_length = chosen_packages.iter().map(|p| p.name.len()).max().unwrap();
-        for package in &chosen_packages {
+        for package in chosen_packages {
             if rng.gen::<f32>() < 0.1f32 {
                 print(format!(
                     "{:>12} {name} {empty:─>width$} v{version}",
@@ -132,6 +134,58 @@ impl Module for Julia {
             ))
             .await;
             newline().await;
+        }
+
+        csleep(rng.gen_range(250..1000)).await;
+
+        for artifact in chosen_artifacts {
+            print(format!(
+                "{:>12} artifact: {name}",
+                Paint::green("Downloading").bold(),
+                name = artifact.name,
+            ))
+            .await;
+            newline().await;
+
+            csleep(rng.gen_range(100..150)).await;
+
+            let mut bar = progress_string::BarBuilder::new()
+                .total(10000)
+                .width(41)
+                .full_char('=')
+                .include_percent()
+                .get_bar();
+
+            print(format!("{:>15} {}", Paint::cyan("Downloading").bold(), bar)).await;
+            newline().await;
+
+            while bar.current_partial < bar.total {
+                let add = rng.gen_range(0..=500.min(bar.total - bar.current_partial));
+                bar.update(add);
+
+                cursor_up(1).await;
+                erase_line().await;
+                print(format!("{:>15} {}", Paint::cyan("Downloading").bold(), bar)).await;
+                newline().await;
+
+                csleep(rng.gen_range(50..75)).await;
+            }
+
+            cursor_up(1).await;
+            erase_line().await;
+            csleep(rng.gen_range(100..200)).await;
+            cursor_up(1).await;
+            erase_line().await;
+
+            print(format!(
+                "{:>12} artifact: {name}",
+                Paint::green("Downloaded").bold(),
+                name = artifact.name,
+            ))
+            .await;
+            newline().await;
+
+            csleep(rng.gen_range(100..200)).await;
         }
 
         csleep(rng.gen_range(250..1000)).await;
@@ -196,7 +250,7 @@ impl Module for Julia {
 
         csleep(rng.gen_range(10..100)).await;
 
-        for package in &chosen_packages {
+        for package in chosen_packages {
             if package.versions.len() > 1 && rng.gen::<f32>() < 0.75f32 {
                 // update package
                 print(format!(
@@ -245,6 +299,50 @@ impl Module for Julia {
 
         csleep(rng.gen_range(150..500)).await;
 
+        let mut bar = progress_string::BarBuilder::new()
+            .total(num_artifacts)
+            .width(41)
+            .full_char('=')
+            .include_numbers()
+            .get_bar();
+
+        print(format!("{:>10} {}", Paint::cyan("Progress").bold(), bar)).await;
+        newline().await;
+
+        let max_name_length = chosen_artifacts.iter().map(|p| p.name.len()).max().unwrap();
+        for artifact in chosen_artifacts {
+            bar.update(1);
+
+            cursor_up(1).await;
+            erase_line().await;
+
+            print(format!(
+                "{:>12} {name} {empty:─>width$}→ `~/.julia/scratchspaces/{}-{}-{}-{}-{}/{}/build.log`",
+                Paint::green("Building").bold(),
+                gen_hex_string(&mut rng,8),
+                gen_hex_string(&mut rng,4),
+                gen_hex_string(&mut rng,4),
+                gen_hex_string(&mut rng,4),
+                gen_hex_string(&mut rng,12),
+                gen_hex_string(&mut rng,40),
+                name = artifact.name,
+                width = max_name_length - artifact.name.len() + 1,
+                empty = "",
+            ))
+            .await;
+            newline().await;
+
+            print(format!("{:>10} {}", Paint::cyan("Progress").bold(), bar)).await;
+            newline().await;
+
+            csleep(rng.gen_range(500..5000)).await;
+        }
+
+        cursor_up(1).await;
+        erase_line().await;
+
+        csleep(rng.gen_range(150..500)).await;
+
         let now = Instant::now();
 
         print(format!(
@@ -261,7 +359,7 @@ impl Module for Julia {
             .include_numbers()
             .get_bar();
 
-        print(format!("  {} {}", Paint::cyan("Progress").bold(), bar)).await;
+        print(format!("{:>10} {}", Paint::cyan("Progress").bold(), bar)).await;
         newline().await;
 
         for i in 1..=num_packages {
@@ -269,7 +367,7 @@ impl Module for Julia {
 
             cursor_up(1).await;
             erase_line().await;
-            print(format!("  {} {}", Paint::cyan("Progress").bold(), bar)).await;
+            print(format!("{:>10} {}", Paint::cyan("Progress").bold(), bar)).await;
             newline().await;
 
             csleep(rng.gen_range(50..1000)).await;
