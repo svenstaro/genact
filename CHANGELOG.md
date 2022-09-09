@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+- Update deps
+- Fix Docker Hub image publishing
 
 ## [1.0.0] - 2022-09-07
 - Add a bunch more extensions and file formats
