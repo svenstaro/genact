@@ -1,5 +1,6 @@
 //! Module containing functionality for I/O operations.
 
+#[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
 
 use crate::SPEED_FACTOR;
@@ -27,6 +28,7 @@ pub async fn csleep(length: u64) {
     let _ = wasm_bindgen_futures::JsFuture::from(promise).await;
 }
 
+#[cfg(target_arch = "wasm32")]
 #[wasm_bindgen(inline_js = "export function write_to_xterm(s) { window.xterm.write(s) }")]
 extern "C" {
     pub fn write_to_xterm(s: &str);

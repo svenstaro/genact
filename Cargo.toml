@@ -18,33 +18,30 @@ strip = true
 
 [dependencies]
 anyhow = "1"
-async-std = "1"
+async-std = { version = "1", features = ["attributes"] }
 async-trait = "0.1"
-chrono = { version = "0.4", features = ["wasmbind"] }
-console_error_panic_hook = "0.1"
+chrono = { version = "0.4", features = ["clock", "wasmbind"], default-features = false }
 fake = { version = "2.4", features = ["chrono"] }
-futures = "0.3"
 getrandom = { version = "0.2", features = ["js"] }
 humansize = "1"
 humantime = "2"
 instant = { version = "0.1", features = ["now", "wasm-bindgen"] }
-js-sys = "0.3"
 lazy_static = "1.4"
 progress_string = "0.2"
 rand = "0.8"
 rand_distr = "0.4"
 regex = "1.5"
-url = "2.2"
-wasm-bindgen = "0.2"
-wasm-bindgen-futures = "0.4"
 yansi = "0.5"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
-async-std = { version = "1.12", features = ["attributes"] }
 clap = { version = "3.2", features = ["derive", "wrap_help"] }
 ctrlc = { version = "3.2", features = ["termination"] }
 terminal_size = "0.2"
 
-[dependencies.web-sys]
-version = "0.3"
-features = ["Window", "Location", "console"]
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+console_error_panic_hook = "0.1"
+js-sys = "0.3"
+url = "2.2"
+wasm-bindgen = "0.2"
+wasm-bindgen-futures = "0.4"
+web-sys = { version = "0.3", features = ["Window", "Location", "console"] }

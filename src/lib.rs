@@ -4,10 +4,11 @@ mod generators;
 mod io;
 pub mod modules;
 
-use futures::lock::Mutex;
+use std::sync::atomic::{AtomicBool, AtomicU32};
+
+use async_std::sync::Mutex;
 use instant::Instant;
 use rand::prelude::*;
-use std::sync::atomic::{AtomicBool, AtomicU32};
 
 use args::AppConfig;
 use modules::{Module, ALL_MODULES};
