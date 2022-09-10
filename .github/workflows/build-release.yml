@@ -1,4 +1,4 @@
-name: Build/publish release binaries
+name: Build/publish release
 
 on: [push, pull_request]
 
