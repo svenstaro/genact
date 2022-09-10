@@ -59,7 +59,7 @@ impl Module for Julia {
         let (packages, artifacts) = all_packages.split_at(num_packages);
 
         // root project of the julia session
-        let project = if rng.gen::<f32>() < 0.3f32 {
+        let project = if rng.gen_bool(0.3) {
             "@v1.7"
         } else {
             JULIA_PACKAGES_LIST.choose(&mut rng).unwrap().name
@@ -95,31 +95,27 @@ impl Module for Julia {
         csleep(rng.gen_range(500..2500)).await;
 
         install_packages(packages).await;
-
         csleep(rng.gen_range(250..1000)).await;
 
         download_artifacts(artifacts).await;
-
         csleep(rng.gen_range(250..1000)).await;
 
         update_project_and_manifest(project).await;
-
         csleep(rng.gen_range(10..100)).await;
 
         report_packages(packages).await;
-
         csleep(rng.gen_range(150..500)).await;
 
         build_artifacts(artifacts).await;
-
         csleep(rng.gen_range(150..500)).await;
 
         precompile(packages).await;
 
-        if rng.gen::<f32>() < 0.25f32 {
+        if rng.gen_bool(0.25) {
             gc().await;
         }
 
+        // wait cleanup
         csleep(rng.gen_range(50..250)).await;
 
         print_pkg_prompt(project, false).await;
@@ -210,7 +206,7 @@ async fn install_packages(packages: &[&Package<'_>]) {
             version = package.versions.last().unwrap()
         );
 
-        if rng.gen::<f32>() < 0.1f32 {
+        if rng.gen_bool(0.1) {
             log_action("Installing", &package_and_version).await;
 
             csleep(rng.gen_range(250..1000)).await;
@@ -286,13 +282,13 @@ async fn update_project_and_manifest(project: &str) {
         );
     }
 
-    let old_format = rng.gen::<f32>() < 0.25f32;
+    let old_format = rng.gen_bool(0.25);
 
     if old_format {
         print_old_manifest_format_before(&manifest_path).await;
     }
 
-    if rng.gen::<f32>() < 0.9f32 {
+    if rng.gen_bool(0.9) {
         log_action("Updating", format!("`{}`", project_path)).await;
     } else {
         log_action("No Changes", format!("to `{}`", project_path)).await;
@@ -350,7 +346,7 @@ async fn report_packages(packages: &[&Package<'_>]) {
     let mut rng = thread_rng();
 
     for package in packages {
-        if package.versions.len() > 1 && rng.gen::<f32>() < 0.75f32 {
+        if package.versions.len() > 1 && rng.gen_bool(0.75) {
             // update package
             print(format!(
                 "  {} {}",
@@ -367,7 +363,7 @@ async fn report_packages(packages: &[&Package<'_>]) {
             ))
             .await;
             newline().await;
-        } else if rng.gen::<f32>() < 0.9f32 {
+        } else if rng.gen_bool(0.9) {
             // add package
             print(format!(
                 "  {} {}",
