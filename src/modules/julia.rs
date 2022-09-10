@@ -8,24 +8,8 @@ use yansi::Paint;
 use crate::args::AppConfig;
 use crate::data::JULIA_PACKAGES_LIST;
 use crate::generators::gen_hex_string;
-use crate::io::{csleep, cursor_up, dprint, erase_line, newline};
+use crate::io::{csleep, cursor_up, dprint, erase_line, newline, print};
 use crate::modules::Module;
-
-// Redefine a more efficient `crate::io::print` function that doesn't type one character at a time.
-async fn print<S: Into<String>>(s: S) {
-    #[cfg(target_arch = "wasm32")]
-    {
-        write_to_xterm(s.into().as_str());
-    }
-
-    #[cfg(not(target_arch = "wasm32"))]
-    {
-        use std::io::stdout;
-        use std::io::Write;
-        print!("{}", s.into());
-        stdout().flush().unwrap();
-    }
-}
 
 #[derive(Debug)]
 pub struct Package<'a> {
