@@ -1,5 +1,5 @@
-import { write_to_xterm } from './snippets/genact-a7b705a8734f3050/inline0.js';
-import * as __wbg_star0 from './snippets/genact-a7b705a8734f3050/inline1.js';
+import { write_to_xterm } from './snippets/genact-609ff540363706ab/inline0.js';
+import * as __wbg_star0 from './snippets/genact-609ff540363706ab/inline1.js';
 
 let wasm;
 
@@ -321,7 +321,7 @@ function getImports() {
         const ret = getObject(arg0).then(getObject(arg1), getObject(arg2));
         return addHeapObject(ret);
     };
-    imports.wbg.__wbg_writetoxterm_5c2c927d40c389c9 = function(arg0, arg1) {
+    imports.wbg.__wbg_writetoxterm_615ee5a14c9e0c07 = function(arg0, arg1) {
         write_to_xterm(getStringFromWasm0(arg0, arg1));
     };
     imports.wbg.__wbg_setTimeout_b9c1670391a219b8 = function() { return handleError(function (arg0, arg1, arg2) {
@@ -473,11 +473,11 @@ function getImports() {
         const ret = getObject(arg0) instanceof Window;
         return ret;
     };
-    imports.wbg.__wbindgen_closure_wrapper730 = function(arg0, arg1, arg2) {
+    imports.wbg.__wbindgen_closure_wrapper728 = function(arg0, arg1, arg2) {
         const ret = makeMutClosure(arg0, arg1, 89, __wbg_adapter_22);
         return addHeapObject(ret);
     };
-    imports['./snippets/genact-a7b705a8734f3050/inline1.js'] = __wbg_star0;
+    imports['./snippets/genact-609ff540363706ab/inline1.js'] = __wbg_star0;
 
     return imports;
 }
@@ -509,7 +509,7 @@ function initSync(bytes) {
 
 async function init(input) {
     if (typeof input === 'undefined') {
-        input = new URL('genact-a687b37cff72f043_bg.wasm', import.meta.url);
+        input = new URL('genact-273039cc4c5fcf46_bg.wasm', import.meta.url);
     }
     const imports = getImports();
 
