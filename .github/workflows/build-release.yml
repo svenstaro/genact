@@ -114,12 +114,16 @@ jobs:
         uses: taiki-e/install-action@parse-changelog
 
       - name: Get CHANGELOG entry
-        id: changelog_reader
-        run: |
-          parse-changelog CHANGELOG.md ${{ steps.extract_version.outputs.version }} > changelog-entry
-          [[ -s changelog-entry ]] && echo "::set-output name=changelog-entry::$(cat changelog-entry)"
-        if: startsWith(github.ref_name, 'v') && github.ref_type == 'tag' && matrix.target != 'wasm32-unknown-unknown'
+        run: parse-changelog CHANGELOG.md ${{ steps.extract_version.outputs.version }} | tee changelog_entry
+        if: startsWith(github.ref_name, 'v') && github.ref_type == 'tag'
         shell: bash
+
+      - name: Read changelog entry from file
+        id: changelog_entry
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./changelog_entry
+        if: startsWith(github.ref_name, 'v') && github.ref_type == 'tag'
 
       - name: Release
         uses: svenstaro/upload-release-action@v2
@@ -128,7 +132,7 @@ jobs:
           file: target/${{ matrix.target }}/release/genact${{ env.EXE }}
           tag: ${{ github.ref_name }}
           asset_name: genact-${{ steps.extract_version.outputs.version }}-${{ matrix.target }}${{ env.EXE }}
-          body: ${{ steps.changelog_reader.outputs.changelog-entry }}
+          body: ${{ steps.changelog_entry.outputs.content }}
         if: startsWith(github.ref_name, 'v') && github.ref_type == 'tag' && matrix.target != 'wasm32-unknown-unknown'
 
       - name: Deploy
