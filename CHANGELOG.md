@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased] - ReleaseDate
 - Use less CPU when printing large strings
+- Improve release flow
 
 ## [1.0.1] - 2022-09-09
 - Update deps
