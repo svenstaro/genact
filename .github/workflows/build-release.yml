@@ -146,7 +146,7 @@ jobs:
     name: Publish images
     runs-on: ubuntu-latest
     needs: publish
-    if: ${{ github.event.repository.default_branch == github.ref_name }}
+    if: (startsWith(github.ref_name, 'v') && github.ref_type == 'tag') || github.event.repository.default_branch == github.ref_name
 
     steps:
       - name: Checkout code
