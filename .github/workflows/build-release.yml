@@ -146,6 +146,7 @@ jobs:
     name: Publish images
     runs-on: ubuntu-latest
     needs: publish
+    if: ${{ github.event.repository.default_branch == github.ref_name }}
 
     steps:
       - name: Checkout code
