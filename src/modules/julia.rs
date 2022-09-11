@@ -52,13 +52,15 @@ impl Module for Julia {
         // julia startup
         print_banner().await;
         csleep(rng.gen_range(50..150)).await;
-        print_julia_prompt(false).await;
+        newline().await;
+        print_julia_prompt().await;
 
         // wait user input
         csleep(rng.gen_range(500..2500)).await;
 
         // enter pkg mode
-        print_pkg_prompt(project, true).await;
+        erase_line().await;
+        print_pkg_prompt(project).await;
 
         // wait user input
         csleep(rng.gen_range(500..1500)).await;
@@ -102,13 +104,15 @@ impl Module for Julia {
         // wait cleanup
         csleep(rng.gen_range(50..250)).await;
 
-        print_pkg_prompt(project, false).await;
+        newline().await;
+        print_pkg_prompt(project).await;
 
         // wait user input
         csleep(rng.gen_range(500..5000)).await;
 
         // exit pkg mode
-        print_julia_prompt(true).await;
+        erase_line().await;
+        print_julia_prompt().await;
 
         // wait user input
         csleep(rng.gen_range(1000..7000)).await;
@@ -145,21 +149,11 @@ async fn print_banner() {
     .await;
 }
 
-async fn print_julia_prompt(overwrite: bool) {
-    if overwrite {
-        erase_line().await;
-    } else {
-        newline().await;
-    }
+async fn print_julia_prompt() {
     print(format!("{} ", Paint::green("julia>").bold())).await;
 }
 
-async fn print_pkg_prompt(project: &str, overwrite: bool) {
-    if overwrite {
-        erase_line().await;
-    } else {
-        newline().await;
-    }
+async fn print_pkg_prompt(project: &str) {
     print(format!(
         "{} ",
         Paint::blue(format!("({}) pkg>", project)).bold()
