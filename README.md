@@ -112,7 +112,7 @@ Then, just clone it like usual and `cargo run` to get output:
 This is mostly a note for me on how to release this thing:
 
 - Make sure `CHANGELOG.md` is up to date.
-- `cargo release --dry-run`
-- `cargo release`
+- `cargo release <version>`
+- `cargo release --execute <version>`
 - Releases will automatically be deployed by GitHub Actions.
 - Update Arch package.
