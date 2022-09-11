@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.0.0] - 2022-09-07
 - Add a bunch more extensions and file formats
-- Add rkhunter module [#381](https://github.com/svenstaro/genact/pull/381)
+- Add rkhunter module [#381](https://github.com/svenstaro/genact/pull/381) (thanks @Kovah)
 
 ## [0.12.0] - 2022-02-21
 - Add Ansible module [#301](https://github.com/svenstaro/genact/issues/301)
