@@ -114,5 +114,5 @@ This is mostly a note for me on how to release this thing:
 - Make sure `CHANGELOG.md` is up to date.
 - `cargo release --dry-run`
 - `cargo release`
-- Releases will automatically be deployed by Github Actions.
+- Releases will automatically be deployed by GitHub Actions.
 - Update Arch package.
