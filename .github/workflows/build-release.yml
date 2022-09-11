@@ -152,35 +152,35 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Download artifact aarch64-unknown-linux-gnu
+      - name: Download artifact aarch64-unknown-linux-musl
         uses: actions/download-artifact@v3
         with:
-          name: aarch64-unknown-linux-gnu
-          path: target/aarch64-unknown-linux-gnu/release
+          name: aarch64-unknown-linux-musl
+          path: target/aarch64-unknown-linux-musl/release
 
-      - name: Download artifact x86_64-unknown-linux-gnu
+      - name: Download artifact x86_64-unknown-linux-musl
         uses: actions/download-artifact@v3
         with:
-          name: x86_64-unknown-linux-gnu
-          path: target/x86_64-unknown-linux-gnu/release
+          name: x86_64-unknown-linux-musl
+          path: target/x86_64-unknown-linux-musl/release
 
-      - name: Download artifact armv7-unknown-linux-gnueabihf
+      - name: Download artifact armv7-unknown-linux-musleabihf
         uses: actions/download-artifact@v3
         with:
-          name: armv7-unknown-linux-gnueabihf
-          path: target/armv7-unknown-linux-gnueabihf/release
+          name: armv7-unknown-linux-musleabihf
+          path: target/armv7-unknown-linux-musleabihf/release
 
       - name: podman login
         run: podman login --username ${{ secrets.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_TOKEN }} docker.io
 
       - name: podman build linux/arm64
-        run: podman build --format docker --platform linux/arm64/v8 --manifest genact -f Containerfile target/aarch64-unknown-linux-gnu/release
+        run: podman build --format docker --platform linux/arm64/v8 --manifest genact -f Containerfile target/aarch64-unknown-linux-musl/release
 
       - name: podman build linux/amd64
-        run: podman build --format docker --platform linux/amd64 --manifest genact -f Containerfile target/x86_64-unknown-linux-gnu/release
+        run: podman build --format docker --platform linux/amd64 --manifest genact -f Containerfile target/x86_64-unknown-linux-musl/release
 
       - name: podman build linux/arm
-        run: podman build --format docker --platform linux/arm/v7 --manifest genact -f Containerfile target/armv7-unknown-linux-gnueabihf/release
+        run: podman build --format docker --platform linux/arm/v7 --manifest genact -f Containerfile target/armv7-unknown-linux-musleabihf/release
 
       - run: podman manifest inspect genact
 

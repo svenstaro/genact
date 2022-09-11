@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+- Use musl binaries inside container image
 
 ## [1.0.2] - 2022-09-10
 - Use less CPU when printing large strings
