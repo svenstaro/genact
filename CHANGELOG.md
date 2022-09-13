@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.1.0] - 2022-09-13
 - Use musl binaries inside container image
-- Add julia module [#392](https://github.com/svenstaro/genact/pull/392) (thanks @FedoricoStra)
+- Add julia module [#392](https://github.com/svenstaro/genact/pull/392) (thanks @FedericoStra)
 - Fix wasm version
 
 ## [1.0.2] - 2022-09-10
