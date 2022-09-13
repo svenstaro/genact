@@ -14,7 +14,9 @@ edition = "2018"
 lto = true
 opt-level = 'z'
 codegen-units = 1
-strip = true
+
+# We can't set strip = true because of https://github.com/rust-lang/rust/issues/93294
+strip = "debuginfo"
 
 [dependencies]
 anyhow = "1"
