@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased] - ReleaseDate
 - Fixed julia module logo in web version [#400](https://github.com/svenstaro/genact/pull/392) (thanks @FedericoStra)
+- Update deps
 
 ## [1.1.0] - 2022-09-13
 - Use musl binaries inside container image
