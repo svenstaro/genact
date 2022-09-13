@@ -1,7 +1,6 @@
 //! Petend to do some downloading
 use async_trait::async_trait;
-use file_size_opts::FileSizeOpts;
-use humansize::{file_size_opts, FileSize};
+use humansize::{format_size, FormatSizeOptions};
 use humantime::format_duration;
 use rand::prelude::*;
 use std::cmp::max;
@@ -84,27 +83,22 @@ impl Module for Download {
 
                 erase_line().await;
                 progress_bar.replace(bytes_downloaded as usize);
-                let size_opts = FileSizeOpts {
-                    space: false,
-                    ..file_size_opts::BINARY
-                };
-                let speed_opts = FileSizeOpts {
-                    space: false,
-                    suffix: "/s",
-                    ..file_size_opts::BINARY
-                };
+                let size_opts = FormatSizeOptions::from(humansize::BINARY).space_after_value(false);
+                let speed_opts = FormatSizeOptions::from(humansize::BINARY)
+                    .space_after_value(false)
+                    .suffix("/s");
 
                 print(format!(
-                    "{file_name:<file_name_width$} {percent:>4.0}%{progress_bar} {bytes_downloaded:<10} {download_speed:<12} eta {eta:<10}",
-                    file_name = file_name.chars().take(file_name_width).collect::<String>(),
-                    percent = percent,
-                    progress_bar = progress_bar,
-                    bytes_downloaded = bytes_incoming.file_size(size_opts).unwrap(),
-                    download_speed = actual_download_speed.file_size(speed_opts).unwrap(),
-                    eta = format_duration(eta),
-                    file_name_width = file_name_width,
-            ))
-                .await;
+                        "{file_name:<file_name_width$} {percent:>4.0}%{progress_bar} {bytes_downloaded:<10} {download_speed:<12} eta {eta:<10}",
+                        file_name = file_name.chars().take(file_name_width).collect::<String>(),
+                        percent = percent,
+                        progress_bar = progress_bar,
+                        bytes_downloaded = format_size(bytes_incoming, size_opts),
+                        download_speed = format_size(actual_download_speed, speed_opts),
+                        eta = format_duration(eta),
+                        file_name_width = file_name_width,
+                        ))
+                    .await;
                 csleep(sleep_millis).await;
 
                 bytes_downloaded += bytes_incoming;
