@@ -128,14 +128,14 @@ impl Module for Julia {
 
 async fn print_banner() {
     print(format!(
-        r#"               {gu}
-   {bu}       _ {ru}{g}{mu}     |  Documentation: https://docs.julialang.org
-  {b}     | {r} {m}    |
-   _ _   _| |_  __ _   |  Type "?" for help, "]?" for Pkg help.
-  | | | | | | |/ _` |  |
-  | | |_| | | | (_| |  |  Version 1.7.3 (2022-05-06)
- _/ |\__'_|_|_|\__'_|  |  Fedora 35 build
-|__/                   |
+        r#"               {gu}{cr}
+   {bu}       _ {ru}{g}{mu}     |  Documentation: https://docs.julialang.org{cr}
+  {b}     | {r} {m}    |{cr}
+   _ _   _| |_  __ _   |  Type "?" for help, "]?" for Pkg help.{cr}
+  | | | | | | |/ _` |  |{cr}
+  | | |_| | | | (_| |  |  Version 1.7.3 (2022-05-06){cr}
+ _/ |\__'_|_|_|\__'_|  |  Fedora 35 build{cr}
+|__/                   |{cr}
 "#,
         r = Paint::red("(_)").bold(),
         ru = Paint::red("_").bold(),
@@ -145,6 +145,7 @@ async fn print_banner() {
         bu = Paint::blue("_").bold(),
         m = Paint::magenta("(_)").bold(),
         mu = Paint::magenta("_").bold(),
+        cr = '\r',
     ))
     .await;
 }
