@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased] - ReleaseDate
 - Use musl binaries inside container image
 - Add julia module [#392](https://github.com/svenstaro/genact/pull/392) (thanks @FedoricoStra)
+- Fix wasm version
 
 ## [1.0.2] - 2022-09-10
 - Use less CPU when printing large strings
