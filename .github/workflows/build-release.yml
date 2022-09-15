@@ -182,8 +182,6 @@ jobs:
       - name: podman build linux/arm
         run: podman build --format docker --platform linux/arm/v7 --manifest genact -f Containerfile target/armv7-unknown-linux-musleabihf/release
 
-      - run: podman manifest inspect genact
-
       - name: podman manifest push latest
         run: podman manifest push genact docker.io/svenstaro/genact:latest
 
