@@ -49,3 +49,42 @@ pub static EXTENSIONS_LIST: &[&str] = &[
 
 pub static COMPRESSION_FORMATS_LIST: &[&str] =
     &["gzip", "bzip2", "lzma", "xz", "lzop", "lz4", "zstd"];
+
+pub static PASSWORDS_AND_HASHES_LIST: &[(&str, &str)] = &[
+    (
+        "password",
+        "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+    ),
+    (
+        "welcome",
+        "280d44ab1e9f79b5cce2dd4f58f5fe91f0fbacdac9f7447dffc318ceb79f2d02",
+    ),
+    (
+        "qwerty",
+        "65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5",
+    ),
+    (
+        "monkey",
+        "000c285457fc971f862a79b786476c78812c8897063c6fa9c045f579a3b2d63f",
+    ),
+    (
+        "jesus",
+        "a54e71f0e17f5aaf7946e66ab42cf3b1fd4e61d60581736c9f0eb1c3f794eb7c",
+    ),
+    (
+        "love",
+        "686f746a95b6f836d7d70567c302c3f9ebb5ee0def3d1220ee9d4e9f34f5e131",
+    ),
+    (
+        "money",
+        "8d2ac8b58ead9744d77286de9b0bcb7a894f238c3149fc9f3b1e3caff36330fe",
+    ),
+    (
+        "freedom",
+        "13b1f7ec5beaefc781e43a3b344371cd49923a8a05edd71844b92f56f6a08d38",
+    ),
+    (
+        "ninja",
+        "54482595177116e6103b076dbf30648e5d0537dd1ed9cf5ae4562fa8a700d47b",
+    ),
+];
