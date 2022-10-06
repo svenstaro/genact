@@ -36,7 +36,7 @@ regex = "1.5"
 yansi = "0.5"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
-clap = { version = "3.2", features = ["derive", "wrap_help"] }
+clap = { version = "4.0", features = ["derive", "wrap_help"] }
 ctrlc = { version = "3.2", features = ["termination"] }
 terminal_size = "0.2"
 
