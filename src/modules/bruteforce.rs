@@ -18,9 +18,11 @@ impl Module for Bruteforce {
     fn name(&self) -> &'static str {
         "bruteforce"
     }
+    
     fn signature(&self) -> String {
         "./bruteforce.sh".to_string()
     }
+    
     async fn run(&self, app_config: &AppConfig) {
         let mut rng = rand::thread_rng();
         let (password, hash_str) = *PASSWORDS_AND_HASHES_LIST.choose(&mut rng).unwrap();
