@@ -3,6 +3,7 @@ use std::str::from_utf8;
 
 use async_trait::async_trait;
 use fake::{faker::name::raw::FirstName, locales::EN, Fake};
+use rand::Rng;
 use sha2::{Digest, Sha256};
 use yansi::Paint;
 
@@ -25,7 +26,11 @@ impl Module for Bruteforce {
 
     async fn run(&self, app_config: &AppConfig) {
         let mut rng = rand::thread_rng();
-        let password = &FirstName(EN).fake::<&str>().to_lowercase();
+        let password = &format!(
+            "{}{:02}",
+            FirstName(EN).fake::<&str>().to_lowercase(),
+            rng.gen_range(0..99)
+        );
         let hash_str: &str = &sha256(password);
 
         print(format!("SHA256 value: {hash_str}",)).await;
