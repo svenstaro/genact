@@ -33,6 +33,7 @@ progress_string = "0.2"
 rand = "0.8"
 rand_distr = "0.4"
 regex = "1.5"
+sha2 = "0.10.6"
 yansi = "0.5"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]

@@ -2,11 +2,11 @@
 use std::str::from_utf8;
 
 use async_trait::async_trait;
-use rand::seq::SliceRandom;
+use fake::{faker::name::raw::FirstName, locales::EN, Fake};
+use sha2::{Digest, Sha256};
 use yansi::Paint;
 
 use crate::args::AppConfig;
-use crate::data::PASSWORDS_AND_HASHES_LIST;
 use crate::generators::gen_hex_string;
 use crate::io::{csleep, newline, print};
 use crate::modules::Module;
@@ -18,14 +18,15 @@ impl Module for Bruteforce {
     fn name(&self) -> &'static str {
         "bruteforce"
     }
-    
+
     fn signature(&self) -> String {
         "./bruteforce.sh".to_string()
     }
-    
+
     async fn run(&self, app_config: &AppConfig) {
         let mut rng = rand::thread_rng();
-        let (password, hash_str) = *PASSWORDS_AND_HASHES_LIST.choose(&mut rng).unwrap();
+        let password = &FirstName(EN).fake::<&str>().to_lowercase();
+        let hash_str: &str = &sha256(password);
 
         print(format!("SHA256 value: {hash_str}",)).await;
         newline().await;
@@ -105,6 +106,14 @@ impl Module for Bruteforce {
         print(format!("+ Match found -- the password is \"{password}\"")).await;
         newline().await;
     }
+}
+
+// get the SHA256 string for a str
+fn sha256(s: &str) -> String {
+    let mut hasher = Sha256::new();
+    hasher.update(&s);
+    let result_bytes = hasher.finalize();
+    format!("{:x}", result_bytes)
 }
 
 // color a string rainbow
