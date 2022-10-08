@@ -113,7 +113,7 @@ impl Module for Bruteforce {
     }
 }
 
-// get the SHA256 string for a str
+// Get the SHA256 string for a str
 fn sha256(s: &str) -> String {
     let mut hasher = Sha256::new();
     hasher.update(&s);
@@ -121,35 +121,30 @@ fn sha256(s: &str) -> String {
     format!("{:x}", result_bytes)
 }
 
-// color a string rainbow
+// Color a string rainbow
 fn rainbow(s: &str) -> String {
     use std::fmt::Write;
 
-    // Need to split chars by bytes
-    debug_assert!(s.is_ascii());
-
-    static RAINBOW_COLORS: &[yansi::Color] = &[
-        yansi::Color::Red,
-        yansi::Color::Yellow,
-        yansi::Color::Green,
-        yansi::Color::Cyan,
-        yansi::Color::Blue,
-        yansi::Color::Magenta,
-    ];
-
     let len = s.len();
-    let colors = RAINBOW_COLORS.len();
-
-    let bytes: Vec<_> = s.bytes().collect();
+    let colors = colorgrad::sinebow().colors(len);
     let mut ret = String::new();
 
-    // split the string and apply colors
-    for (i, c) in RAINBOW_COLORS.iter().enumerate() {
-        let start = i * len / colors;
-        let end = (i + 1) * len / colors;
-        let s = from_utf8(&bytes[start..end]).unwrap();
-        write!(ret, "{}", Paint::new(s).fg(*c)).unwrap();
+    // apply colors to each characters
+    for (color, ch) in colors.into_iter().zip(s.chars()) {
+        let approx = approx_color(color);
+        write!(ret, "{}", Paint::new(ch).fg(approx)).unwrap();
     }
 
     ret
+}
+
+// Approximate RGB with ANSI 216 colors
+fn approx_color(c: colorgrad::Color) -> yansi::Color {
+    // 6 × 6 × 6 cube (216 colors): 16 + 36 × r + 6 × g + b (0 ≤ r, g, b ≤ 5)
+
+    let r = (c.r * 5.).round() as u8;
+    let g = (c.g * 5.).round() as u8;
+    let b = (c.b * 5.).round() as u8;
+
+    yansi::Color::Fixed(16 + 36 * r + 6 * g + b)
 }

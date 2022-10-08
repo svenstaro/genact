@@ -23,6 +23,7 @@ anyhow = "1"
 async-std = { version = "1", features = ["attributes"] }
 async-trait = "0.1"
 chrono = { version = "0.4", features = ["clock", "wasmbind"], default-features = false }
+colorgrad = "0.6.1"
 fake = { version = "2.4", features = ["chrono"] }
 getrandom = { version = "0.2", features = ["js"] }
 humansize = "2"
