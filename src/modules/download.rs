@@ -60,7 +60,7 @@ impl Module for Download {
                 .total(file_bytes as usize)
                 .full_char('=')
                 .width(full_progress_bar_size)
-                .get_bar();
+                .build();
 
             let mut bytes_downloaded = 0u64;
             loop {

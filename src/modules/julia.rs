@@ -215,7 +215,7 @@ async fn download_artifacts(artifacts: &[&Package<'_>]) {
             .width(41)
             .full_char('=')
             .include_percent()
-            .get_bar();
+            .build();
 
         print(format!("{:>15} {}", Paint::cyan("Downloading").bold(), bar)).await;
         newline().await;
@@ -380,7 +380,7 @@ async fn build_artifacts(artifacts: &[&Package<'_>]) {
         .width(41)
         .full_char('=')
         .include_numbers()
-        .get_bar();
+        .build();
 
     log_progress(&bar).await;
 
@@ -432,7 +432,7 @@ async fn precompile(packages: &[&Package<'_>]) {
         .width(41)
         .full_char('=')
         .include_numbers()
-        .get_bar();
+        .build();
 
     log_progress(&bar).await;
 

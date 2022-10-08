@@ -1,5 +1,5 @@
 #[cfg(not(target_arch = "wasm32"))]
-use clap::Parser;
+use clap::{builder::PossibleValuesParser, Parser};
 
 use crate::modules::ALL_MODULES;
 
@@ -30,19 +30,19 @@ pub struct AppConfig {
     pub list_modules_and_exit: bool,
 
     /// Run only these modules
-    #[clap(short, long, possible_values = ALL_MODULES.keys().cloned().collect::<Vec<_>>())]
+    #[clap(short, long, value_parser = PossibleValuesParser::new(&ALL_MODULES.keys().cloned().collect::<Vec<_>>()))]
     pub modules: Vec<String>,
 
     /// Global speed factor
-    #[clap(short, long, default_value = "1", parse(try_from_str = parse_speed_factor))]
+    #[clap(short, long, default_value = "1", value_parser = parse_speed_factor)]
     pub speed_factor: f32,
 
     /// Exit after running for this long (format example: 2h10min)
-    #[clap(long, parse(try_from_str = humantime::parse_duration))]
+    #[clap(long, value_parser = humantime::parse_duration)]
     pub exit_after_time: Option<instant::Duration>,
 
     /// Exit after running this many modules
-    #[clap(long, parse(try_from_str = parse_min_1))]
+    #[clap(long, value_parser = parse_min_1)]
     pub exit_after_modules: Option<u32>,
 }
 
