@@ -27,7 +27,7 @@ impl Module for Bruteforce {
     async fn run(&self, app_config: &AppConfig) {
         let mut rng = rand::thread_rng();
 
-        let n_parallel = rng.gen_range(2..5);
+        let n_parallel = rng.gen_range(2..10);
         let pass_hash_pairs: Vec<_> = std::iter::repeat_with(|| gen_pass_and_hash(&mut rng))
             .take(n_parallel)
             .collect();
@@ -95,7 +95,7 @@ impl Module for Bruteforce {
                 }
 
                 for (i, a_guesser) in guessers.iter_mut().enumerate() {
-                    a_guesser.run_guess();
+                    a_guesser.tick_guess();
                     print(format!("\r :: {a_guesser} ::")).await;
 
                     // Do not append new line to the final line
@@ -178,33 +178,26 @@ struct HashGuesser {
 
 impl HashGuesser {
     fn new(hash: &str) -> Self {
-        // the hash string must only contains lowercase hex characters
-        debug_assert!(hash
-            .chars()
-            .all(|c| c.is_ascii_hexdigit() && !c.is_ascii_uppercase()));
+        // NOTE: the hash string must only contains lowercase hex characters
 
         Self {
             hash: hash.bytes().collect(),
-            guesses: vec![], // will be set by run_guess
+            guesses: vec![], // will be set by tick_guess
             progress: 0,
             len: hash.len(),
             rng: rand::thread_rng(),
         }
     }
 
-    fn update_progress(&mut self) {
-        let progress = &mut self.progress;
-        while *progress < self.len && self.guesses[*progress] == self.hash[*progress] {
-            *progress += 1;
-        }
-    }
-
-    fn run_guess(&mut self) {
+    fn tick_guess(&mut self) {
         if !self.completed() {
             self.guesses = gen_hex_string(&mut self.rng, self.len as u64)
                 .bytes()
                 .collect();
-            self.update_progress();
+
+            while !self.completed() && self.guesses[self.progress] == self.hash[self.progress] {
+                self.progress += 1;
+            }
         }
     }
 
