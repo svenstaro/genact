@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+
+## [1.2.0] - 2022-10-09
 - Add bruteforce module [#408](https://github.com/svenstaro/genact/pull/408) (thanks @equal-l2)
 
 ## [1.1.1] - 2022-09-13
@@ -54,7 +56,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Rewrite web version using wasm-bindgen
 
 <!-- next-url -->
-[Unreleased]: https://github.com/svenstaro/genact/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/svenstaro/genact/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/svenstaro/genact/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/svenstaro/genact/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/svenstaro/genact/compare/v1.0.2...v1.1.0
 [1.0.2]: https://github.com/svenstaro/genact/compare/v1.0.1...v1.0.2
