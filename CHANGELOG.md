@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+- Add bruteforce module [#408](https://github.com/svenstaro/genact/pull/408) (thanks @equal-l2)
 
 ## [1.1.1] - 2022-09-13
 - Fixed julia module logo in web version [#400](https://github.com/svenstaro/genact/pull/392) (thanks @FedericoStra)
