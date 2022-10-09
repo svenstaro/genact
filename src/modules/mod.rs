@@ -1,6 +1,7 @@
 pub mod ansible;
 pub mod bootlog;
 pub mod botnet;
+pub mod bruteforce;
 pub mod cargo;
 pub mod cc;
 pub mod composer;
@@ -34,12 +35,13 @@ lazy_static::lazy_static! {
         all_modules.insert("ansible", Box::new(ansible::Ansible));
         all_modules.insert("bootlog", Box::new(bootlog::Bootlog));
         all_modules.insert("botnet", Box::new(botnet::Botnet));
+        all_modules.insert("bruteforce", Box::new(bruteforce::Bruteforce));
         all_modules.insert("cargo", Box::new(cargo::Cargo));
         all_modules.insert("cc", Box::new(cc::Cc));
         all_modules.insert("composer", Box::new(composer::Composer));
         all_modules.insert("cryptomining", Box::new(cryptomining::Crytomining));
-        all_modules.insert("docker_image_rm", Box::new(docker_image_rm::DockerImageRm));
         all_modules.insert("docker_build", Box::new(docker_build::DockerBuild));
+        all_modules.insert("docker_image_rm", Box::new(docker_image_rm::DockerImageRm));
         all_modules.insert("download", Box::new(download::Download));
         all_modules.insert("julia", Box::new(julia::Julia));
         all_modules.insert("kernel_compile", Box::new(kernel_compile::KernelCompile));
