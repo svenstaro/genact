@@ -3,13 +3,13 @@ use std::str::from_utf8;
 
 use async_trait::async_trait;
 use fake::{faker::name::raw::FirstName, locales::EN, Fake};
-use rand::Rng;
+use rand::{rngs::ThreadRng, Rng};
 use sha2::{Digest, Sha256};
 use yansi::Paint;
 
 use crate::args::AppConfig;
 use crate::generators::gen_hex_string;
-use crate::io::{csleep, newline, print};
+use crate::io::{csleep, cursor_up, newline, print};
 use crate::modules::Module;
 
 pub struct Bruteforce;
@@ -21,25 +21,30 @@ impl Module for Bruteforce {
     }
 
     fn signature(&self) -> String {
-        "./bruteforce.sh".to_string()
+        "./bruteforce.sh ./hashes.txt".to_string()
     }
 
     async fn run(&self, app_config: &AppConfig) {
         let mut rng = rand::thread_rng();
-        let password = &format!(
-            "{}{:02}",
-            FirstName(EN).fake::<&str>().to_lowercase(),
-            rng.gen_range(0..99)
-        );
-        let hash_str: &str = &sha256(password);
 
-        print(format!("SHA256 value: {hash_str}",)).await;
+        let n_parallel = rng.gen_range(2..5);
+        let pass_hash_pairs: Vec<_> = std::iter::repeat_with(|| gen_pass_and_hash(&mut rng))
+            .take(n_parallel)
+            .collect();
+
+        print("=> Hashes to decrypt").await;
         newline().await;
+        csleep(500).await;
+
+        for (_, hash) in &pass_hash_pairs {
+            print(format!("  {hash}")).await;
+            newline().await;
+        }
         csleep(500).await;
 
         // Wait for "extraction" with a rainbow progress bar
         {
-            let message = "Extracting Rainbow Table";
+            let message = "=> Extracting Rainbow Table";
             let width = 30;
             let millis_wait = 2500;
             let fill_char = "=";
@@ -70,46 +75,50 @@ impl Module for Bruteforce {
             newline().await;
         }
 
-        print("Begin matching").await;
+        print("=> Begin matching").await;
         newline().await;
         csleep(500).await;
 
         // Show the progress of "decryption"
         {
-            let mut progress: usize = 0;
-
-            let hash_bytes = hash_str.bytes().collect::<Vec<_>>();
-            let l = hash_bytes.len();
-
-            while progress < l {
-                let guesses: Vec<_> = gen_hex_string(&mut rng, l as u64).bytes().collect();
-
-                while progress < l && guesses[progress] == hash_bytes[progress] {
-                    progress += 1;
+            let mut guessers: Vec<_> = pass_hash_pairs
+                .iter()
+                .map(|(_, hash)| HashGuesser::new(hash))
+                .collect();
+            let mut first = true;
+            while !guessers.iter().all(|g| g.completed()) {
+                // Do not cursor-up at the first time to avoid messing up
+                if first {
+                    first = false;
+                } else {
+                    cursor_up(n_parallel as u64).await;
                 }
 
-                let (done, undone) = if progress < l {
-                    let done = from_utf8(&hash_bytes[0..progress]).unwrap();
-                    let undone = from_utf8(&guesses[progress..]).unwrap();
-                    (done, undone)
-                } else {
-                    (hash_str, "")
-                };
+                for (i, a_guesser) in guessers.iter_mut().enumerate() {
+                    a_guesser.run_guess();
+                    print(format!("\r :: {a_guesser} ::")).await;
 
-                let (done, undone) = (Paint::green(done), Paint::red(undone));
+                    // Do not append new line to the final line
+                    if i != n_parallel {
+                        newline().await;
+                    }
+                }
 
-                print(format!("\r :: {done}{undone} ::")).await;
                 csleep(10).await;
 
                 if app_config.should_exit() {
                     return;
                 }
             }
-            newline().await;
         }
 
-        print(format!("+ Match found -- the password is \"{password}\"")).await;
+        print("=> Match found").await;
         newline().await;
+
+        for (pass, hash) in pass_hash_pairs {
+            print(format!("  {hash}:{}", Paint::new(pass).bold())).await;
+            newline().await;
+        }
     }
 }
 
@@ -147,4 +156,77 @@ fn approx_color(c: colorgrad::Color) -> yansi::Color {
     let b = (c.b * 5.).round() as u8;
 
     yansi::Color::Fixed(16 + 36 * r + 6 * g + b)
+}
+
+fn gen_pass_and_hash<T: Rng>(rng: &mut T) -> (String, String) {
+    let pass = format!(
+        "{}{:02}",
+        FirstName(EN).fake::<&str>().to_lowercase(),
+        rng.gen_range(0..99)
+    );
+    let hash = sha256(&pass);
+    (pass, hash)
+}
+
+struct HashGuesser {
+    hash: Vec<u8>,
+    guesses: Vec<u8>,
+    progress: usize,
+    len: usize,
+    rng: ThreadRng,
+}
+
+impl HashGuesser {
+    fn new(hash: &str) -> Self {
+        // the hash string must only contains lowercase hex characters
+        debug_assert!(hash
+            .chars()
+            .all(|c| c.is_ascii_hexdigit() && !c.is_ascii_uppercase()));
+
+        Self {
+            hash: hash.bytes().collect(),
+            guesses: vec![], // will be set by run_guess
+            progress: 0,
+            len: hash.len(),
+            rng: rand::thread_rng(),
+        }
+    }
+
+    fn update_progress(&mut self) {
+        let progress = &mut self.progress;
+        while *progress < self.len && self.guesses[*progress] == self.hash[*progress] {
+            *progress += 1;
+        }
+    }
+
+    fn run_guess(&mut self) {
+        if !self.completed() {
+            self.guesses = gen_hex_string(&mut self.rng, self.len as u64)
+                .bytes()
+                .collect();
+            self.update_progress();
+        }
+    }
+
+    fn completed(&self) -> bool {
+        self.progress == self.len
+    }
+}
+
+impl std::fmt::Display for HashGuesser {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let progress = self.progress;
+
+        let (done, undone) = if progress < self.len {
+            let done = from_utf8(&self.hash[0..progress]).unwrap();
+            let undone = from_utf8(&self.guesses[progress..]).unwrap();
+            (done, undone)
+        } else {
+            (from_utf8(&self.hash).unwrap(), "")
+        };
+
+        let (done, undone) = (Paint::green(done), Paint::red(undone));
+
+        write!(f, "{done}{undone}")
+    }
 }
