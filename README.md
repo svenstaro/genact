@@ -71,23 +71,27 @@ or (on Docker)
 
 ### Usage
 
-    genact 1.2.0
-    Sven-Hendrik Haase <svenstaro@gmail.com>
     A nonsense activity generator
 
-    USAGE:
-        genact [OPTIONS]
+    Usage: genact [OPTIONS]
 
-    OPTIONS:
-            --exit-after-modules <EXIT_AFTER_MODULES>    Exit after running this many modules
-            --exit-after-time <EXIT_AFTER_TIME>          Exit after running for this long (format example: 2h10min)
-        -h, --help                                       Print help information
-        -l, --list-modules                               List available modules
-        -m, --modules <MODULES>                          Run only these modules [possible values: kernel_compile, cryptomining, weblog, memdump,
-                                                         docker_image_rm, mkinitcpio, download, composer, botnet, rkhunter, simcity, bootlog,
-                                                         cargo, cc, ansible, docker_build]
-        -s, --speed-factor <SPEED_FACTOR>                Global speed factor [default: 1]
-        -V, --version                                    Print version information
+    Options:
+      -l, --list-modules
+              List available modules
+      -m, --modules <MODULES>
+              Run only these modules [possible values: download, simcity, ansible, bruteforce, botnet,
+              mkinitcpio, weblog, rkhunter, memdump, bootlog, cc, cryptomining, docker_build,
+              docker_image_rm, cargo, julia, kernel_compile, composer]
+      -s, --speed-factor <SPEED_FACTOR>
+              Global speed factor [default: 1]
+          --exit-after-time <EXIT_AFTER_TIME>
+              Exit after running for this long (format example: 2h10min)
+          --exit-after-modules <EXIT_AFTER_MODULES>
+              Exit after running this many modules
+      -h, --help
+              Print help information
+      -V, --version
+              Print version information
 
 ### Web usage
 
