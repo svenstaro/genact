@@ -1,7 +1,6 @@
 sign-commit = true
 sign-tag = true
 pre-release-replacements = [
-  {file="README.md", search="genact [0-9][a-z0-9\\.-]+", replace="genact {{version}}"},
   {file="index.html", search="genact [0-9][a-z0-9\\.-]+", replace="genact {{version}}"},
   {file="CHANGELOG.md", search="Unreleased", replace="{{version}}"},
   {file="CHANGELOG.md", search="\\.\\.\\.HEAD", replace="...{{tag_name}}", exactly=1},
