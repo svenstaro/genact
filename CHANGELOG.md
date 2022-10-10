@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+
+## [1.2.2] - 2022-10-10
 - Add manpage printing via `--print-manpage`
 - Add completions printing via `--print-completions`
 
@@ -61,7 +63,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Rewrite web version using wasm-bindgen
 
 <!-- next-url -->
-[Unreleased]: https://github.com/svenstaro/genact/compare/v1.2.1...HEAD
+[Unreleased]: https://github.com/svenstaro/genact/compare/v1.2.2...HEAD
+[1.2.2]: https://github.com/svenstaro/genact/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/svenstaro/genact/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/svenstaro/genact/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/svenstaro/genact/compare/v1.1.0...v1.1.1
