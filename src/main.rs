@@ -10,9 +10,27 @@ use genact::exit_handler;
 #[cfg(not(target_arch = "wasm32"))]
 #[async_std::main]
 async fn main() -> Result<()> {
+    use clap::CommandFactory;
+    use genact::args::AppConfig;
+
     yansi::Paint::enable_windows_ascii();
 
     let appconfig = parse_args();
+
+    if let Some(shell) = appconfig.print_completions {
+        let mut clap_app = AppConfig::command();
+        let app_name = clap_app.get_name().to_string();
+        clap_complete::generate(shell, &mut clap_app, app_name, &mut std::io::stdout());
+        return Ok(());
+    }
+
+    if appconfig.print_manpage {
+        let clap_app = AppConfig::command();
+        let man = clap_mangen::Man::new(clap_app);
+        man.render(&mut std::io::stdout())?;
+        return Ok(());
+    }
+
     *SPEED_FACTOR.lock().await = appconfig.speed_factor;
 
     if appconfig.list_modules_and_exit {

@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+- Add manpage printing via `--print-manpage`
+- Add completions printing via `--print-completions`
 
 ## [1.2.1] - 2022-10-10
 - Enable multiple parallel decryptions to run in bruteforce [#414](https://github.com/svenstaro/genact/pull/414) (thanks @equal-l2)

@@ -44,6 +44,14 @@ pub struct AppConfig {
     /// Exit after running this many modules
     #[clap(long, value_parser = parse_min_1)]
     pub exit_after_modules: Option<u32>,
+
+    /// Generate completion file for a shell
+    #[clap(long = "print-completions", value_name = "shell")]
+    pub print_completions: Option<clap_complete::Shell>,
+
+    /// Generate man page
+    #[clap(long = "print-manpage")]
+    pub print_manpage: bool,
 }
 
 #[cfg(target_arch = "wasm32")]
