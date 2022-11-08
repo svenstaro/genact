@@ -33,7 +33,7 @@ lazy_static = "1.4"
 progress_string = "0.2"
 rand = "0.8"
 rand_distr = "0.4"
-regex = "1.6"
+regex = "1.7"
 sha2 = "0.10.6"
 yansi = "0.5"
 
