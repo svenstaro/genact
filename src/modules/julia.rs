@@ -157,7 +157,7 @@ async fn print_julia_prompt() {
 async fn print_pkg_prompt(project: &str) {
     print(format!(
         "{} ",
-        Paint::blue(format!("({}) pkg>", project)).bold()
+        Paint::blue(format!("({project}) pkg>")).bold()
     ))
     .await;
 }
@@ -248,16 +248,14 @@ async fn update_project_and_manifest(project: &str) {
     let manifest_path;
 
     if let Some(project) = project.strip_prefix('@') {
-        project_path = format!("~/.julia/environments/{}/Project.toml", project);
-        manifest_path = format!("~/.julia/environments/{}/Manifest.toml", project);
+        project_path = format!("~/.julia/environments/{project}/Project.toml");
+        manifest_path = format!("~/.julia/environments/{project}/Manifest.toml");
     } else {
         project_path = format!(
-            "~/Documents/code/julia/projects/{}.jl/Project.toml",
-            project
+            "~/Documents/code/julia/projects/{project}.jl/Project.toml"
         );
         manifest_path = format!(
-            "~/Documents/code/julia/projects/{}.jl/Manifest.toml",
-            project
+            "~/Documents/code/julia/projects/{project}.jl/Manifest.toml"
         );
     }
 
@@ -268,14 +266,14 @@ async fn update_project_and_manifest(project: &str) {
     }
 
     if rng.gen_bool(0.9) {
-        log_action("Updating", format!("`{}`", project_path)).await;
+        log_action("Updating", format!("`{project_path}`")).await;
     } else {
-        log_action("No Changes", format!("to `{}`", project_path)).await;
+        log_action("No Changes", format!("to `{project_path}`")).await;
     }
 
     csleep(rng.gen_range(10..100)).await;
 
-    log_action("Updating", format!("`{}`", manifest_path)).await;
+    log_action("Updating", format!("`{manifest_path}`")).await;
 
     if old_format {
         print_old_manifest_format_after(&manifest_path).await;
@@ -315,7 +313,7 @@ async fn print_old_manifest_format_after(manifest_path: &str) {
     print(format!(
         "{} {}",
         Paint::yellow("└").bold(),
-        Paint::fixed(8, format!("@ {}:0", manifest_path))
+        Paint::fixed(8, format!("@ {manifest_path}:0"))
     ))
     .await;
     newline().await;

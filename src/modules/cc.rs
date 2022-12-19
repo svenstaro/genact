@@ -144,11 +144,7 @@ impl Module for Cc {
             .iter()
             .fold(String::new(), |acc, &x| acc + &x.replace(".c", ".o") + " ");
         print(format!(
-            "{compiler} -o {output_file} {object_files}{linker_flags}",
-            compiler = compiler,
-            output_file = package,
-            object_files = object_files,
-            linker_flags = linker_flags
+            "{compiler} -o {package} {object_files}{linker_flags}"
         ))
         .await;
         newline().await;

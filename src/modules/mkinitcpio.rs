@@ -73,7 +73,7 @@ async fn build(
         suffix = if mode == "default" {
             "".to_string()
         } else {
-            format!("-{}", mode)
+            format!("-{mode}")
         }
     );
 

@@ -36,7 +36,7 @@ async fn main() -> Result<()> {
     if appconfig.list_modules_and_exit {
         println!("Available modules:");
         for module in genact::modules::ALL_MODULES.keys() {
-            println!("  {}", module);
+            println!("  {module}");
         }
         std::process::exit(0);
     }

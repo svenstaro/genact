@@ -54,7 +54,7 @@ pub async fn dprint<S: Into<String>>(s: S, delay: u64) {
 
         #[cfg(not(target_arch = "wasm32"))]
         {
-            print!("{}", c);
+            print!("{c}");
             stdout().flush().unwrap();
         }
 
@@ -89,7 +89,7 @@ pub fn is_printable_ascii(a: u64) -> bool {
 }
 
 pub async fn cursor_up(n: u64) {
-    print(format!("\x1b[{}A", n)).await;
+    print(format!("\x1b[{n}A")).await;
 }
 
 // pub async fn cursor_left(n: u64) {
