@@ -251,12 +251,8 @@ async fn update_project_and_manifest(project: &str) {
         project_path = format!("~/.julia/environments/{project}/Project.toml");
         manifest_path = format!("~/.julia/environments/{project}/Manifest.toml");
     } else {
-        project_path = format!(
-            "~/Documents/code/julia/projects/{project}.jl/Project.toml"
-        );
-        manifest_path = format!(
-            "~/Documents/code/julia/projects/{project}.jl/Manifest.toml"
-        );
+        project_path = format!("~/Documents/code/julia/projects/{project}.jl/Project.toml");
+        manifest_path = format!("~/Documents/code/julia/projects/{project}.jl/Manifest.toml");
     }
 
     let old_format = rng.gen_bool(0.25);
