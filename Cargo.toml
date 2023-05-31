@@ -41,7 +41,7 @@ yansi = "0.5"
 clap = { version = "4.0", features = ["derive", "cargo", "wrap_help"] }
 clap_complete = "4"
 clap_mangen = "0.2"
-ctrlc = { version = "3.2", features = ["termination"] }
+ctrlc = { version = "3.4", features = ["termination"] }
 terminal_size = "0.2"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
