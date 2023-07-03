@@ -8,7 +8,7 @@ license = "MIT"
 readme = "README.md"
 keywords = ["fake", "nonsense", "useless"]
 categories = ["command-line-utilities", "command-line-interface"]
-edition = "2018"
+edition = "2021"
 
 [profile.release]
 lto = true
