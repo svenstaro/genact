@@ -18,7 +18,7 @@ pub mod simcity;
 pub mod weblog;
 
 use async_trait::async_trait;
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 use crate::args::AppConfig;
 
@@ -30,8 +30,8 @@ pub trait Module: Sync {
 }
 
 lazy_static::lazy_static! {
-    pub static ref ALL_MODULES: HashMap<&'static str, Box<dyn Module>> = {
-        let mut all_modules: HashMap<&'static str, Box<dyn Module>> = HashMap::new();
+    pub static ref ALL_MODULES: BTreeMap<&'static str, Box<dyn Module>> = {
+        let mut all_modules: BTreeMap<&'static str, Box<dyn Module>> = BTreeMap::new();
         all_modules.insert("ansible", Box::new(ansible::Ansible));
         all_modules.insert("bootlog", Box::new(bootlog::Bootlog));
         all_modules.insert("botnet", Box::new(botnet::Botnet));
