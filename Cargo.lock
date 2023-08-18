@@ -472,9 +472,9 @@ checksum = "0206175f82b8d6bf6652ff7d71a1e27fd2e4efde587fd368662814d6ec1d9ce0"
 
 [[package]]
 name = "fake"
-version = "2.6.1"
+version = "2.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0a44c765350db469b774425ff1c833890b16ceb9612fb5d7c4bbdf4a1b55f876"
+checksum = "7ba4cf08f2dafea0d018ba7051d6e90c78911c6e7438d9b7b029945379b2ac07"
 dependencies = [
  "chrono",
  "rand",
