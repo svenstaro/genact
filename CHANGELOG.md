@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+- Fix undeterministically ordered module list [#528](https://github.com/svenstaro/genact/pull/528) (thanks @VergeDX)
 
 ## [1.2.2] - 2022-10-10
 - Add manpage printing via `--print-manpage`
