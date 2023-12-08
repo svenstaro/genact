@@ -6,24 +6,25 @@ use wasm_bindgen::prelude::*;
 #[cfg(not(target_arch = "wasm32"))]
 use std::io::{stdout, Write};
 
-use crate::SPEED_FACTOR;
-use crate::INSTANT_PRINT_LINES;
+use crate::{SPEED_FACTOR, INSTANT_PRINT_LINES};
 
-static mut COUNTER: i32 = 0;
+use std::sync::atomic::{AtomicU32, Ordering};
+static COUNTER: AtomicU32 = AtomicU32::new(0);
 
 #[cfg(not(target_arch = "wasm32"))]
 pub async fn csleep(length: u64) {
     use std::time;
 
     let speed_factor = *SPEED_FACTOR.lock().await;
-    unsafe { COUNTER += 1;
-             let sleep_length = if COUNTER <= *INSTANT_PRINT_LINES.lock().await {
-                 time::Duration::new(0, 0)
-             } else {
-                 time::Duration::from_millis((1.0 / speed_factor * length as f32) as u64)
-             };
-             async_std::task::sleep(sleep_length).await;
+    let count = COUNTER.fetch_add(1, Ordering::Relaxed);
+    let sleep_length = if count < *INSTANT_PRINT_LINES.lock().await {
+        // If user passed `--instant-print-lines`, there should be
+        // no pauses in first `INSTANT_PRINT_LINES` number of lines
+        time::Duration::new(0, 0)
+    } else {
+        time::Duration::from_millis((1.0 / speed_factor * length as f32) as u64)
     };
+    async_std::task::sleep(sleep_length).await;
 }
 
 #[cfg(target_arch = "wasm32")]
