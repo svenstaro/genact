@@ -2,7 +2,7 @@
 use anyhow::Result;
 
 use genact::args::parse_args;
-use genact::{run, SPEED_FACTOR, INSTANT_PRINT_LINES};
+use genact::{run, INSTANT_PRINT_LINES, SPEED_FACTOR};
 
 use std::sync::atomic::Ordering;
 
@@ -35,7 +35,6 @@ async fn main() -> Result<()> {
 
     *SPEED_FACTOR.lock().await = appconfig.speed_factor;
     INSTANT_PRINT_LINES.store(appconfig.instant_print_lines, Ordering::SeqCst);
-
 
     if appconfig.list_modules_and_exit {
         println!("Available modules:");

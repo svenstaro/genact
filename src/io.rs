@@ -6,7 +6,7 @@ use wasm_bindgen::prelude::*;
 #[cfg(not(target_arch = "wasm32"))]
 use std::io::{stdout, Write};
 
-use crate::{SPEED_FACTOR, INSTANT_PRINT_LINES};
+use crate::{INSTANT_PRINT_LINES, SPEED_FACTOR};
 
 use std::sync::atomic::{AtomicU32, Ordering};
 static COUNTER: AtomicU32 = AtomicU32::new(0);
