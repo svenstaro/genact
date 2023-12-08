@@ -16,8 +16,8 @@ pub async fn csleep(length: u64) {
     use std::time;
 
     let speed_factor = *SPEED_FACTOR.lock().await;
-    let count = COUNTER.fetch_add(1, Ordering::Relaxed);
-    let sleep_length = if count < *INSTANT_PRINT_LINES.lock().await {
+    let count = COUNTER.fetch_add(1, Ordering::SeqCst);
+    let sleep_length = if count < INSTANT_PRINT_LINES.load(Ordering::SeqCst) {
         // If user passed `--instant-print-lines`, there should be
         // no pauses in first `INSTANT_PRINT_LINES` number of lines
         time::Duration::new(0, 0)
