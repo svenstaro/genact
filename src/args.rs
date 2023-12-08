@@ -13,6 +13,15 @@ fn parse_speed_factor(s: &str) -> Result<f32, String> {
 }
 
 #[cfg(not(target_arch = "wasm32"))]
+fn parse_instant_print(s: &str) -> Result<i32, String> {
+    let value_as_int = s.parse::<i32>().map_err(|e| e.to_string())?;
+    if value_as_int < 0 {
+        return Err("Number of instant-print lines must be non-negative".to_string());
+    }
+    Ok(value_as_int)
+}
+
+#[cfg(not(target_arch = "wasm32"))]
 fn parse_min_1(s: &str) -> Result<u32, String> {
     let value_as_u32 = s.parse::<u32>().map_err(|e| e.to_string())?;
     if value_as_u32 == 0 {
@@ -36,6 +45,10 @@ pub struct AppConfig {
     /// Global speed factor
     #[clap(short, long, default_value = "1", value_parser = parse_speed_factor)]
     pub speed_factor: f32,
+
+    /// Instantly print this many lines
+    #[clap(short, long = "instant-print-lines", default_value = "0", value_parser = parse_instant_print)]
+    pub instant_print_lines: i32,
 
     /// Exit after running for this long (format example: 2h10min)
     #[clap(long, value_parser = humantime::parse_duration)]

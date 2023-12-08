@@ -2,7 +2,7 @@
 use anyhow::Result;
 
 use genact::args::parse_args;
-use genact::{run, SPEED_FACTOR};
+use genact::{run, SPEED_FACTOR, INSTANT_PRINT_LINES};
 
 #[cfg(not(target_arch = "wasm32"))]
 use genact::exit_handler;
@@ -32,6 +32,7 @@ async fn main() -> Result<()> {
     }
 
     *SPEED_FACTOR.lock().await = appconfig.speed_factor;
+    *INSTANT_PRINT_LINES.lock().await = appconfig.instant_print_lines;
 
     if appconfig.list_modules_and_exit {
         println!("Available modules:");

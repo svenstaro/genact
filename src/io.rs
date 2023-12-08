@@ -7,13 +7,23 @@ use wasm_bindgen::prelude::*;
 use std::io::{stdout, Write};
 
 use crate::SPEED_FACTOR;
+use crate::INSTANT_PRINT_LINES;
+
+static mut COUNTER: i32 = 0;
 
 #[cfg(not(target_arch = "wasm32"))]
 pub async fn csleep(length: u64) {
     use std::time;
+
     let speed_factor = *SPEED_FACTOR.lock().await;
-    let sleep_length = time::Duration::from_millis((1.0 / speed_factor * length as f32) as u64);
-    async_std::task::sleep(sleep_length).await;
+    unsafe { COUNTER += 1;
+             let sleep_length = if COUNTER <= *INSTANT_PRINT_LINES.lock().await {
+                 time::Duration::new(0, 0)
+             } else {
+                 time::Duration::from_millis((1.0 / speed_factor * length as f32) as u64)
+             };
+             async_std::task::sleep(sleep_length).await;
+    };
 }
 
 #[cfg(target_arch = "wasm32")]
