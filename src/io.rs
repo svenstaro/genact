@@ -30,7 +30,14 @@ pub async fn csleep(length: u64) {
 #[cfg(target_arch = "wasm32")]
 pub async fn csleep(length: u64) {
     let speed_factor = *SPEED_FACTOR.lock().await;
-    let sleep_length = (1.0 / speed_factor * length as f32) as i32;
+    let count = COUNTER.fetch_add(1, Ordering::SeqCst);
+    let sleep_length = if count < INSTANT_PRINT_LINES.load(Ordering::SeqCst) {
+        // If user passed `--instant-print-lines`, there should be
+        // no pauses in first `INSTANT_PRINT_LINES` number of lines
+        0 as i32
+    } else {
+        (1.0 / speed_factor * length as f32) as i32
+    };
 
     let promise = js_sys::Promise::new(&mut move |resolve, _| {
         let window = web_sys::window().expect("should have a Window");

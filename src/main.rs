@@ -60,6 +60,7 @@ async fn main() {
 
     let appconfig = parse_args();
     *SPEED_FACTOR.lock().await = appconfig.speed_factor;
+    INSTANT_PRINT_LINES.store(appconfig.instant_print_lines, Ordering::SeqCst);
 
     run(appconfig).await;
 }
