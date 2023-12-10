@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+
+## [1.3.0] - 2023-12-10
 - Fix undeterministically ordered module list [#528](https://github.com/svenstaro/genact/pull/528) (thanks @VergeDX)
 - Implement `--instant-print-lines` argument [#583](https://github.com/svenstaro/genact/pull/583) (thanks @josherrickson)
 
@@ -65,7 +67,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Rewrite web version using wasm-bindgen
 
 <!-- next-url -->
-[Unreleased]: https://github.com/svenstaro/genact/compare/v1.2.2...HEAD
+[Unreleased]: https://github.com/svenstaro/genact/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/svenstaro/genact/compare/v1.2.2...v1.3.0
 [1.2.2]: https://github.com/svenstaro/genact/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/svenstaro/genact/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/svenstaro/genact/compare/v1.1.1...v1.2.0
