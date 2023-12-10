@@ -37,6 +37,10 @@ pub struct AppConfig {
     #[clap(short, long, default_value = "1", value_parser = parse_speed_factor)]
     pub speed_factor: f32,
 
+    /// Instantly print this many lines
+    #[clap(short, long = "instant-print-lines", default_value = "0")]
+    pub instant_print_lines: u32,
+
     /// Exit after running for this long (format example: 2h10min)
     #[clap(long, value_parser = humantime::parse_duration)]
     pub exit_after_time: Option<instant::Duration>,
@@ -61,6 +65,9 @@ pub struct AppConfig {
 
     /// Global speed factor
     pub speed_factor: f32,
+
+    /// Instantly print this many lines
+    pub instant_print_lines: u32,
 }
 
 impl AppConfig {
@@ -122,6 +129,11 @@ pub fn parse_args() -> AppConfig {
         .map(|(_, v)| v.parse::<f32>().unwrap_or(1.0))
         .unwrap_or(1.0);
 
+    let instant_print_lines: u32 = pairs
+        .find(|&(ref k, _)| k == "instant-print-lines")
+        .map(|(_, v)| v.parse::<u32>().unwrap_or(0))
+        .unwrap_or(0);
+
     let modules_to_run = if temp_modules.is_empty() {
         ALL_MODULES.keys().map(|m| m.to_string()).collect()
     } else {
@@ -131,5 +143,6 @@ pub fn parse_args() -> AppConfig {
     AppConfig {
         modules: modules_to_run,
         speed_factor,
+        instant_print_lines,
     }
 }

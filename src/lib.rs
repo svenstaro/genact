@@ -16,6 +16,7 @@ use modules::{Module, ALL_MODULES};
 lazy_static::lazy_static! {
     pub static ref CTRLC_PRESSED: AtomicBool = AtomicBool::new(false);
     pub static ref SPEED_FACTOR: Mutex<f32> = Mutex::new(1.0);
+    pub static ref INSTANT_PRINT_LINES: AtomicU32 = AtomicU32::new(0);
     pub static ref STARTED_AT: Instant = Instant::now();
     pub static ref MODULES_RAN: AtomicU32 = AtomicU32::new(0);
 }
