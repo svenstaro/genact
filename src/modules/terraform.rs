@@ -11,11 +11,7 @@ use crate::modules::Module;
 pub struct Terraform;
 
 async fn bold(msg: &str) {
-    print(format!(
-        "{}",
-        Paint::new(msg).bold()
-    ))
-    .await;
+    print(format!("{}", Paint::new(msg).bold())).await;
     newline().await;
 }
 
@@ -40,21 +36,61 @@ impl Module for Terraform {
         let mut destroyed = 0;
 
         loop {
-            let resource = TERRAFORM_AWS_RESOURCES_LIST.iter().choose(&mut rng).unwrap();
+            let resource = TERRAFORM_AWS_RESOURCES_LIST
+                .iter()
+                .choose(&mut rng)
+                .unwrap();
             let id = TERRAFORM_IDS_LIST.iter().choose(&mut rng).unwrap();
             let secs = rng.gen_range(1..99);
 
             match rng.gen_range(0..9) {
-                0 => { bold(format!("{resource}.{id}: Refreshing state... [id={id}]").as_ref()).await; },
-                1 => { bold(format!("{resource}.{id}: Creating...").as_ref()).await; },
-                2 => { bold(format!("{resource}.{id}: Creation complete after {secs}s [id={id}]").as_ref()).await; added += 1; },
-                3 => { bold(format!("{resource}.{id}: Still creating... [{secs}0s elapsed]").as_ref()).await; },
-                4 => { bold(format!("{resource}.{id}: Modifying... [id={id}]").as_ref()).await; },
-                5 => { bold(format!("{resource}.{id}: Still modifying... [id={id}, {secs}0s elapsed]").as_ref()).await; },
-                6 => { bold(format!("{resource}.{id}: Modifications complete after {secs}s [id={id}]").as_ref()).await; changed += 1; },
-                7 => { bold(format!("{resource}.{id}: Destroying... [id={id}]").as_ref()).await; },
-                8 => { bold(format!("{resource}.{id}: Destruction complete after {secs}s").as_ref()).await; destroyed += 1; },
-                _ => { unreachable!(); },
+                0 => {
+                    bold(format!("{resource}.{id}: Refreshing state... [id={id}]").as_ref()).await;
+                }
+                1 => {
+                    bold(format!("{resource}.{id}: Creating...").as_ref()).await;
+                }
+                2 => {
+                    bold(
+                        format!("{resource}.{id}: Creation complete after {secs}s [id={id}]")
+                            .as_ref(),
+                    )
+                    .await;
+                    added += 1;
+                }
+                3 => {
+                    bold(format!("{resource}.{id}: Still creating... [{secs}0s elapsed]").as_ref())
+                        .await;
+                }
+                4 => {
+                    bold(format!("{resource}.{id}: Modifying... [id={id}]").as_ref()).await;
+                }
+                5 => {
+                    bold(
+                        format!("{resource}.{id}: Still modifying... [id={id}, {secs}0s elapsed]")
+                            .as_ref(),
+                    )
+                    .await;
+                }
+                6 => {
+                    bold(
+                        format!("{resource}.{id}: Modifications complete after {secs}s [id={id}]")
+                            .as_ref(),
+                    )
+                    .await;
+                    changed += 1;
+                }
+                7 => {
+                    bold(format!("{resource}.{id}: Destroying... [id={id}]").as_ref()).await;
+                }
+                8 => {
+                    bold(format!("{resource}.{id}: Destruction complete after {secs}s").as_ref())
+                        .await;
+                    destroyed += 1;
+                }
+                _ => {
+                    unreachable!();
+                }
             };
             csleep(rng.gen_range(100..2000)).await;
 
