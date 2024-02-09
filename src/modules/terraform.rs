@@ -32,10 +32,7 @@ impl Module for Terraform {
     async fn run(&self, appconfig: &AppConfig) {
         let mut rng = thread_rng();
 
-        print(format!(
-            "Acquiring state lock. This may take a few moments...\r\n",
-        ))
-        .await;
+        print("Acquiring state lock. This may take a few moments...\r\n").await;
         csleep(500).await;
 
         let mut added = 0;
