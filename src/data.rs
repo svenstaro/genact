@@ -14,6 +14,8 @@ static RKHUNTER_ROOTKITS: &str = include_str!("../data/rkhunter_rootkits.txt");
 static RKHUNTER_TASKS: &str = include_str!("../data/rkhunter_tasks.txt");
 static JULIA_PACKAGES: &str = include_str!("../data/julia.csv");
 static TERRAFORM_AWS_RESOURCES: &str = include_str!("../data/terraform_aws_resources.txt");
+static TERRAFORM_AZURE_RESOURCES: &str = include_str!("../data/terraform_azure_resources.txt");
+static TERRAFORM_GCP_RESOURCES: &str = include_str!("../data/terraform_gcp_resources.txt");
 static TERRAFORM_IDS: &str = include_str!("../data/terraform_ids.txt");
 
 lazy_static::lazy_static! {
@@ -32,6 +34,8 @@ lazy_static::lazy_static! {
     pub static ref RKHUNTER_ROOTKITS_LIST: Vec<&'static str> = RKHUNTER_ROOTKITS.lines().collect();
     pub static ref RKHUNTER_TASKS_LIST: Vec<&'static str> = RKHUNTER_TASKS.lines().collect();
     pub static ref TERRAFORM_AWS_RESOURCES_LIST: Vec<&'static str> = TERRAFORM_AWS_RESOURCES.lines().collect();
+    pub static ref TERRAFORM_AZURE_RESOURCES_LIST: Vec<&'static str> = TERRAFORM_AZURE_RESOURCES.lines().collect();
+    pub static ref TERRAFORM_GCP_RESOURCES_LIST: Vec<&'static str> = TERRAFORM_GCP_RESOURCES.lines().collect();
     pub static ref TERRAFORM_IDS_LIST: Vec<&'static str> = TERRAFORM_IDS.lines().collect();
     pub static ref JULIA_PACKAGES_LIST: Vec<crate::modules::julia::Package<'static>> = JULIA_PACKAGES
         .lines()
