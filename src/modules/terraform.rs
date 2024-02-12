@@ -40,6 +40,9 @@ impl Module for Terraform {
         let mut changed = 0;
         let mut destroyed = 0;
 
+        // Start counting time
+        let start = std::time::Instant::now();
+
         // Randomize the cloud provider
         let cloud = match rng.gen_range(0..3) {
             0 => "AWS",
@@ -73,9 +76,11 @@ impl Module for Terraform {
                 _ => unreachable!(),
             }
 
-            // Randomize a resource ID and a time in seconds
+            // Randomize a resource ID
             let id = TERRAFORM_IDS_LIST.iter().choose(&mut rng).unwrap();
-            let secs = rng.gen_range(1..99);
+
+            // Count the time elapsed
+            let secs = start.elapsed().as_secs();
 
             // Randomize a Terraform message to print
             match rng.gen_range(0..9) {
@@ -94,7 +99,7 @@ impl Module for Terraform {
                     added += 1;
                 }
                 3 => {
-                    bold(format!("{resource}.{id}: Still creating... [{secs}0s elapsed]").as_ref())
+                    bold(format!("{resource}.{id}: Still creating... [{secs}s elapsed]").as_ref())
                         .await;
                 }
                 4 => {
@@ -102,7 +107,7 @@ impl Module for Terraform {
                 }
                 5 => {
                     bold(
-                        format!("{resource}.{id}: Still modifying... [id={id}, {secs}0s elapsed]")
+                        format!("{resource}.{id}: Still modifying... [id={id}, {secs}s elapsed]")
                             .as_ref(),
                     )
                     .await;
