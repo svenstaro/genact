@@ -1,6 +1,7 @@
 //! Pretend to run Terraform
 use async_trait::async_trait;
 use rand::prelude::*;
+use rand::distributions::{Bernoulli, Distribution};
 use yansi::Paint;
 
 use crate::args::AppConfig;
@@ -126,7 +127,12 @@ impl Module for Terraform {
                     unreachable!();
                 }
             };
-            csleep(rng.gen_range(100..2000)).await;
+
+            // Sleep for a random time between 100ms and 2s based on Bernoulli distribution
+            let dist = Bernoulli::new(0.5).unwrap();
+            if dist.sample(&mut rng) {
+                csleep(rng.gen_range(100..3000)).await;
+            }
 
             // Check if program wants to exit and print the final message
             if appconfig.should_exit() {
