@@ -54,24 +54,18 @@ impl Module for Terraform {
         loop {
             // Based on the cloud provider, randomize a resource name
             let resource = match cloud {
-                "AWS" => {
-                    TERRAFORM_AWS_RESOURCES_LIST
-                        .iter()
-                        .choose(&mut rng)
-                        .unwrap()
-                }
-                "AZURE" => {
-                    TERRAFORM_AZURE_RESOURCES_LIST
-                        .iter()
-                        .choose(&mut rng)
-                        .unwrap()
-                }
-                "GCP" => {
-                    TERRAFORM_GCP_RESOURCES_LIST
-                        .iter()
-                        .choose(&mut rng)
-                        .unwrap()
-                }
+                "AWS" => TERRAFORM_AWS_RESOURCES_LIST
+                    .iter()
+                    .choose(&mut rng)
+                    .unwrap(),
+                "AZURE" => TERRAFORM_AZURE_RESOURCES_LIST
+                    .iter()
+                    .choose(&mut rng)
+                    .unwrap(),
+                "GCP" => TERRAFORM_GCP_RESOURCES_LIST
+                    .iter()
+                    .choose(&mut rng)
+                    .unwrap(),
                 _ => unreachable!(),
             };
 
