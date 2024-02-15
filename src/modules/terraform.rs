@@ -1,7 +1,7 @@
 //! Pretend to run Terraform
 use async_trait::async_trait;
-use rand::prelude::*;
 use rand::distributions::{Bernoulli, Distribution};
+use rand::prelude::*;
 use yansi::Paint;
 
 use crate::args::AppConfig;
