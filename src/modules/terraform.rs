@@ -53,28 +53,27 @@ impl Module for Terraform {
 
         loop {
             // Based on the cloud provider, randomize a resource name
-            let resource;
-            match cloud {
+            let resource = match cloud {
                 "AWS" => {
-                    resource = TERRAFORM_AWS_RESOURCES_LIST
+                    TERRAFORM_AWS_RESOURCES_LIST
                         .iter()
                         .choose(&mut rng)
-                        .unwrap();
+                        .unwrap()
                 }
                 "AZURE" => {
-                    resource = TERRAFORM_AZURE_RESOURCES_LIST
+                    TERRAFORM_AZURE_RESOURCES_LIST
                         .iter()
                         .choose(&mut rng)
-                        .unwrap();
+                        .unwrap()
                 }
                 "GCP" => {
-                    resource = TERRAFORM_GCP_RESOURCES_LIST
+                    TERRAFORM_GCP_RESOURCES_LIST
                         .iter()
                         .choose(&mut rng)
-                        .unwrap();
+                        .unwrap()
                 }
                 _ => unreachable!(),
-            }
+            };
 
             // Randomize a resource ID
             let id = TERRAFORM_IDS_LIST.iter().choose(&mut rng).unwrap();
