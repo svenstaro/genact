@@ -76,22 +76,18 @@ or (on Docker)
     Usage: genact [OPTIONS]
 
     Options:
-      -l, --list-modules
-              List available modules
-      -m, --modules <MODULES>
-              Run only these modules [possible values: download, simcity, ansible, bruteforce, botnet,
-              mkinitcpio, weblog, rkhunter, memdump, bootlog, cc, cryptomining, docker_build,
-              docker_image_rm, cargo, julia, kernel_compile, composer]
-      -s, --speed-factor <SPEED_FACTOR>
-              Global speed factor [default: 1]
-          --exit-after-time <EXIT_AFTER_TIME>
-              Exit after running for this long (format example: 2h10min)
-          --exit-after-modules <EXIT_AFTER_MODULES>
-              Exit after running this many modules
-      -h, --help
-              Print help information
-      -V, --version
-              Print version information
+      -l, --list-modules                               List available modules
+      -m, --modules <MODULES>                          Run only these modules [possible values: ansible, bootlog, botnet, bruteforce, cargo, cc,
+                                                       composer, cryptomining, docker_build, docker_image_rm, download, julia, kernel_compile, memdump,
+                                                       mkinitcpio, rkhunter, simcity, terraform, weblog]
+      -s, --speed-factor <SPEED_FACTOR>                Global speed factor [default: 1]
+      -i, --instant-print-lines <INSTANT_PRINT_LINES>  Instantly print this many lines [default: 0]
+          --exit-after-time <EXIT_AFTER_TIME>          Exit after running for this long (format example: 2h10min)
+          --exit-after-modules <EXIT_AFTER_MODULES>    Exit after running this many modules
+          --print-completions <shell>                  Generate completion file for a shell [possible values: bash, elvish, fish, powershell, zsh]
+          --print-manpage                              Generate man page
+      -h, --help                                       Print help
+      -V, --version                                    Print version
 
 ### Web usage
 
