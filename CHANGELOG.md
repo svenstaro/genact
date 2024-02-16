@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+- Add Terraform module [#622](https://github.com/svenstaro/genact/pull/622) (thanks @taskinen)
 
 ## [1.3.0] - 2023-12-10
 - Fix undeterministically ordered module list [#528](https://github.com/svenstaro/genact/pull/528) (thanks @VergeDX)
