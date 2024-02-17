@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.4.2] - 2024-02-17
 - Use more realistic sleep distribution in Terraform module
+- Make the number of processed resources finite in Terraform module - before it never actually quit
 
 ## [1.4.1] - 2024-02-17
 - Fix hang in Terraform module on WASM [#624](https://github.com/svenstaro/genact/issues/624)
