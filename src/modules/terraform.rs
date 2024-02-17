@@ -1,5 +1,6 @@
 //! Pretend to run Terraform
 use async_trait::async_trait;
+use instant::Instant;
 use rand::distributions::{Bernoulli, Distribution};
 use rand::prelude::*;
 use yansi::Paint;
@@ -41,7 +42,7 @@ impl Module for Terraform {
         let mut destroyed = 0;
 
         // Start counting time
-        let start = std::time::Instant::now();
+        let start = Instant::now();
 
         // Randomize the cloud provider
         let cloud = match rng.gen_range(0..3) {
