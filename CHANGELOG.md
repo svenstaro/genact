@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+
+## [1.4.1] - 2024-02-17
 - Fix hang in Terraform module on WASM [#624](https://github.com/svenstaro/genact/issues/624)
 
 ## [1.4.0] - 2024-02-16
@@ -71,7 +73,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Rewrite web version using wasm-bindgen
 
 <!-- next-url -->
-[Unreleased]: https://github.com/svenstaro/genact/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/svenstaro/genact/compare/v1.4.1...HEAD
+[1.4.1]: https://github.com/svenstaro/genact/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/svenstaro/genact/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/svenstaro/genact/compare/v1.2.2...v1.3.0
 [1.2.2]: https://github.com/svenstaro/genact/compare/v1.2.1...v1.2.2
