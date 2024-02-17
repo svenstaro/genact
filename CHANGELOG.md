@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+- Use more realistic sleep distribution in Terraform module
 
 ## [1.4.1] - 2024-02-17
 - Fix hang in Terraform module on WASM [#624](https://github.com/svenstaro/genact/issues/624)

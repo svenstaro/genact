@@ -1,8 +1,8 @@
 //! Pretend to run Terraform
 use async_trait::async_trait;
 use instant::Instant;
-use rand::distributions::{Bernoulli, Distribution};
 use rand::prelude::*;
+use rand_distr::FisherF;
 use yansi::Paint;
 
 use crate::args::AppConfig;
@@ -127,18 +127,20 @@ impl Module for Terraform {
                 }
             };
 
-            // Sleep for a random time between 100ms and 2s based on Bernoulli distribution
-            let dist = Bernoulli::new(0.5).unwrap();
-            if dist.sample(&mut rng) {
-                csleep(rng.gen_range(100..3000)).await;
-            }
+            // Sleep for a random time where most often we sleep only for a short time but
+            // sometimes there will be modules that take a long time.
+            let base_sleep_time_ms = 100.0;
+
+            let dist = FisherF::new(5.0, 5.0).unwrap();
+            let sleep_duration = dist.sample(&mut rng) * base_sleep_time_ms;
+            csleep(sleep_duration as u64).await;
 
             // Check if program wants to exit and print the final message
             if appconfig.should_exit() {
                 print(format!(
-                    "\r\nApply complete! Resources: {added} added, {changed} changed, {destroyed} destroyed.\r\n"
+                        "\r\nApply complete! Resources: {added} added, {changed} changed, {destroyed} destroyed.\r\n"
                 ))
-                .await;
+                    .await;
                 break;
             }
         }
