@@ -32,6 +32,7 @@ impl Module for Terraform {
 
     async fn run(&self, appconfig: &AppConfig) {
         let mut rng = thread_rng();
+        let num_resources = rng.gen_range(30..300);
 
         print("Acquiring state lock. This may take a few moments...\r\n").await;
         csleep(500).await;
@@ -52,7 +53,7 @@ impl Module for Terraform {
             _ => unreachable!(),
         };
 
-        loop {
+        for _ in 1..num_resources {
             // Based on the cloud provider, randomize a resource name
             let resource = match cloud {
                 "AWS" => TERRAFORM_AWS_RESOURCES_LIST
