@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+- Fix hang in Terraform module on WASM [#624](https://github.com/svenstaro/genact/issues/624)
 
 ## [1.4.0] - 2024-02-16
 - Add Terraform module [#622](https://github.com/svenstaro/genact/pull/622) (thanks @taskinen)
