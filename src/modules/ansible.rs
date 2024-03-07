@@ -3,7 +3,7 @@ use async_trait::async_trait;
 use fake::faker::internet::en::*;
 use fake::Fake;
 use rand::prelude::*;
-use rand_distr::{Distribution, Normal};
+use rand_distr::Normal;
 use yansi::Paint;
 
 use crate::args::AppConfig;

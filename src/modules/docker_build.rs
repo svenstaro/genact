@@ -1,7 +1,6 @@
 //! Module that pretends to build Docker images
 use async_trait::async_trait;
 use rand::prelude::*;
-use rand::Rng;
 
 use crate::args::AppConfig;
 use crate::data::DOCKER_PACKAGES_LIST;
