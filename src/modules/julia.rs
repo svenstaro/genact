@@ -317,42 +317,41 @@ async fn report_packages(packages: &[&Package<'_>]) {
     for package in packages {
         if package.versions.len() > 1 && rng.gen_bool(0.75) {
             // update package
+            let package_id = format!("[{}]", &package.id[0..8]);
+            let version_change = format!(
+                "↑ {} v{} ⇒ v{}",
+                package.name,
+                package.versions[rng.gen_range(0..package.versions.len() - 1)],
+                package.versions.last().unwrap()
+            );
             print(format!(
                 "  {} {}",
-                format!("[{}]", &package.id[0..8]).fixed(8),
-                format!(
-                    "↑ {} v{} ⇒ v{}",
-                    package.name,
-                    package.versions[rng.gen_range(0..package.versions.len() - 1)],
-                    package.versions.last().unwrap()
-                )
-                .fixed(11)
+                package_id.fixed(8),
+                version_change.fixed(11)
             ))
             .await;
             newline().await;
         } else if rng.gen_bool(0.9) {
             // add package
+            let package_id = format!("[{}]", &package.id[0..8]);
+            let version_change =
+                format!("+ {} v{}", package.name, package.versions.last().unwrap());
             print(format!(
                 "  {} {}",
-                format!("[{}]", &package.id[0..8]).fixed(8),
-                format!(
-                    "+ {} v{}",
-                    package.name,
-                    package.versions.last().unwrap().fixed(10)
-                )
+                package_id.fixed(8),
+                version_change.fixed(10)
             ))
             .await;
             newline().await;
         } else {
             // remove package
+            let package_id = format!("[{}]", &package.id[0..8]);
+            let version_change =
+                format!("- {} v{}", package.name, package.versions.last().unwrap());
             print(format!(
                 "  {} {}",
-                format!("[{}]", &package.id[0..8]).fixed(8),
-                format!(
-                    "- {} v{}",
-                    package.name,
-                    package.versions.last().unwrap().fixed(9)
-                )
+                package_id.fixed(8),
+                version_change.fixed(9)
             ))
             .await;
             newline().await;
