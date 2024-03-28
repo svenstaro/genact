@@ -155,15 +155,11 @@ async fn print_julia_prompt() {
 }
 
 async fn print_pkg_prompt(project: &str) {
-    print(format!(
-        "{} ",
-        Paint::blue(format!("({project}) pkg>")).bold()
-    ))
-    .await;
+    print(format!("{} ", format!("({project}) pkg>").blue().bold())).await;
 }
 
 async fn log_action(action: impl Display, message: impl Display) {
-    print(format!("{:>12} {}", Paint::green(action).bold(), message)).await;
+    print(format!("{:>12} {}", action.green().bold(), message)).await;
     newline().await;
 }
 
@@ -285,31 +281,31 @@ async fn print_old_manifest_format_before(manifest_path: &str) {
     .await;
     newline().await;
     print(format!(
-        "{} To update to the new format run `Pkg.upgrade_manifest()` which will upgrade the format without re-resolving.",
-        Paint::yellow("│").bold()
+            "{} To update to the new format run `Pkg.upgrade_manifest()` which will upgrade the format without re-resolving.",
+            Paint::yellow("│").bold()
     ))
-    .await;
+        .await;
     newline().await;
     print(format!(
-        "{} {}",
-        Paint::yellow("└").bold(),
-        Paint::fixed(8, "@ Pkg.Types /builddir/build/BUILD/julia-1.7.3/build/usr/share/julia/stdlib/v1.7/Pkg/src/manifest.jl:287")
+            "{} {}",
+            "└".yellow().bold(),
+            "@ Pkg.Types /builddir/build/BUILD/julia-1.7.3/build/usr/share/julia/stdlib/v1.7/Pkg/src/manifest.jl:287".fixed(8)
     ))
-    .await;
+        .await;
     newline().await;
 }
 
 async fn print_old_manifest_format_after(manifest_path: &str) {
     print(format!(
-        "{} The active manifest file is an older format with no julia version entry. Dependencies may have been resolved with a different julia version.",
-        Paint::yellow("┌ Warning:").bold(),
+            "{} The active manifest file is an older format with no julia version entry. Dependencies may have been resolved with a different julia version.",
+            Paint::yellow("┌ Warning:").bold(),
     ))
-    .await;
+        .await;
     newline().await;
     print(format!(
         "{} {}",
-        Paint::yellow("└").bold(),
-        Paint::fixed(8, format!("@ {manifest_path}:0"))
+        "└".yellow().bold(),
+        format!("@ {manifest_path}:0").fixed(8)
     ))
     .await;
     newline().await;
@@ -323,16 +319,14 @@ async fn report_packages(packages: &[&Package<'_>]) {
             // update package
             print(format!(
                 "  {} {}",
-                Paint::fixed(8, format!("[{}]", &package.id[0..8])),
-                Paint::fixed(
-                    11, // bright yellow
-                    format!(
-                        "↑ {} v{} ⇒ v{}",
-                        package.name,
-                        package.versions[rng.gen_range(0..package.versions.len() - 1)],
-                        package.versions.last().unwrap()
-                    )
+                format!("[{}]", &package.id[0..8]).fixed(8),
+                format!(
+                    "↑ {} v{} ⇒ v{}",
+                    package.name,
+                    package.versions[rng.gen_range(0..package.versions.len() - 1)],
+                    package.versions.last().unwrap()
                 )
+                .fixed(11)
             ))
             .await;
             newline().await;
@@ -340,10 +334,11 @@ async fn report_packages(packages: &[&Package<'_>]) {
             // add package
             print(format!(
                 "  {} {}",
-                Paint::fixed(8, format!("[{}]", &package.id[0..8])),
-                Paint::fixed(
-                    10, // bright green
-                    format!("+ {} v{}", package.name, package.versions.last().unwrap())
+                format!("[{}]", &package.id[0..8]).fixed(8),
+                format!(
+                    "+ {} v{}",
+                    package.name,
+                    package.versions.last().unwrap().fixed(10)
                 )
             ))
             .await;
@@ -352,10 +347,11 @@ async fn report_packages(packages: &[&Package<'_>]) {
             // remove package
             print(format!(
                 "  {} {}",
-                Paint::fixed(8, format!("[{}]", &package.id[0..8])),
-                Paint::fixed(
-                    9, // bright red
-                    format!("- {} v{}", package.name, package.versions.last().unwrap())
+                format!("[{}]", &package.id[0..8]).fixed(8),
+                format!(
+                    "- {} v{}",
+                    package.name,
+                    package.versions.last().unwrap().fixed(9)
                 )
             ))
             .await;
@@ -448,7 +444,7 @@ async fn precompile(packages: &[&Package<'_>]) {
     print(format!(
             "  {num_packages} dependencies successfully precompiled in {seconds:.0} seconds ({} already precompiled)",
             rng.gen_range(10..500)
-        ))
+    ))
         .await;
     newline().await;
 }

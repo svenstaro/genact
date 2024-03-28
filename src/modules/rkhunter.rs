@@ -110,12 +110,12 @@ impl Module for RkHunter {
 
                 // Prepare check and status
                 let mut check_status = if check_positive {
-                    Paint::red("Found")
+                    "Found".red()
                 } else {
-                    Paint::default("Not found")
+                    "Not found".resetting()
                 };
                 if rng.gen_bool(0.01) {
-                    check_status = Paint::default("Skipped");
+                    check_status = "Skipped".resetting();
                 }
 
                 print(format!(
@@ -129,9 +129,9 @@ impl Module for RkHunter {
                 print(format!(
                     "  {rootkit:<check_pad$} [ {status} ]\r\n",
                     status = if rootkit_found {
-                        Paint::red("Found")
+                        "Found".red()
                     } else {
-                        Paint::default("Not found")
+                        "Not found".resetting()
                     }
                 ))
                 .await;

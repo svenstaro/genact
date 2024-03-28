@@ -105,7 +105,7 @@ impl Module for Simcity {
 
             // End of loop, the line has been removed, conclude the status
             dprint(checked_checkbox, 10).await;
-            print(color_func(format!("{simcity}... {resolution}")).to_string()).await;
+            print(color_func(&format!("{simcity}... {resolution}")).to_string()).await;
 
             if appconfig.should_exit() {
                 print("\nALL DONE\n").await;

@@ -49,7 +49,8 @@ impl Module for Crytomining {
         for _ in 1..num_lines {
             let sleep_length = 300;
 
-            let time = Paint::magenta(Local::now().format("%H:%M:%S"));
+            let time = Local::now().format("%H:%M:%S");
+            let time = time.magenta();
 
             if remaining_until_new_job == 0 {
                 remaining_until_new_job = new_job_every_n_lines;
@@ -108,11 +109,11 @@ impl Module for Crytomining {
                     gpus.push_str(&format!(
                         "gpu/{gpu} {mhs:.2} ",
                         gpu = gpu,
-                        mhs = Paint::cyan(actual_mhs_per_gpu)
+                        mhs = actual_mhs_per_gpu.cyan()
                     ));
                     total_mhs += actual_mhs_per_gpu;
                 }
-                let speed = format!("Speed {mhs:>6.2} Mh/s", mhs = Paint::cyan(total_mhs).bold());
+                let speed = format!("Speed {mhs:>6.2} Mh/s", mhs = total_mhs.cyan().bold());
                 let duration = Duration::from_std(now.elapsed())
                     .expect("Couldn't make chrono::Duration from std::time::Duration!");
                 let elapsed = format!(

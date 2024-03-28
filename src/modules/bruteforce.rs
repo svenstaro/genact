@@ -124,7 +124,7 @@ impl Module for Bruteforce {
 
 // Get the SHA256 string for a str
 fn sha256(s: &str) -> String {
-    let mut hasher = Sha256::new();
+    let mut hasher = Sha256::default();
     hasher.update(s);
     let result_bytes = hasher.finalize();
     format!("{result_bytes:x}")

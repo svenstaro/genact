@@ -15,8 +15,6 @@ async fn main() -> Result<()> {
     use clap::CommandFactory;
     use genact::args::AppConfig;
 
-    yansi::Paint::enable_windows_ascii();
-
     let appconfig = parse_args();
 
     if let Some(shell) = appconfig.print_completions {

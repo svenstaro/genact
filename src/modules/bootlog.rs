@@ -44,7 +44,7 @@ impl Module for Bootlog {
 
             let is_error = rng.gen_bool(0.01);
             if is_error {
-                dprint(format!("{}", Paint::red(format!("ERROR: {choice}"))), 10).await;
+                dprint(format!("{}", format!("ERROR: {choice}").red()), 10).await;
             } else {
                 let has_bold_word = rng.gen_bool(0.1);
                 if has_bold_word {

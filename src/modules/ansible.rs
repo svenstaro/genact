@@ -27,17 +27,17 @@ async fn do_for_all_hosts(hosts: &[String], is_gather: bool) {
 
         // If this is the gather task, we always want to return all ok.
         let text = if is_gather {
-            Paint::green(format!("ok: [{host}]")).to_string()
+            format!("ok: [{host}]").green().to_string()
         } else {
             match global_outcome {
-                1 => Paint::cyan(format!("skipping: [{host}]")).to_string(),
-                2 => Paint::red(format!("failed: [{host}]")).to_string(),
-                3 => Paint::yellow(format!("changed: [{host}]")).to_string(),
+                1 => format!("skipping: [{host}]").cyan().to_string(),
+                2 => format!("failed: [{host}]").red().to_string(),
+                3 => format!("changed: [{host}]").yellow().to_string(),
                 _ => match host_outcome {
-                    1 => Paint::cyan(format!("skipping: [{host}]")).to_string(),
-                    2 => Paint::red(format!("failed: [{host}]")).to_string(),
-                    3..=5 => Paint::yellow(format!("changed: [{host}]")).to_string(),
-                    _ => Paint::green(format!("ok: [{host}]")).to_string(),
+                    1 => format!("skipping: [{host}]").cyan().to_string(),
+                    2 => format!("failed: [{host}]").red().to_string(),
+                    3..=5 => format!("changed: [{host}]").yellow().to_string(),
+                    _ => format!("ok: [{host}]").green().to_string(),
                 },
             }
         };
