@@ -58,12 +58,11 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu') && matrix.target != 'wasm32-unknown-unknown'
 
       - name: cargo build
-        uses: actions-rs/cargo@v1
+        uses: houseabsolute/actions-rust-cross@v0
         with:
           command: build
-          args: --release --locked --target=${{ matrix.target }}
-          use-cross: ${{ matrix.cross }}
-        if: matrix.target != 'wasm32-unknown-unknown'
+          args: --release --locked ${{ matrix.cargo_flags }}
+          target: ${{ matrix.target }}
 
       - name: trunk build
         run: trunk build --release
