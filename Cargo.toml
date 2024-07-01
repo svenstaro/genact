@@ -29,16 +29,16 @@ getrandom = { version = "0.2", features = ["js"] }
 humansize = "2"
 humantime = "2"
 instant = { version = "0.1", features = ["now", "wasm-bindgen"] }
-lazy_static = "1.4"
+lazy_static = "1.5"
 progress_string = "0.2"
 rand = "0.8"
 rand_distr = "0.4"
-regex = "1.8"
+regex = "1.10"
 sha2 = "0.10.6"
 yansi = "1"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
-clap = { version = "4.4", features = ["derive", "cargo", "wrap_help"] }
+clap = { version = "4.5", features = ["derive", "cargo", "wrap_help"] }
 clap_complete = "4"
 clap_mangen = "0.2"
 ctrlc = { version = "3.4", features = ["termination"] }
@@ -47,7 +47,7 @@ terminal_size = "0.3"
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 console_error_panic_hook = "0.1"
 js-sys = "0.3"
-url = "2.4"
+url = "2.5"
 wasm-bindgen = "0.2"
 wasm-bindgen-futures = "0.4"
 web-sys = { version = "0.3", features = ["Window", "Location", "console"] }
