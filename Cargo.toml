@@ -23,8 +23,8 @@ anyhow = "1"
 async-std = { version = "1", features = ["attributes"] }
 async-trait = "0.1"
 chrono = { version = "0.4", features = ["clock", "wasmbind"], default-features = false }
-fake = { version = "2.8", features = ["chrono"] }
-colorgrad = "0.6.2"
+fake = { version = "2.10", features = ["chrono"] }
+colorgrad = "0.7.0"
 getrandom = { version = "0.2", features = ["js"] }
 humansize = "2"
 humantime = "2"
@@ -33,7 +33,7 @@ lazy_static = "1.5"
 progress_string = "0.2"
 rand = "0.8"
 rand_distr = "0.4"
-regex = "1.10"
+regex = "1.11"
 sha2 = "0.10.6"
 yansi = "1"
 
@@ -42,7 +42,7 @@ clap = { version = "4.5", features = ["derive", "cargo", "wrap_help"] }
 clap_complete = "4"
 clap_mangen = "0.2"
 ctrlc = { version = "3.4", features = ["termination"] }
-terminal_size = "0.3"
+terminal_size = "0.4"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 console_error_panic_hook = "0.1"
