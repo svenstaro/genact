@@ -6,6 +6,7 @@ use fake::{faker::name::raw::FirstName, locales::EN, Fake};
 use rand::{rngs::ThreadRng, Rng};
 use sha2::{Digest, Sha256};
 use yansi::Paint;
+use colorgrad::Gradient;
 
 use crate::args::AppConfig;
 use crate::generators::gen_hex_string;
@@ -135,7 +136,7 @@ fn rainbow(s: &str) -> String {
     use std::fmt::Write;
 
     let len = s.len();
-    let colors = colorgrad::sinebow().colors(len);
+    let colors = colorgrad::preset::sinebow().colors(len);
     let mut ret = String::new();
 
     // apply colors to each characters
