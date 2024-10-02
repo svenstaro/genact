@@ -2,11 +2,11 @@
 use std::str::from_utf8;
 
 use async_trait::async_trait;
+use colorgrad::Gradient;
 use fake::{faker::name::raw::FirstName, locales::EN, Fake};
 use rand::{rngs::ThreadRng, Rng};
 use sha2::{Digest, Sha256};
 use yansi::Paint;
-use colorgrad::Gradient;
 
 use crate::args::AppConfig;
 use crate::generators::gen_hex_string;
