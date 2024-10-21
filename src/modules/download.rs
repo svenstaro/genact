@@ -1,4 +1,4 @@
-//! Petend to do some downloading
+//! Pretend to do some downloading
 use async_trait::async_trait;
 use humansize::{format_size, FormatSizeOptions};
 use humantime::format_duration;
