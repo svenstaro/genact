@@ -50,10 +50,18 @@ It is also available on Scoop:
 
     scoop install genact
 
+
+
 **With Cargo**: If you have a somewhat recent version of Rust and Cargo installed, you can run
 
     cargo install genact
     genact
+
+**With X-CMD**: If you are an x-cmd user, you can run
+
+    x env use genact
+    genact
+
 
 ## Running
 
