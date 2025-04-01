@@ -1,6 +1,7 @@
 //! Pretend to run mkinitcpio
 use async_trait::async_trait;
-use rand::prelude::*;
+use rand::seq::IndexedRandom;
+use rand::{rng, Rng};
 use regex::Regex;
 use yansi::Paint;
 
@@ -58,7 +59,7 @@ async fn build(
     os_release: &str,
     appconfig: &AppConfig,
 ) {
-    let mut rng = thread_rng();
+    let mut rng = rng();
 
     msg1(
         format!("Building image from preset: /etc/mkinitcpio.d/{preset}.preset: '{mode}'",)
@@ -116,7 +117,7 @@ impl Module for Mkinitcpio {
     }
 
     async fn run(&self, appconfig: &AppConfig) {
-        let mut rng = thread_rng();
+        let mut rng = rng();
 
         // Select a few hooks from the list of all hooks (in order). Make sure the required default
         // hooks are also included (also, in order).

@@ -4,7 +4,8 @@ use chrono::prelude::*;
 use fake::faker::internet::en::*;
 use fake::faker::lorem::en::*;
 use fake::Fake;
-use rand::prelude::*;
+use rand::seq::IndexedRandom;
+use rand::{rng, Rng};
 
 use crate::args::AppConfig;
 use crate::data::{EXTENSIONS_LIST, PACKAGES_LIST};
@@ -27,7 +28,7 @@ impl Module for Weblog {
     }
 
     async fn run(&self, appconfig: &AppConfig) {
-        let mut rng = thread_rng();
+        let mut rng = rng();
         let num_lines = rng.gen_range(50..200);
         let mut burst_mode = false;
         let mut count_burst_lines = 0;

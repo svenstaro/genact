@@ -2,8 +2,9 @@
 use async_trait::async_trait;
 use fake::faker::internet::en::*;
 use fake::Fake;
-use rand::prelude::*;
-use rand_distr::Normal;
+use rand::seq::{IndexedRandom, SliceRandom};
+use rand::{rng, Rng};
+use rand_distr::{Distribution, Normal};
 use yansi::Paint;
 
 use crate::args::AppConfig;
@@ -15,7 +16,7 @@ use crate::modules::Module;
 pub struct Ansible;
 
 async fn do_for_all_hosts(hosts: &[String], is_gather: bool) {
-    let mut rng = thread_rng();
+    let mut rng = rng();
 
     let latency_distr = Normal::new(500.0, 100.0).unwrap();
 
@@ -59,7 +60,7 @@ impl Module for Ansible {
     }
 
     async fn run(&self, appconfig: &AppConfig) {
-        let mut rng = thread_rng();
+        let mut rng = rng();
 
         let term_width = get_terminal_width();
         let play_text = format!(

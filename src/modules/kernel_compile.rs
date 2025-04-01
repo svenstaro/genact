@@ -1,6 +1,8 @@
 //! Pretend to build a Linux kernel
 use async_trait::async_trait;
-use rand::prelude::*;
+use rand::rngs::ThreadRng;
+use rand::seq::IndexedRandom;
+use rand::{rng, Rng};
 use regex::Regex;
 
 use crate::args::AppConfig;
@@ -118,7 +120,7 @@ impl Module for KernelCompile {
     }
 
     async fn run(&self, appconfig: &AppConfig) {
-        let mut rng = thread_rng();
+        let mut rng = rng();
         let num_lines = rng.gen_range(50..500);
 
         const ARCHES: &[&str] = &[

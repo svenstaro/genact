@@ -1,6 +1,9 @@
 //! Module that pretends to build Docker images
 use async_trait::async_trait;
-use rand::prelude::*;
+use rand::rng;
+use rand::seq::IndexedRandom;
+use rand::seq::IteratorRandom;
+use rand::Rng;
 
 use crate::args::AppConfig;
 use crate::data::DOCKER_PACKAGES_LIST;
@@ -23,7 +26,7 @@ impl Module for DockerBuild {
     }
 
     async fn run(&self, appconfig: &AppConfig) {
-        let mut rng = thread_rng();
+        let mut rng = rng();
 
         // Output the sending of the context to Docker
         let target_size: f64 = rng.gen_range(100.0..1000.0);

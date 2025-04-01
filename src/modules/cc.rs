@@ -1,7 +1,10 @@
 //! Pretend to run a C compiler
-use async_trait::async_trait;
-use rand::prelude::*;
 use std::path::Path;
+
+use async_trait::async_trait;
+use rand::rngs::ThreadRng;
+use rand::seq::IndexedRandom;
+use rand::{rng, Rng};
 
 use crate::args::AppConfig;
 use crate::data::{CFILES_LIST, PACKAGES_LIST};
@@ -70,7 +73,7 @@ impl Module for Cc {
             "-DSHARED",
         ];
 
-        let mut rng = thread_rng();
+        let mut rng = rng();
 
         // Choose a random package name to be our final linking target.
         let package = &PACKAGES_LIST.choose(&mut rng).unwrap();

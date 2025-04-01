@@ -8,10 +8,11 @@ use std::sync::atomic::{AtomicBool, AtomicU32};
 
 use async_std::sync::Mutex;
 use instant::Instant;
-use rand::prelude::*;
+use rand::rng;
+use rand::seq::IndexedRandom;
 
-use args::AppConfig;
-use modules::{Module, ALL_MODULES};
+use crate::args::AppConfig;
+use crate::modules::{Module, ALL_MODULES};
 
 lazy_static::lazy_static! {
     pub static ref CTRLC_PRESSED: AtomicBool = AtomicBool::new(false);
@@ -22,7 +23,7 @@ lazy_static::lazy_static! {
 }
 
 pub async fn run(appconfig: AppConfig) {
-    let mut rng = thread_rng();
+    let mut rng = rng();
     let selected_modules: Vec<&Box<dyn Module>> = appconfig
         .modules
         .iter()

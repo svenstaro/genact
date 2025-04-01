@@ -1,6 +1,7 @@
 //! Print some Sim City loading screen status quips
 use async_trait::async_trait;
-use rand::prelude::*;
+use rand::seq::IndexedRandom;
+use rand::{rng, Rng};
 use yansi::Paint;
 
 use crate::args::AppConfig;
@@ -26,7 +27,7 @@ impl Module for Simcity {
         const TEXT_SLEEP: u64 = 15;
         const MAX_SPINNER_LOOPS: u8 = 20;
 
-        let mut rng = thread_rng();
+        let mut rng = rng();
         let mut simcity = "";
 
         for _ in 0..500 {

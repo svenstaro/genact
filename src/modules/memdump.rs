@@ -1,8 +1,8 @@
 //! Pretend to dump some random memory locations
+use std::io::{stdout, Write};
+
 use async_trait::async_trait;
-use rand::prelude::*;
-use std::io::stdout;
-use std::io::Write;
+use rand::{rng, Rng};
 
 use crate::args::AppConfig;
 use crate::generators::gen_hex_string;
@@ -22,7 +22,7 @@ impl Module for Memdump {
     }
 
     async fn run(&self, appconfig: &AppConfig) {
-        let mut rng = thread_rng();
+        let mut rng = rng();
 
         let mut current_loc = (rng.gen_range(0..2u64.pow(63)) / 16) * 16;
         let num_lines = rng.gen_range(50..200);

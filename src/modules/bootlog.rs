@@ -1,6 +1,7 @@
 //! Pretend to boot a system
 use async_trait::async_trait;
-use rand::prelude::*;
+use rand::seq::IndexedRandom;
+use rand::{rng, Rng};
 use yansi::Paint;
 
 use crate::args::AppConfig;
@@ -21,7 +22,7 @@ impl Module for Bootlog {
     }
 
     async fn run(&self, appconfig: &AppConfig) {
-        let mut rng = thread_rng();
+        let mut rng = rng();
         let num_lines = rng.gen_range(50..200);
         let mut burst_mode = false;
         let mut count_burst_lines = 0;

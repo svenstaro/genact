@@ -1,8 +1,10 @@
 //! Pretend to update julia packages
+use std::fmt::Display;
+
 use async_trait::async_trait;
 use instant::Instant;
-use rand::prelude::*;
-use std::fmt::Display;
+use rand::seq::IndexedRandom;
+use rand::{rng, Rng};
 use yansi::Paint;
 
 use crate::args::AppConfig;
@@ -31,7 +33,7 @@ impl Module for Julia {
     }
 
     async fn run(&self, appconfig: &AppConfig) {
-        let mut rng = thread_rng();
+        let mut rng = rng();
 
         // Choose `num_packages` packages and `num_artifacts` artifacts
         // non-repeating and in random order
@@ -169,7 +171,7 @@ async fn log_progress(bar: &progress_string::Bar) {
 }
 
 async fn install_packages(packages: &[&Package<'_>]) {
-    let mut rng = thread_rng();
+    let mut rng = rng();
 
     let max_name_length = packages.iter().map(|p| p.name.len()).max().unwrap();
     for package in packages {
@@ -197,7 +199,7 @@ async fn install_packages(packages: &[&Package<'_>]) {
 }
 
 async fn download_artifacts(artifacts: &[&Package<'_>]) {
-    let mut rng = thread_rng();
+    let mut rng = rng();
 
     for artifact in artifacts {
         csleep(rng.gen_range(50..100)).await;
@@ -238,7 +240,7 @@ async fn download_artifacts(artifacts: &[&Package<'_>]) {
 }
 
 async fn update_project_and_manifest(project: &str) {
-    let mut rng = thread_rng();
+    let mut rng = rng();
 
     let project_path;
     let manifest_path;
@@ -312,7 +314,7 @@ async fn print_old_manifest_format_after(manifest_path: &str) {
 }
 
 async fn report_packages(packages: &[&Package<'_>]) {
-    let mut rng = thread_rng();
+    let mut rng = rng();
 
     for package in packages {
         if package.versions.len() > 1 && rng.gen_bool(0.75) {
@@ -362,7 +364,7 @@ async fn report_packages(packages: &[&Package<'_>]) {
 }
 
 async fn build_artifacts(artifacts: &[&Package<'_>]) {
-    let mut rng = thread_rng();
+    let mut rng = rng();
 
     let mut bar = progress_string::BarBuilder::new()
         .total(artifacts.len())
@@ -408,7 +410,7 @@ async fn build_artifacts(artifacts: &[&Package<'_>]) {
 }
 
 async fn precompile(packages: &[&Package<'_>]) {
-    let mut rng = thread_rng();
+    let mut rng = rng();
 
     let num_packages = packages.len();
 
@@ -449,7 +451,7 @@ async fn precompile(packages: &[&Package<'_>]) {
 }
 
 async fn gc() {
-    let mut rng = thread_rng();
+    let mut rng = rng();
 
     csleep(rng.gen_range(50..250)).await;
 

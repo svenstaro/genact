@@ -1,16 +1,19 @@
 //! Module containing random utilities.
-use rand::distributions::Uniform;
-use rand::prelude::*;
-use rand_distr::{ChiSquared, Exp};
 use std::cmp;
 use std::path::{Path, PathBuf};
 use std::str;
+
+use rand::distr::Uniform;
+use rand::rngs::ThreadRng;
+use rand::seq::IndexedRandom;
+use rand::Rng;
+use rand_distr::{ChiSquared, Distribution, Exp};
 
 /// Generate a string of `length` with characters randomly sampled
 /// from `string`.
 pub fn gen_string_with_chars(rng: &mut ThreadRng, char_set: &str, length: u64) -> String {
     let chars: Vec<_> = char_set.chars().collect();
-    let range = Uniform::new(0, chars.len());
+    let range = Uniform::new(0, chars.len()).unwrap();
 
     let string: String = (0..length).map(|_| chars[rng.sample(range)]).collect();
     string
@@ -24,7 +27,7 @@ pub fn gen_hex_string(rng: &mut ThreadRng, length: u64) -> String {
 ///
 /// If `n` >= `list.len()` then `list.len()` will be used instead of `n`.
 pub fn gen_random_n_from_list_into_string(rng: &mut ThreadRng, list: &[&str], n: u64) -> String {
-    let range = Uniform::new(0, list.len());
+    let range = Uniform::new(0, list.len()).unwrap();
     (0..cmp::min(n, list.len() as u64))
         .fold(String::new(), |acc, _| acc + " " + list[rng.sample(range)])
 }
@@ -50,7 +53,7 @@ pub fn gen_file_path<T: std::clone::Clone + AsRef<str> + std::convert::AsRef<std
 ) -> String {
     let path_length = rng.gen_range(1..5);
     let mut path = PathBuf::from("/");
-    let range = Uniform::new(0, dir_candidates.len());
+    let range = Uniform::new(0, dir_candidates.len()).unwrap();
     for _ in 0..path_length {
         path.push(dir_candidates[rng.sample(range)].clone());
     }

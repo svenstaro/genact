@@ -1,7 +1,10 @@
 //! Pretend to run Terraform
 use async_trait::async_trait;
 use instant::Instant;
-use rand::prelude::*;
+use rand::rng;
+use rand::seq::IteratorRandom;
+use rand::Rng;
+use rand_distr::Distribution;
 use rand_distr::FisherF;
 use yansi::Paint;
 
@@ -31,7 +34,7 @@ impl Module for Terraform {
     }
 
     async fn run(&self, appconfig: &AppConfig) {
-        let mut rng = thread_rng();
+        let mut rng = rng();
         let num_resources = rng.gen_range(30..300);
 
         print("Acquiring state lock. This may take a few moments...\r\n").await;

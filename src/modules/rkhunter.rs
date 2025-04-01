@@ -1,7 +1,8 @@
 //! Pretend to detect rootkits using rkhunter
 use async_trait::async_trait;
 use chrono::Utc;
-use rand::prelude::*;
+use rand::seq::{IndexedRandom, IteratorRandom};
+use rand::{rng, Rng};
 use yansi::Paint;
 
 use crate::args::AppConfig;
@@ -23,7 +24,7 @@ impl Module for RkHunter {
     }
 
     async fn run(&self, appconfig: &AppConfig) {
-        let mut rng = thread_rng();
+        let mut rng = rng();
         let check_positive_probability = 0.05;
 
         print(format!(

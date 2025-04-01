@@ -1,6 +1,7 @@
 //! Pretend to delete Docker images
 use async_trait::async_trait;
-use rand::prelude::*;
+use rand::seq::IndexedRandom;
+use rand::{rng, Rng};
 
 use crate::args::AppConfig;
 use crate::data::{DOCKER_PACKAGES_LIST, DOCKER_TAGS_LIST};
@@ -21,7 +22,7 @@ impl Module for DockerImageRm {
     }
 
     async fn run(&self, appconfig: &AppConfig) {
-        let mut rng = thread_rng();
+        let mut rng = rng();
         let num_packages = rng.gen_range(20..100);
         // Choose `num_packages` packages, non-repeating and in random order
         let chosen_packages: Vec<_> = DOCKER_PACKAGES_LIST

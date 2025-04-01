@@ -1,7 +1,8 @@
 //! Pretend to run cargo to install rust packages
 use async_trait::async_trait;
 use instant::Instant;
-use rand::prelude::*;
+use rand::seq::IndexedRandom;
+use rand::{rng, Rng};
 use yansi::Paint;
 
 use crate::args::AppConfig;
@@ -23,7 +24,7 @@ impl Module for Cargo {
     }
 
     async fn run(&self, appconfig: &AppConfig) {
-        let mut rng = thread_rng();
+        let mut rng = rng();
         let num_packages = rng.gen_range(10..100);
         // Choose `num_packages` packages, non-repeating and in random order
         let chosen_names: Vec<_> = PACKAGES_LIST

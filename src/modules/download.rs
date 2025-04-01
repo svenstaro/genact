@@ -1,10 +1,12 @@
 //! Pretend to do some downloading
+use std::cmp::max;
+use std::time::Duration;
+
 use async_trait::async_trait;
 use humansize::{format_size, FormatSizeOptions};
 use humantime::format_duration;
-use rand::prelude::*;
-use std::cmp::max;
-use std::time::Duration;
+use rand::seq::IndexedRandom;
+use rand::{rng, Rng};
 
 use crate::args::AppConfig;
 use crate::data::{CFILES_LIST, EXTENSIONS_LIST};
@@ -26,7 +28,7 @@ impl Module for Download {
     }
 
     async fn run(&self, appconfig: &AppConfig) {
-        let mut rng = thread_rng();
+        let mut rng = rng();
 
         // We'll use the same extension for all files of this whole run to make things seem more
         // realistic.

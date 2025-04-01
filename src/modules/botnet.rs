@@ -1,6 +1,6 @@
 //! Pretend to run and orchestrate a botnet
 use async_trait::async_trait;
-use rand::prelude::*;
+use rand::{rng, Rng};
 use yansi::Paint;
 
 use crate::args::AppConfig;
@@ -20,7 +20,7 @@ impl Module for Botnet {
     }
 
     async fn run(&self, appconfig: &AppConfig) {
-        let mut rng = thread_rng();
+        let mut rng = rng();
         let clusters = {
             let mut ret = vec![];
             let num_clusters = rng.gen_range(8..16 + 1);
