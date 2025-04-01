@@ -23,9 +23,9 @@ impl Module for Botnet {
         let mut rng = rng();
         let clusters = {
             let mut ret = vec![];
-            let num_clusters = rng.gen_range(8..16 + 1);
+            let num_clusters = rng.random_range(8..16 + 1);
             for _ in 0..num_clusters {
-                let num_nodes = rng.gen_range(100..200 + 1);
+                let num_nodes = rng.random_range(100..200 + 1);
                 ret.push(num_nodes);
             }
             ret
@@ -41,7 +41,7 @@ impl Module for Botnet {
             ))
             .await;
             connected += 1;
-            csleep((rng.gen_range(0f64..1.).powi(50) * 50.) as u64).await;
+            csleep((rng.random_range(0f64..1.).powi(50) * 50.) as u64).await;
         }
         newline().await;
 
@@ -77,7 +77,7 @@ impl Module for Botnet {
             }
             for o in &mut onlines {
                 let success_rate = 0.05;
-                if rng.gen_bool(success_rate) {
+                if rng.random_bool(success_rate) {
                     *o = true;
                 }
             }

@@ -29,12 +29,12 @@ impl Module for Weblog {
 
     async fn run(&self, appconfig: &AppConfig) {
         let mut rng = rng();
-        let num_lines = rng.gen_range(50..200);
+        let num_lines = rng.random_range(50..200);
         let mut burst_mode = false;
         let mut count_burst_lines = 0;
 
         for _ in 1..num_lines {
-            let ip = if rng.gen_bool(0.5) {
+            let ip = if rng.random_bool(0.5) {
                 IPv4().fake()
             } else {
                 IPv6().fake::<String>().to_lowercase()
@@ -44,14 +44,14 @@ impl Module for Weblog {
             let dir_candidates: Vec<String> = Words(20..21).fake();
             let path = gen_file_path(&mut rng, &PACKAGES_LIST, EXTENSIONS_LIST, &dir_candidates);
             let http_code = HTTP_CODES.choose(&mut rng).unwrap_or(&200);
-            let size = rng.gen_range(99..5_000_000);
+            let size = rng.random_range(99..5_000_000);
             let referrer = "-";
             let user_agent: String = UserAgent().fake();
             let line = format!(
                 "{ip} - - [{date}] \"{method} {path} HTTP/1.0\" {http_code} {size} \"{referrer}\" \"{user_agent}\"",
             );
-            let mut line_sleep_length = rng.gen_range(10..1000);
-            let burst_lines = rng.gen_range(10..50);
+            let mut line_sleep_length = rng.random_range(10..1000);
+            let burst_lines = rng.random_range(10..50);
 
             if burst_mode && count_burst_lines < burst_lines {
                 line_sleep_length = 30;
@@ -59,7 +59,7 @@ impl Module for Weblog {
                 burst_mode = false;
                 count_burst_lines = 0;
             } else if !burst_mode {
-                burst_mode = rng.gen_bool(1.0 / 20.0);
+                burst_mode = rng.random_bool(1.0 / 20.0);
             }
 
             print(line.to_string()).await;

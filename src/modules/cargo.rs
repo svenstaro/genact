@@ -25,7 +25,7 @@ impl Module for Cargo {
 
     async fn run(&self, appconfig: &AppConfig) {
         let mut rng = rng();
-        let num_packages = rng.gen_range(10..100);
+        let num_packages = rng.random_range(10..100);
         // Choose `num_packages` packages, non-repeating and in random order
         let chosen_names: Vec<_> = PACKAGES_LIST
             .choose_multiple(&mut rng, num_packages)
@@ -38,7 +38,7 @@ impl Module for Cargo {
         let now = Instant::now();
         for stage in &["Downloading", "Compiling"] {
             for &(package_name, ref package_version) in &chosen_packages {
-                let sleep_length = rng.gen_range(100..2000);
+                let sleep_length = rng.random_range(100..2000);
 
                 print(format!(
                     "{stage:>12} {package_name} v{package_version}",

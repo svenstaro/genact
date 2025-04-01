@@ -36,13 +36,13 @@ impl Module for Download {
 
         // Choose speed. We'll choose an approximate speed that we'll vary a little bit.
         // Download speed in bytes per second.
-        let download_speed = rng.gen_range(10_000_000..100_000_000);
+        let download_speed = rng.random_range(10_000_000..100_000_000);
 
-        let num_files = rng.gen_range(3..10);
+        let num_files = rng.random_range(3..10);
 
         for _ in 0..num_files {
             // File size in bytes.
-            let file_bytes = rng.gen_range(30_000_000..300_000_000);
+            let file_bytes = rng.random_range(30_000_000..300_000_000);
 
             // How long to sleep for in ms.
             let sleep_millis = 50;
@@ -66,7 +66,7 @@ impl Module for Download {
 
             let mut bytes_downloaded = 0u64;
             loop {
-                let download_speed_offset = rng.gen_range(-5_000_000i32..5_000_000i32);
+                let download_speed_offset = rng.random_range(-5_000_000i32..5_000_000i32);
                 let actual_download_speed =
                     max(100_000, download_speed + download_speed_offset) as u64;
                 let percent = ((100.0 / file_bytes as f64) * bytes_downloaded as f64).min(100.0);

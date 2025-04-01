@@ -16,7 +16,7 @@ fn gen_header(arch: &str, rng: &mut ThreadRng) -> String {
 
     const CMDS: &[&str] = &["WRAP   ", "CHK    ", "UPD    "];
 
-    let cmd = if rng.gen_bool(1.0 / 15.0) {
+    let cmd = if rng.random_bool(1.0 / 15.0) {
         RARE_CMDS.choose(rng).unwrap_or(&"")
     } else {
         CMDS.choose(rng).unwrap_or(&"")
@@ -39,9 +39,9 @@ fn gen_header(arch: &str, rng: &mut ThreadRng) -> String {
 fn gen_object(arch: &str, rng: &mut ThreadRng) -> String {
     const RARE_CMDS: &[&str] = &["HOSTCC ", "AS     "];
 
-    let cmd = if rng.gen_bool(1.0 / 15.0) {
+    let cmd = if rng.random_bool(1.0 / 15.0) {
         RARE_CMDS.choose(rng).unwrap_or(&"")
-    } else if rng.gen_bool(0.33) {
+    } else if rng.random_bool(0.33) {
         "AR     "
     } else {
         "CC     "
@@ -98,9 +98,9 @@ fn gen_special(arch: &str, rng: &mut ThreadRng) -> String {
 
 /// Generates a line from `make` output
 fn gen_line(arch: &str, rng: &mut ThreadRng) -> String {
-    if rng.gen_bool(1.0 / 50.0) {
+    if rng.random_bool(1.0 / 50.0) {
         gen_special(arch, rng)
-    } else if rng.gen_bool(0.1) {
+    } else if rng.random_bool(0.1) {
         gen_header(arch, rng)
     } else {
         gen_object(arch, rng)
@@ -121,7 +121,7 @@ impl Module for KernelCompile {
 
     async fn run(&self, appconfig: &AppConfig) {
         let mut rng = rng();
-        let num_lines = rng.gen_range(50..500);
+        let num_lines = rng.random_range(50..500);
 
         const ARCHES: &[&str] = &[
             "alpha",
@@ -160,7 +160,7 @@ impl Module for KernelCompile {
 
         for _ in 1..num_lines {
             let line = gen_line(arch, &mut rng);
-            let sleep_length = rng.gen_range(10..1000);
+            let sleep_length = rng.random_range(10..1000);
 
             print(line).await;
             newline().await;
@@ -176,8 +176,8 @@ impl Module for KernelCompile {
 
         newline().await;
 
-        let bytes: u32 = rng.gen_range(9000..1_000_000);
-        let padded_bytes: u32 = rng.gen_range(bytes..1_100_000);
+        let bytes: u32 = rng.random_range(9000..1_000_000);
+        let padded_bytes: u32 = rng.random_range(bytes..1_100_000);
 
         print(format!(
             "Setup is {bytes} bytes (padded to {padded_bytes} bytes)."
@@ -185,11 +185,11 @@ impl Module for KernelCompile {
         .await;
         newline().await;
 
-        let system: u32 = rng.gen_range(300..3000);
+        let system: u32 = rng.random_range(300..3000);
         print(format!("System is {system} kB")).await;
         newline().await;
 
-        let crc: u32 = rng.gen_range(0x1000_0000..0xffff_ffff);
+        let crc: u32 = rng.random_range(0x1000_0000..0xffff_ffff);
 
         print(format!("CRC {crc:x}")).await;
         newline().await;

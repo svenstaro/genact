@@ -31,7 +31,7 @@ impl Module for Simcity {
         let mut simcity = "";
 
         for _ in 0..500 {
-            let spinner_loops = rng.gen_range(1..MAX_SPINNER_LOOPS);
+            let spinner_loops = rng.random_range(1..MAX_SPINNER_LOOPS);
 
             // Message chosen from "data/simcity.txt"
             // Thanks https://gist.github.com/erikcox/7e96d031d00d7ecb1a2f
@@ -45,7 +45,7 @@ impl Module for Simcity {
             }
 
             // Choose a status/resolution per "task"
-            let resolution_id = 1 + rng.gen::<u8>() % 100;
+            let resolution_id = 1 + rng.random::<u8>() % 100;
             let mut resolution = match resolution_id {
                 1..=4 => "FAIL",
                 5..=9 => "YES",
@@ -94,7 +94,7 @@ impl Module for Simcity {
                 // Use white most of the time
                 Paint::white
             } else {
-                let color_id = 1 + rng.gen::<u8>() % 20;
+                let color_id = 1 + rng.random::<u8>() % 20;
                 match color_id {
                     1..=2 => Paint::red,
                     3..=4 => Paint::green,

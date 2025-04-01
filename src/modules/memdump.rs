@@ -24,8 +24,8 @@ impl Module for Memdump {
     async fn run(&self, appconfig: &AppConfig) {
         let mut rng = rng();
 
-        let mut current_loc = (rng.gen_range(0..2u64.pow(63)) / 16) * 16;
-        let num_lines = rng.gen_range(50..200);
+        let mut current_loc = (rng.random_range(0..2u64.pow(63)) / 16) * 16;
+        let num_lines = rng.random_range(50..200);
         for _ in 1..num_lines {
             print(format!("{current_loc:016x}  ")).await;
             current_loc += 0x10;
@@ -40,7 +40,7 @@ impl Module for Memdump {
                     print(" ").await;
                 }
                 print(format!("{val} ")).await;
-                let val_delay = rng.gen_range(0..2);
+                let val_delay = rng.random_range(0..2);
                 stdout().flush().unwrap();
                 csleep(val_delay).await;
             }
@@ -57,7 +57,7 @@ impl Module for Memdump {
             }
             print(format!(" |{ascii_repr}|")).await;
 
-            let row_delay = rng.gen_range(10..200);
+            let row_delay = rng.random_range(10..200);
             csleep(row_delay).await;
 
             if appconfig.should_exit() {

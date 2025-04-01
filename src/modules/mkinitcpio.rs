@@ -82,7 +82,7 @@ async fn build(
 
     for hook in hooks {
         msg2(format!("Running build hook: [{hook}]").as_ref()).await;
-        csleep(rng.gen_range(50..1000)).await;
+        csleep(rng.random_range(50..1000)).await;
 
         if *hook == "block" && mode == "fallback" {
             for driver in drivers {
@@ -96,10 +96,10 @@ async fn build(
     }
 
     msg1("Generating module dependencies").await;
-    csleep(rng.gen_range(200..500)).await;
+    csleep(rng.random_range(200..500)).await;
 
     msg1(format!("Creating {zip}-compressed initcpio image: {image}",).as_ref()).await;
-    csleep(rng.gen_range(500..2500)).await;
+    csleep(rng.random_range(500..2500)).await;
 
     msg1("Image generation successful").await;
 }
@@ -124,7 +124,7 @@ impl Module for Mkinitcpio {
         let hooks = {
             let mut ret: Vec<&str> = vec![];
             for hook in BOOT_HOOKS_LIST.iter() {
-                if REQUIRED_HOOKS.contains(hook) || rng.gen_range(0..10) < 3 {
+                if REQUIRED_HOOKS.contains(hook) || rng.random_range(0..10) < 3 {
                     ret.push(hook);
                 }
             }
@@ -139,7 +139,7 @@ impl Module for Mkinitcpio {
 
             let re = Regex::new(r"^drivers/scsi.*/([^/\.]+).c$").unwrap();
 
-            let count = rng.gen_range(0..5);
+            let count = rng.random_range(0..5);
             while ret.len() < count {
                 let file = CFILES_LIST.choose(&mut rng).unwrap();
 

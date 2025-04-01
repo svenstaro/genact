@@ -22,9 +22,9 @@ async fn do_for_all_hosts(hosts: &[String], is_gather: bool) {
 
     // To spice things up, add a mode where everything shows up as either failed, changed, or
     // skipped.
-    let global_outcome = rng.gen_range(1..20);
+    let global_outcome = rng.random_range(1..20);
     for host in hosts {
-        let host_outcome = rng.gen_range(1..50);
+        let host_outcome = rng.random_range(1..50);
 
         // If this is the gather task, we always want to return all ok.
         let text = if is_gather {
@@ -70,11 +70,11 @@ impl Module for Ansible {
 
         print(format!("{play_text:*<term_width$}",)).await;
         newline().await;
-        csleep(rng.gen_range(1000..3000)).await;
+        csleep(rng.random_range(1000..3000)).await;
         newline().await;
 
-        let num_ipv4_hosts = 1..rng.gen_range(1..20);
-        let num_ipv6_hosts = 1..rng.gen_range(1..20);
+        let num_ipv4_hosts = 1..rng.random_range(1..20);
+        let num_ipv6_hosts = 1..rng.random_range(1..20);
         let ipv4_hosts = num_ipv4_hosts
             .map(|_| IPv4().fake())
             .collect::<Vec<String>>();
@@ -85,21 +85,21 @@ impl Module for Ansible {
         hosts.shuffle(&mut rng);
 
         let gathering_text = "TASK [Gathering Facts] ";
-        csleep(rng.gen_range(1000..3000)).await;
+        csleep(rng.random_range(1000..3000)).await;
         print(format!("{gathering_text:*<term_width$}",)).await;
         do_for_all_hosts(&hosts, true).await;
-        csleep(rng.gen_range(1000..3000)).await;
+        csleep(rng.random_range(1000..3000)).await;
 
-        let num_roles = rng.gen_range(3..10);
+        let num_roles = rng.random_range(3..10);
         for _ in 1..num_roles {
             let role = ANSIBLE_ROLES_LIST.choose(&mut rng).unwrap_or(&"unknown");
-            let num_tasks = rng.gen_range(3..10);
+            let num_tasks = rng.random_range(3..10);
             for _ in 1..num_tasks {
                 newline().await;
                 let task = ANSIBLE_TASKS_LIST.choose(&mut rng).unwrap_or(&"unknown");
                 let task_text = format!("TASK [{role} : {task}] ");
                 print(format!("{task_text:*<term_width$}")).await;
-                csleep(rng.gen_range(1000..3000)).await;
+                csleep(rng.random_range(1000..3000)).await;
                 do_for_all_hosts(&hosts, false).await;
 
                 if appconfig.should_exit() {

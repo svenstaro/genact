@@ -37,15 +37,15 @@ impl Module for Julia {
 
         // Choose `num_packages` packages and `num_artifacts` artifacts
         // non-repeating and in random order
-        let num_packages = rng.gen_range(10..150);
-        let num_artifacts = rng.gen_range(1..10);
+        let num_packages = rng.random_range(10..150);
+        let num_artifacts = rng.random_range(1..10);
         let all_packages: Vec<&Package> = JULIA_PACKAGES_LIST
             .choose_multiple(&mut rng, num_packages + num_artifacts)
             .collect();
         let (packages, artifacts) = all_packages.split_at(num_packages);
 
         // root project of the julia session
-        let project = if rng.gen_bool(0.3) {
+        let project = if rng.random_bool(0.3) {
             "@v1.7"
         } else {
             JULIA_PACKAGES_LIST.choose(&mut rng).unwrap().name
@@ -53,71 +53,71 @@ impl Module for Julia {
 
         // julia startup
         print_banner().await;
-        csleep(rng.gen_range(50..150)).await;
+        csleep(rng.random_range(50..150)).await;
         newline().await;
         print_julia_prompt().await;
 
         // wait user input
-        csleep(rng.gen_range(500..2500)).await;
+        csleep(rng.random_range(500..2500)).await;
 
         // enter pkg mode
         erase_line().await;
         print_pkg_prompt(project).await;
 
         // wait user input
-        csleep(rng.gen_range(500..1500)).await;
+        csleep(rng.random_range(500..1500)).await;
 
         // type "update" and press enter
-        dprint("up", rng.gen_range(100..500)).await;
-        dprint("date", rng.gen_range(100..500)).await;
-        csleep(rng.gen_range(500..1500)).await;
+        dprint("up", rng.random_range(100..500)).await;
+        dprint("date", rng.random_range(100..500)).await;
+        csleep(rng.random_range(500..1500)).await;
         newline().await;
 
         // wait Pkg.update() startup time
-        csleep(rng.gen_range(200..1000)).await;
+        csleep(rng.random_range(200..1000)).await;
 
         log_action("Updating", "registry at `~/.julia/registries/General.toml`").await;
-        csleep(rng.gen_range(1500..5000)).await;
+        csleep(rng.random_range(1500..5000)).await;
 
         log_action("Resolving", "package versions...").await;
-        csleep(rng.gen_range(500..2500)).await;
+        csleep(rng.random_range(500..2500)).await;
 
         install_packages(packages).await;
-        csleep(rng.gen_range(250..1000)).await;
+        csleep(rng.random_range(250..1000)).await;
 
         download_artifacts(artifacts).await;
-        csleep(rng.gen_range(250..1000)).await;
+        csleep(rng.random_range(250..1000)).await;
 
         update_project_and_manifest(project).await;
-        csleep(rng.gen_range(10..100)).await;
+        csleep(rng.random_range(10..100)).await;
 
         report_packages(packages).await;
-        csleep(rng.gen_range(150..500)).await;
+        csleep(rng.random_range(150..500)).await;
 
         build_artifacts(artifacts).await;
-        csleep(rng.gen_range(150..500)).await;
+        csleep(rng.random_range(150..500)).await;
 
         precompile(packages).await;
 
-        if rng.gen_bool(0.25) {
+        if rng.random_bool(0.25) {
             gc().await;
         }
 
         // wait cleanup
-        csleep(rng.gen_range(50..250)).await;
+        csleep(rng.random_range(50..250)).await;
 
         newline().await;
         print_pkg_prompt(project).await;
 
         // wait user input
-        csleep(rng.gen_range(500..5000)).await;
+        csleep(rng.random_range(500..5000)).await;
 
         // exit pkg mode
         erase_line().await;
         print_julia_prompt().await;
 
         // wait user input
-        csleep(rng.gen_range(1000..7000)).await;
+        csleep(rng.random_range(1000..7000)).await;
 
         // quit julia
         newline().await;
@@ -183,15 +183,15 @@ async fn install_packages(packages: &[&Package<'_>]) {
             version = package.versions.last().unwrap()
         );
 
-        if rng.gen_bool(0.1) {
+        if rng.random_bool(0.1) {
             log_action("Installing", &package_and_version).await;
 
-            csleep(rng.gen_range(250..1000)).await;
+            csleep(rng.random_range(250..1000)).await;
 
             cursor_up(1).await;
             erase_line().await;
         } else {
-            csleep(rng.gen_range(10..200)).await;
+            csleep(rng.random_range(10..200)).await;
         }
 
         log_action("Installed", &package_and_version).await;
@@ -202,11 +202,11 @@ async fn download_artifacts(artifacts: &[&Package<'_>]) {
     let mut rng = rng();
 
     for artifact in artifacts {
-        csleep(rng.gen_range(50..100)).await;
+        csleep(rng.random_range(50..100)).await;
 
         log_action("Downloading", format!("artifact: {}", artifact.name)).await;
 
-        csleep(rng.gen_range(100..150)).await;
+        csleep(rng.random_range(100..150)).await;
 
         let mut bar = progress_string::BarBuilder::new()
             .total(10000)
@@ -219,7 +219,7 @@ async fn download_artifacts(artifacts: &[&Package<'_>]) {
         newline().await;
 
         while bar.current_partial < bar.total {
-            let add = rng.gen_range(0..=500.min(bar.total - bar.current_partial));
+            let add = rng.random_range(0..=500.min(bar.total - bar.current_partial));
             bar.update(add);
 
             cursor_up(1).await;
@@ -227,11 +227,11 @@ async fn download_artifacts(artifacts: &[&Package<'_>]) {
             print(format!("{:>15} {}", Paint::cyan("Downloading").bold(), bar)).await;
             newline().await;
 
-            csleep(rng.gen_range(50..75)).await;
+            csleep(rng.random_range(50..75)).await;
         }
         cursor_up(1).await;
         erase_line().await;
-        csleep(rng.gen_range(100..200)).await;
+        csleep(rng.random_range(100..200)).await;
         cursor_up(1).await;
         erase_line().await;
 
@@ -253,19 +253,19 @@ async fn update_project_and_manifest(project: &str) {
         manifest_path = format!("~/Documents/code/julia/projects/{project}.jl/Manifest.toml");
     }
 
-    let old_format = rng.gen_bool(0.25);
+    let old_format = rng.random_bool(0.25);
 
     if old_format {
         print_old_manifest_format_before(&manifest_path).await;
     }
 
-    if rng.gen_bool(0.9) {
+    if rng.random_bool(0.9) {
         log_action("Updating", format!("`{project_path}`")).await;
     } else {
         log_action("No Changes", format!("to `{project_path}`")).await;
     }
 
-    csleep(rng.gen_range(10..100)).await;
+    csleep(rng.random_range(10..100)).await;
 
     log_action("Updating", format!("`{manifest_path}`")).await;
 
@@ -317,13 +317,13 @@ async fn report_packages(packages: &[&Package<'_>]) {
     let mut rng = rng();
 
     for package in packages {
-        if package.versions.len() > 1 && rng.gen_bool(0.75) {
+        if package.versions.len() > 1 && rng.random_bool(0.75) {
             // update package
             let package_id = format!("[{}]", &package.id[0..8]);
             let version_change = format!(
                 "↑ {} v{} ⇒ v{}",
                 package.name,
-                package.versions[rng.gen_range(0..package.versions.len() - 1)],
+                package.versions[rng.random_range(0..package.versions.len() - 1)],
                 package.versions.last().unwrap()
             );
             print(format!(
@@ -333,7 +333,7 @@ async fn report_packages(packages: &[&Package<'_>]) {
             ))
             .await;
             newline().await;
-        } else if rng.gen_bool(0.9) {
+        } else if rng.random_bool(0.9) {
             // add package
             let package_id = format!("[{}]", &package.id[0..8]);
             let version_change =
@@ -359,7 +359,7 @@ async fn report_packages(packages: &[&Package<'_>]) {
             newline().await;
         }
 
-        csleep(rng.gen_range(10..100)).await;
+        csleep(rng.random_range(10..100)).await;
     }
 }
 
@@ -401,7 +401,7 @@ async fn build_artifacts(artifacts: &[&Package<'_>]) {
 
         log_progress(&bar).await;
 
-        csleep(rng.gen_range(500..5000)).await;
+        csleep(rng.random_range(500..5000)).await;
     }
 
     // erase progress bar
@@ -434,7 +434,7 @@ async fn precompile(packages: &[&Package<'_>]) {
         erase_line().await;
         log_progress(&bar).await;
 
-        csleep(rng.gen_range(50..1000)).await;
+        csleep(rng.random_range(50..1000)).await;
     }
 
     let elapsed = now.elapsed();
@@ -444,7 +444,7 @@ async fn precompile(packages: &[&Package<'_>]) {
     erase_line().await;
     print(format!(
             "  {num_packages} dependencies successfully precompiled in {seconds:.0} seconds ({} already precompiled)",
-            rng.gen_range(10..500)
+            rng.random_range(10..500)
     ))
         .await;
     newline().await;
@@ -453,7 +453,7 @@ async fn precompile(packages: &[&Package<'_>]) {
 async fn gc() {
     let mut rng = rng();
 
-    csleep(rng.gen_range(50..250)).await;
+    csleep(rng.random_range(50..250)).await;
 
     print(format!(
         "{} We haven't cleaned this depot up for a bit, running Pkg.gc()...",
@@ -462,62 +462,62 @@ async fn gc() {
     .await;
     newline().await;
 
-    csleep(rng.gen_range(100..250)).await;
+    csleep(rng.random_range(100..250)).await;
 
     log_action(
         "Active",
-        format!("manifest files: {} found", rng.gen_range(1..10)),
+        format!("manifest files: {} found", rng.random_range(1..10)),
     )
     .await;
 
-    csleep(rng.gen_range(100..250)).await;
+    csleep(rng.random_range(100..250)).await;
 
     log_action(
         "Active",
-        format!("artifact files: {} found", rng.gen_range(10..200)),
+        format!("artifact files: {} found", rng.random_range(10..200)),
     )
     .await;
 
-    csleep(rng.gen_range(100..250)).await;
+    csleep(rng.random_range(100..250)).await;
 
     log_action(
         "Active",
-        format!("scratchspaces: {} found", rng.gen_range(10..20)),
+        format!("scratchspaces: {} found", rng.random_range(10..20)),
     )
     .await;
 
-    csleep(rng.gen_range(100..250)).await;
+    csleep(rng.random_range(100..250)).await;
 
     log_action(
         "Deleted",
         format!(
             "{} package installations ({:.3} MiB)",
-            rng.gen_range(2..100),
-            rng.gen_range(10f32..250f32)
+            rng.random_range(2..100),
+            rng.random_range(10f32..250f32)
         ),
     )
     .await;
 
-    csleep(rng.gen_range(100..250)).await;
+    csleep(rng.random_range(100..250)).await;
 
     log_action(
         "Deleted",
         format!(
             "{} artifact installations ({:.3} MiB)",
-            rng.gen_range(2..10),
-            rng.gen_range(10f32..250f32)
+            rng.random_range(2..10),
+            rng.random_range(10f32..250f32)
         ),
     )
     .await;
 
-    csleep(rng.gen_range(100..250)).await;
+    csleep(rng.random_range(100..250)).await;
 
     log_action(
         "Deleted",
         format!(
             "{} scratchspaces ({:.3} byte)",
-            rng.gen_range(2..10),
-            rng.gen_range(10f32..1000f32)
+            rng.random_range(2..10),
+            rng.random_range(10f32..1000f32)
         ),
     )
     .await;

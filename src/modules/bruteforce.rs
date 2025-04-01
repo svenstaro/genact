@@ -4,7 +4,8 @@ use std::str::from_utf8;
 use async_trait::async_trait;
 use colorgrad::Gradient;
 use fake::{faker::name::raw::FirstName, locales::EN, Fake};
-use rand::{rngs::ThreadRng, Rng};
+use rand::rngs::ThreadRng;
+use rand::{rng, Rng};
 use sha2::{Digest, Sha256};
 use yansi::Paint;
 
@@ -26,9 +27,9 @@ impl Module for Bruteforce {
     }
 
     async fn run(&self, app_config: &AppConfig) {
-        let mut rng = rand::thread_rng();
+        let mut rng = rng();
 
-        let n_parallel = rng.gen_range(2..10);
+        let n_parallel = rng.random_range(2..10);
         let pass_hash_pairs: Vec<_> = std::iter::repeat_with(|| gen_pass_and_hash(&mut rng))
             .take(n_parallel)
             .collect();
@@ -163,7 +164,7 @@ fn gen_pass_and_hash<T: Rng>(rng: &mut T) -> (String, String) {
     let pass = format!(
         "{}{:02}",
         FirstName(EN).fake::<&str>().to_lowercase(),
-        rng.gen_range(0..99)
+        rng.random_range(0..99)
     );
     let hash = sha256(&pass);
     (pass, hash)
@@ -186,7 +187,7 @@ impl HashGuesser {
             guesses: vec![], // will be set by tick_guess
             progress: 0,
             len: hash.len(),
-            rng: rand::thread_rng(),
+            rng: rng(),
         }
     }
 

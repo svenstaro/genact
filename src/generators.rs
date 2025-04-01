@@ -51,7 +51,7 @@ pub fn gen_file_path<T: std::clone::Clone + AsRef<str> + std::convert::AsRef<std
     extensions: &[&str],
     dir_candidates: &[T],
 ) -> String {
-    let path_length = rng.gen_range(1..5);
+    let path_length = rng.random_range(1..5);
     let mut path = PathBuf::from("/");
     let range = Uniform::new(0, dir_candidates.len()).unwrap();
     for _ in 0..path_length {

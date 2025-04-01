@@ -29,7 +29,7 @@ impl Module for DockerBuild {
         let mut rng = rng();
 
         // Output the sending of the context to Docker
-        let target_size: f64 = rng.gen_range(100.0..1000.0);
+        let target_size: f64 = rng.random_range(100.0..1000.0);
         let mut current_size: f64 = 0.0;
 
         while current_size <= target_size {
@@ -42,7 +42,7 @@ impl Module for DockerBuild {
             if remaining_size <= 5.0 {
                 current_size += 5.0;
             } else {
-                current_size += rng.gen_range(5.0..30.0);
+                current_size += rng.random_range(5.0..30.0);
             }
 
             if appconfig.should_exit() {
@@ -53,7 +53,7 @@ impl Module for DockerBuild {
         }
 
         // Loop trough a set number of steps
-        let total_steps = rng.gen_range(30..100);
+        let total_steps = rng.random_range(30..100);
         let mut current_step = 1_i32;
 
         while current_step <= total_steps {
@@ -98,7 +98,7 @@ impl Module for DockerBuild {
             }
 
             current_step += 1;
-            csleep(rng.gen_range(300..1000)).await;
+            csleep(rng.random_range(300..1000)).await;
         }
 
         // Print the final lines

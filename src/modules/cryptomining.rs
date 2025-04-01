@@ -3,7 +3,7 @@ use async_trait::async_trait;
 use chrono::prelude::*;
 use chrono::Duration;
 use instant::Instant;
-use rand::{thread_rng, Rng};
+use rand::{rng, Rng};
 use rand_distr::{Distribution, Normal};
 use yansi::Paint;
 
@@ -26,19 +26,19 @@ impl Module for Crytomining {
     }
 
     async fn run(&self, appconfig: &AppConfig) {
-        let mut rng = thread_rng();
-        let num_lines = rng.gen_range(300..1000);
+        let mut rng = rng();
+        let num_lines = rng.random_range(300..1000);
 
         // How often to receive a new job.
-        let new_job_every_n_lines = rng.gen_range(20..50);
+        let new_job_every_n_lines = rng.random_range(20..50);
         let mut remaining_until_new_job = new_job_every_n_lines;
 
         // Base value for how many MH/s a GPU gets.
-        let approximate_mhs_per_gpu = rng.gen_range(1.0..99.0);
-        let num_gpus = rng.gen_range(1..8);
+        let approximate_mhs_per_gpu = rng.random_range(1.0..99.0);
+        let num_gpus = rng.random_range(1..8);
 
         // How often a solution will be found.
-        let solution_found_every_n_lines = rng.gen_range(80..200);
+        let solution_found_every_n_lines = rng.random_range(80..200);
         let mut remaining_until_next_solution = solution_found_every_n_lines;
 
         // How many solutions have already been found.
