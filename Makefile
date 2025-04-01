@@ -18,7 +18,7 @@ build-apple:
 
 .PHONY: build-web
 build-web:
-	trunk build --release
+	RUSTFLAGS='--cfg getrandom_backend="wasm_js"' trunk build --release
 
 .PHONY: clean
 clean:

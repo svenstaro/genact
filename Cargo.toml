@@ -25,12 +25,12 @@ async-trait = "0.1"
 chrono = { version = "0.4", features = ["clock", "wasmbind"], default-features = false }
 fake = { version = "4.2", features = ["chrono"] }
 colorgrad = "0.7"
-getrandom = { version = "0.3" }
 humansize = "2"
 humantime = "2"
 instant = { version = "0.1", features = ["now", "wasm-bindgen"] }
 lazy_static = "1.5"
 progress_string = "0.2"
+getrandom = { version = "0.3", features = ["wasm_js"] }
 rand = "0.9"
 rand_distr = "0.5"
 regex = "1.11"
