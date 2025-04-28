@@ -7,7 +7,6 @@ use rand::distr::Uniform;
 use rand::rngs::ThreadRng;
 use rand::seq::IndexedRandom;
 use rand::Rng;
-use rand_distr::{ChiSquared, Distribution, Exp};
 
 /// Generate a string of `length` with characters randomly sampled
 /// from `string`.
@@ -62,12 +61,9 @@ pub fn gen_file_path<T: std::clone::Clone + AsRef<str> + std::convert::AsRef<std
 }
 
 pub fn gen_package_version(rng: &mut ThreadRng) -> String {
-    let chi = ChiSquared::new(1.0).unwrap();
-    let exp = Exp::new(2.0).unwrap();
-    format!(
-        "{major:.0}.{minor:.0}.{patch:.0}",
-        major = exp.sample(rng),
-        minor = 10.0 * chi.sample(rng),
-        patch = 10.0 * chi.sample(rng)
-    )
+    let major = rng.random_range(0..10);    // Major versions typically 0-9
+    let minor = rng.random_range(0..100);   // Minor versions typically 0-99
+    let patch = rng.random_range(0..1000);  // Patch versions typically 0-999
+    
+    format!("{major}.{minor}.{patch}")
 }
