@@ -57,6 +57,10 @@ jobs:
       - run: sudo apt install musl-tools
         if: startsWith(matrix.os, 'ubuntu') && matrix.target != 'wasm32-unknown-unknown'
 
+      - name: Set exe extension for Windows
+        run: echo "RUSTFLAGS=--cfg getrandom_backend=\"wasm_js\"" >> "$GITHUB_ENV"
+        if: matrix.target == 'wasm32-unknown-unknown'
+
       - name: cargo build
         uses: houseabsolute/actions-rust-cross@v0
         with:
