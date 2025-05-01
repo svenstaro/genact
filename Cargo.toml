@@ -23,7 +23,7 @@ anyhow = "1"
 async-std = { version = "1", features = ["attributes"] }
 async-trait = "0.1"
 chrono = { version = "0.4", features = ["clock", "wasmbind"], default-features = false }
-fake = { version = "4.2", features = ["chrono"] }
+fake = { version = "4.3", features = ["chrono"] }
 colorgrad = "0.7"
 humansize = "2"
 humantime = "2"
@@ -34,7 +34,7 @@ getrandom = { version = "0.3", features = ["wasm_js"] }
 rand = "0.9"
 rand_distr = "0.5"
 regex = "1.11"
-sha2 = "0.10.6"
+sha2 = "0.10.9"
 yansi = "1"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
