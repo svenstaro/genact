@@ -1,17 +1,17 @@
 //! Module that pretends to build Docker images
 use async_trait::async_trait;
+use rand::Rng;
 use rand::rng;
 use rand::seq::IndexedRandom;
 use rand::seq::IteratorRandom;
-use rand::Rng;
 
+use crate::ALL_MODULES;
 use crate::args::AppConfig;
 use crate::data::DOCKER_PACKAGES_LIST;
 use crate::data::DOCKER_TAGS_LIST;
 use crate::generators::gen_hex_string;
 use crate::io::{csleep, newline, print};
 use crate::modules::Module;
-use crate::ALL_MODULES;
 
 pub struct DockerBuild;
 

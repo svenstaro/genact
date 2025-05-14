@@ -1,8 +1,8 @@
 //! Pretend to dump some random memory locations
-use std::io::{stdout, Write};
+use std::io::{Write, stdout};
 
 use async_trait::async_trait;
-use rand::{rng, Rng};
+use rand::{Rng, rng};
 
 use crate::args::AppConfig;
 use crate::generators::gen_hex_string;

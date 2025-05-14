@@ -3,9 +3,9 @@ use std::str::from_utf8;
 
 use async_trait::async_trait;
 use colorgrad::Gradient;
-use fake::{faker::name::raw::FirstName, locales::EN, Fake};
+use fake::{Fake, faker::name::raw::FirstName, locales::EN};
 use rand::rngs::ThreadRng;
-use rand::{rng, Rng};
+use rand::{Rng, rng};
 use sha2::{Digest, Sha256};
 use yansi::Paint;
 

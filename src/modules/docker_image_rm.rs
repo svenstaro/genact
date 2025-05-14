@@ -1,7 +1,7 @@
 //! Pretend to delete Docker images
 use async_trait::async_trait;
 use rand::seq::IndexedRandom;
-use rand::{rng, Rng};
+use rand::{Rng, rng};
 
 use crate::args::AppConfig;
 use crate::data::{DOCKER_PACKAGES_LIST, DOCKER_TAGS_LIST};

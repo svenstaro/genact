@@ -1,5 +1,5 @@
 #[cfg(not(target_arch = "wasm32"))]
-use clap::{builder::PossibleValuesParser, Parser};
+use clap::{Parser, builder::PossibleValuesParser};
 
 use crate::modules::ALL_MODULES;
 

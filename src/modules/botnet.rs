@@ -1,6 +1,6 @@
 //! Pretend to run and orchestrate a botnet
 use async_trait::async_trait;
-use rand::{rng, Rng};
+use rand::{Rng, rng};
 use yansi::Paint;
 
 use crate::args::AppConfig;

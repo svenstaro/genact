@@ -12,7 +12,7 @@ use rand::rng;
 use rand::seq::IndexedRandom;
 
 use crate::args::AppConfig;
-use crate::modules::{Module, ALL_MODULES};
+use crate::modules::{ALL_MODULES, Module};
 
 lazy_static::lazy_static! {
     pub static ref CTRLC_PRESSED: AtomicBool = AtomicBool::new(false);

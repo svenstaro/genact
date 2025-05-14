@@ -2,7 +2,7 @@
 use anyhow::Result;
 
 use genact::args::parse_args;
-use genact::{run, INSTANT_PRINT_LINES, SPEED_FACTOR};
+use genact::{INSTANT_PRINT_LINES, SPEED_FACTOR, run};
 
 use std::sync::atomic::Ordering;
 

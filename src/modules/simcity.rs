@@ -1,7 +1,7 @@
 //! Print some Sim City loading screen status quips
 use async_trait::async_trait;
 use rand::seq::IndexedRandom;
-use rand::{rng, Rng};
+use rand::{Rng, rng};
 use yansi::Paint;
 
 use crate::args::AppConfig;

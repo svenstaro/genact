@@ -3,10 +3,10 @@ use std::cmp::max;
 use std::time::Duration;
 
 use async_trait::async_trait;
-use humansize::{format_size, FormatSizeOptions};
+use humansize::{FormatSizeOptions, format_size};
 use humantime::format_duration;
 use rand::seq::IndexedRandom;
-use rand::{rng, Rng};
+use rand::{Rng, rng};
 
 use crate::args::AppConfig;
 use crate::data::{CFILES_LIST, EXTENSIONS_LIST};

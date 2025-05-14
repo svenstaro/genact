@@ -4,7 +4,7 @@
 use wasm_bindgen::prelude::*;
 
 #[cfg(not(target_arch = "wasm32"))]
-use std::io::{stdout, Write};
+use std::io::{Write, stdout};
 
 use crate::{INSTANT_PRINT_LINES, SPEED_FACTOR};
 

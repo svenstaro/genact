@@ -1,7 +1,7 @@
 //! Pretend to run mkinitcpio
 use async_trait::async_trait;
 use rand::seq::IndexedRandom;
-use rand::{rng, Rng};
+use rand::{Rng, rng};
 use regex::Regex;
 use yansi::Paint;
 

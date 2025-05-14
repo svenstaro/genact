@@ -1,9 +1,9 @@
 //! Pretend to run Ansible to set up some systems
 use async_trait::async_trait;
-use fake::faker::internet::en::*;
 use fake::Fake;
+use fake::faker::internet::en::*;
 use rand::seq::{IndexedRandom, SliceRandom};
-use rand::{rng, Rng};
+use rand::{Rng, rng};
 use rand_distr::{Distribution, Normal};
 use yansi::Paint;
 

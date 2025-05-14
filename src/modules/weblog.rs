@@ -1,11 +1,11 @@
 //! Pretend to tail a web server log
 use async_trait::async_trait;
 use chrono::prelude::*;
+use fake::Fake;
 use fake::faker::internet::en::*;
 use fake::faker::lorem::en::*;
-use fake::Fake;
 use rand::seq::IndexedRandom;
-use rand::{rng, Rng};
+use rand::{Rng, rng};
 
 use crate::args::AppConfig;
 use crate::data::{EXTENSIONS_LIST, PACKAGES_LIST};

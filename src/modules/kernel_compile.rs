@@ -2,7 +2,7 @@
 use async_trait::async_trait;
 use rand::rngs::ThreadRng;
 use rand::seq::IndexedRandom;
-use rand::{rng, Rng};
+use rand::{Rng, rng};
 use regex::Regex;
 
 use crate::args::AppConfig;

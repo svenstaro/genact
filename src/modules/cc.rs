@@ -4,7 +4,7 @@ use std::path::Path;
 use async_trait::async_trait;
 use rand::rngs::ThreadRng;
 use rand::seq::IndexedRandom;
-use rand::{rng, Rng};
+use rand::{Rng, rng};
 
 use crate::args::AppConfig;
 use crate::data::{CFILES_LIST, PACKAGES_LIST};
