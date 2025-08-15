@@ -55,6 +55,10 @@ It is also available on Scoop:
     cargo install genact
     genact
 
+**With gah**: If you are using [gah](https://github.com/marverix/gah), you can run
+
+    gah install genact
+
 ## Running
 
 To see a list of all available options, you can run
