@@ -17,13 +17,11 @@ fn generate_includes(file_list: &[&str], max: u32, rng: &mut ThreadRng) -> Strin
     let mut include_flags = vec![];
     for file in file_list {
         let path = Path::new(file);
-        if let Some(dir) = path.parent() {
-            if let Some(dir_str) = dir.to_str() {
-                if !include_flags.contains(&dir_str) {
+        if let Some(dir) = path.parent()
+            && let Some(dir_str) = dir.to_str()
+                && !include_flags.contains(&dir_str) {
                     include_flags.push(dir_str);
                 }
-            }
-        }
     }
     let limited_flags = (0..max).map(|_| include_flags.choose(rng).unwrap());
     limited_flags.fold(String::new(), |acc, x| acc + "-I" + x + " ")

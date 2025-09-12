@@ -80,18 +80,16 @@ impl AppConfig {
             use std::sync::atomic::Ordering;
 
             // Check if maximum running time is exceeded.
-            if let Some(eat) = self.exit_after_time {
-                if STARTED_AT.elapsed() > eat {
+            if let Some(eat) = self.exit_after_time
+                && STARTED_AT.elapsed() > eat {
                     return true;
                 }
-            }
 
             // Check if maximum number of module runs has been reached.
-            if let Some(eam) = self.exit_after_modules {
-                if MODULES_RAN.load(Ordering::SeqCst) >= eam {
+            if let Some(eam) = self.exit_after_modules
+                && MODULES_RAN.load(Ordering::SeqCst) >= eam {
                     return true;
                 }
-            }
         }
 
         false
