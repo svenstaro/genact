@@ -16,7 +16,8 @@ jobs:
 
       - name: Setup Rust toolchain
         uses: dtolnay/rust-toolchain@stable
-        components: rustfmt
+        with:
+          components: rustfmt, clippy
 
       - name: cargo build
         run: cargo build
