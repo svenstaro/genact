@@ -33,7 +33,7 @@ progress_string = "0.2"
 getrandom = { version = "0.3", features = ["wasm_js"] }
 rand = "0.9"
 rand_distr = "0.5"
-regex = "1.11"
+regex = "1.12"
 sha2 = "0.10.9"
 yansi = "1"
 
@@ -41,7 +41,7 @@ yansi = "1"
 clap = { version = "4.5", features = ["derive", "cargo", "wrap_help"] }
 clap_complete = "4"
 clap_mangen = "0.2"
-ctrlc = { version = "3.4", features = ["termination"] }
+ctrlc = { version = "3.5", features = ["termination"] }
 terminal_size = "0.4"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
