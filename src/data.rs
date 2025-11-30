@@ -17,6 +17,9 @@ static TERRAFORM_AWS_RESOURCES: &str = include_str!("../data/terraform_aws_resou
 static TERRAFORM_AZURE_RESOURCES: &str = include_str!("../data/terraform_azure_resources.txt");
 static TERRAFORM_GCP_RESOURCES: &str = include_str!("../data/terraform_gcp_resources.txt");
 static TERRAFORM_IDS: &str = include_str!("../data/terraform_ids.txt");
+static CSS_PROPERTIES: &str = include_str!("../data/css_properties.txt");
+static WEB_APIS: &str = include_str!("../data/web_apis.txt");
+static WPT_CATEGORIES: &str = include_str!("../data/wpt_categories.txt");
 
 lazy_static::lazy_static! {
     pub static ref BOOTLOG_LIST: Vec<&'static str> = BOOTLOG.lines().collect();
@@ -47,6 +50,9 @@ lazy_static::lazy_static! {
             crate::modules::julia::Package { name, id, versions }
         })
         .collect();
+    pub static ref CSS_PROPERTIES_LIST: Vec<&'static str> = CSS_PROPERTIES.lines().collect();
+    pub static ref WEB_APIS_LIST: Vec<&'static str> = WEB_APIS.lines().collect();
+    pub static ref WPT_CATEGORIES_LIST: Vec<&'static str> = WPT_CATEGORIES.lines().collect();
 
 }
 
