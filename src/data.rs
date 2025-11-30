@@ -17,6 +17,7 @@ static TERRAFORM_AWS_RESOURCES: &str = include_str!("../data/terraform_aws_resou
 static TERRAFORM_AZURE_RESOURCES: &str = include_str!("../data/terraform_azure_resources.txt");
 static TERRAFORM_GCP_RESOURCES: &str = include_str!("../data/terraform_gcp_resources.txt");
 static TERRAFORM_IDS: &str = include_str!("../data/terraform_ids.txt");
+static WPT_TESTS: &str = include_str!("../data/wpt_tests.txt");
 
 lazy_static::lazy_static! {
     pub static ref BOOTLOG_LIST: Vec<&'static str> = BOOTLOG.lines().collect();
@@ -47,6 +48,7 @@ lazy_static::lazy_static! {
             crate::modules::julia::Package { name, id, versions }
         })
         .collect();
+    pub static ref WPT_TESTS_LIST: Vec<&'static str> = WPT_TESTS.lines().collect();
 
 }
 
