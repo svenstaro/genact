@@ -17,6 +17,7 @@ pub mod rkhunter;
 pub mod simcity;
 pub mod terraform;
 pub mod weblog;
+pub mod wpt;
 
 use async_trait::async_trait;
 use std::collections::BTreeMap;
@@ -52,6 +53,7 @@ lazy_static::lazy_static! {
         all_modules.insert("simcity", Box::new(simcity::Simcity));
         all_modules.insert("terraform", Box::new(terraform::Terraform));
         all_modules.insert("weblog", Box::new(weblog::Weblog));
+        all_modules.insert("wpt", Box::new(wpt::WPT));
         all_modules
     };
 }
