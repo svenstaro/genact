@@ -24,7 +24,7 @@ async-std = { version = "1", features = ["attributes"] }
 async-trait = "0.1"
 chrono = { version = "0.4", features = ["clock", "wasmbind"], default-features = false }
 fake = { version = "4.3", features = ["chrono"] }
-colorgrad = "0.7"
+colorgrad = { version = "0.8", features = ["preset"] }
 humansize = "2"
 humantime = "2"
 instant = { version = "0.1", features = ["now", "wasm-bindgen"] }
