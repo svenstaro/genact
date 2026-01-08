@@ -600,7 +600,7 @@ dependencies = [
 
 [[package]]
 name = "genact"
-version = "1.4.2"
+version = "1.5.0"
 dependencies = [
  "anyhow",
  "async-std",
