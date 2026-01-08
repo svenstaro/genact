@@ -1,1 +1,42 @@
-<!doctype html><title>genact 1.4.1</title><meta charset=utf-8><meta content="IE=edge" http-equiv=X-UA-Compatible><meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=1" name=viewport><link href=https://cdn.jsdelivr.net/npm/xterm@4.19.0/css/xterm.css rel=stylesheet><link href=https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css rel=stylesheet><link rel="shortcut icon" href=https://github.githubassets.com/images/icons/emoji/unicode/1f300.png type=image/png><link href=/genact/styles-16fb34d95e4aa8fd.css integrity=sha384-SasWQLlSsqyk1TA2qdSWk6Way7XlSz_dyj3BTzAsREhUpel1LnIBAEGOp4p8Ga1E rel=stylesheet><script src=https://cdn.jsdelivr.net/npm/xterm@4.19.0/lib/xterm.js></script><script src=https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.5.0/lib/xterm-addon-fit.js></script><link as=fetch crossorigin href=/genact/genact-5e95594ac0c31fe_bg.wasm integrity=sha384-Rr5l-oUVwgoRZCPFrQRI-GYjc-2PByUCP3-wMpuiO6GNQkb4IUiZ7mScYWRvzI51 rel=preload type=application/wasm><link crossorigin href=/genact/genact-5e95594ac0c31fe.js integrity=sha384-QbPHIsBsT7X2IekEXruBHJW2eQ-ALC_qBq-kF4AoWhWsle8PpBrbfq0AoxR0--vX rel=modulepreload><link crossorigin href=/genact/snippets/genact-4d165f88fc6b03b3/inline1.js integrity=sha384-jFRc1A4HtNwDXnHdw0_tjr5tFIlTSpVO31TtGNhMJR2-mpDG2s4x5ypXVlX2bfXI rel=modulepreload><link crossorigin href=/genact/snippets/genact-4d165f88fc6b03b3/inline0.js integrity=sha384-oIemSIXFaCB3iqQwpHiSan_A5PZQDqBxzEwqzqol3vw8H49_px2jZ2ZRaQFRn6Gn rel=modulepreload></head><body><div id=terminal></div><script>const xterm=new Terminal({scrollback:0});const fitAddon=new FitAddon.FitAddon();xterm.loadAddon(fitAddon);xterm.open(document.getElementById(`terminal`));fitAddon.fit();window.xterm=xterm</script><script type=module>import a,*as b from"/genact/genact-5e95594ac0c31fe.js";a(`/genact/genact-5e95594ac0c31fe_bg.wasm`);window.wasmBindings=b</script></body></html>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>genact 1.5.0</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1" name="viewport" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@4.19.0/css/xterm.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css" />
+    <link rel="shortcut icon" type="image/png" href="https://github.githubassets.com/images/icons/emoji/unicode/1f300.png" />
+    <link rel="stylesheet" href="/genact/styles-dca8b9c60cb4da36.css" integrity="sha384-tEcwTU5TDsvGwTsJ3thNM19dp1DyTgeXudEeP70sHxo03XB/A7g1d0rHr9zNPxk5"/>
+    <script src="https://cdn.jsdelivr.net/npm/xterm@4.19.0/lib/xterm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.5.0/lib/xterm-addon-fit.js"></script>
+<link rel="modulepreload" href="/genact/genact-81ed8a621c693ff5.js" crossorigin="anonymous" integrity="sha384-xFR4EQKJnBZpvdEifdaJkrvigTxQt7Y3aY0YAysbvpc/jDam70dYOft6jLkZLWp3"><link rel="modulepreload" href="/genact/snippets/genact-38d01644f9fa55cb/inline1.js" crossorigin="anonymous" integrity="sha384-jFRc1A4HtNwDXnHdw0/tjr5tFIlTSpVO31TtGNhMJR2+mpDG2s4x5ypXVlX2bfXI"><link rel="modulepreload" href="/genact/snippets/genact-38d01644f9fa55cb/inline0.js" crossorigin="anonymous" integrity="sha384-oIemSIXFaCB3iqQwpHiSan/A5PZQDqBxzEwqzqol3vw8H49/px2jZ2ZRaQFRn6Gn"><link rel="preload" href="/genact/genact-81ed8a621c693ff5_bg.wasm" crossorigin="anonymous" integrity="sha384-B8C87x/Cuynpe6y2tP0v3E/tpmVsxa2UTxA9eF6rihZfrri5bIydPceVh6VIhRCc" as="fetch" type="application/wasm"></head>
+
+<body>
+    <div id="terminal"></div>
+    <script>
+        const xterm = new Terminal({
+            scrollback: 0
+        });
+        const fitAddon = new FitAddon.FitAddon();
+        xterm.loadAddon(fitAddon);
+        xterm.open(document.getElementById('terminal'));
+        fitAddon.fit();
+        window.xterm = xterm;
+    </script>
+
+<script type="module">
+import init, * as bindings from '/genact/genact-81ed8a621c693ff5.js';
+const wasm = await init({ module_or_path: '/genact/genact-81ed8a621c693ff5_bg.wasm' });
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script></body>
+
+</html>
