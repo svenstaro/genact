@@ -31,6 +31,22 @@ pub async fn run(appconfig: AppConfig) {
         .collect();
     loop {
         let choice = selected_modules.choose(&mut rng).unwrap();
+
+        #[cfg(not(target_arch = "wasm32"))]
+        let keep_awake = appconfig
+            .inhibit
+            .then(|| {
+                keepawake::Builder::default()
+                    .display(true)
+                    .app_name("genact")
+                    .app_reverse_domain("io.github.svenstaro.genact")
+                    .reason(format!("Running `{}`", choice.signature()))
+                    .create()
+                    .inspect_err(|err| println!("WARN: failed to set up idle inhibition: {err}"))
+                    .ok()
+            })
+            .flatten();
+
         choice.run(&appconfig).await;
 
         #[cfg(not(target_arch = "wasm32"))]
@@ -41,6 +57,8 @@ pub async fn run(appconfig: AppConfig) {
             if appconfig.should_exit() {
                 exit_handler();
             }
+
+            drop(keep_awake);
         }
     }
 }

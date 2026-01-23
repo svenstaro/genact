@@ -41,6 +41,10 @@ pub struct AppConfig {
     #[clap(short, long = "instant-print-lines", default_value = "0")]
     pub instant_print_lines: u32,
 
+    /// Keep the computer awake and the display on while genact is running
+    #[clap(long)]
+    pub inhibit: bool,
+
     /// Exit after running for this long (format example: 2h10min)
     #[clap(long, value_parser = humantime::parse_duration)]
     pub exit_after_time: Option<instant::Duration>,
