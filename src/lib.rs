@@ -32,7 +32,8 @@ pub async fn run(appconfig: AppConfig) {
     loop {
         let choice = selected_modules.choose(&mut rng).unwrap();
 
-        #[cfg(not(target_arch = "wasm32"))]
+        // platforms supported by `keepawake`
+        #[cfg(any(target_os = "linux", target_os = "macos", target_os = "windows"))]
         let keep_awake = appconfig
             .inhibit
             .then(|| {
@@ -49,6 +50,9 @@ pub async fn run(appconfig: AppConfig) {
 
         choice.run(&appconfig).await;
 
+        #[cfg(any(target_os = "linux", target_os = "macos", target_os = "windows"))]
+        drop(keep_awake);
+
         #[cfg(not(target_arch = "wasm32"))]
         {
             use std::sync::atomic::Ordering;
@@ -57,8 +61,6 @@ pub async fn run(appconfig: AppConfig) {
             if appconfig.should_exit() {
                 exit_handler();
             }
-
-            drop(keep_awake);
         }
     }
 }

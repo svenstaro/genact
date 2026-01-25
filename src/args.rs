@@ -41,6 +41,8 @@ pub struct AppConfig {
     #[clap(short, long = "instant-print-lines", default_value = "0")]
     pub instant_print_lines: u32,
 
+    // platforms supported by `keepawake`
+    #[cfg(any(target_os = "linux", target_os = "macos", target_os = "windows"))]
     /// Keep the computer awake and the display on while genact is running
     #[clap(long)]
     pub inhibit: bool,
