@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+
+## [1.5.1] - 2026-01-26
 - Add idle inhibition feature via `--inhibit` [#698](https://github.com/svenstaro/genact/pull/698) (thanks @cyqsimon)
 
 ## [1.5.0] - 2026-01-08
@@ -81,7 +83,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Rewrite web version using wasm-bindgen
 
 <!-- next-url -->
-[Unreleased]: https://github.com/svenstaro/genact/compare/v1.5.0...HEAD
+[Unreleased]: https://github.com/svenstaro/genact/compare/v1.5.1...HEAD
+[1.5.1]: https://github.com/svenstaro/genact/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/svenstaro/genact/compare/v1.4.2...v1.5.0
 [1.4.2]: https://github.com/svenstaro/genact/compare/v1.4.1...v1.4.2
 [1.4.1]: https://github.com/svenstaro/genact/compare/v1.4.0...v1.4.1
