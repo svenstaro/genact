@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+- Add idle inhibition feature via `--inhibit` [#698](https://github.com/svenstaro/genact/pull/698) (thanks @cyqsimon)
 
 ## [1.5.0] - 2026-01-08
 - Add web-platform-tests module [#695](https://github.com/svenstaro/genact/pull/695) (thanks @alimpfard)
