@@ -2,7 +2,7 @@
 use std::io::{Write, stdout};
 
 use async_trait::async_trait;
-use rand::{Rng, rng};
+use rand::{RngExt, rng};
 
 use crate::args::AppConfig;
 use crate::generators::gen_hex_string;

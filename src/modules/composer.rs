@@ -2,7 +2,7 @@
 use async_trait::async_trait;
 use rand::rngs::ThreadRng;
 use rand::seq::IndexedRandom;
-use rand::{Rng, rng};
+use rand::{RngExt, rng};
 use rand_distr::{ChiSquared, Distribution};
 use yansi::Paint;
 
@@ -37,9 +37,7 @@ impl Module for Composer {
         let mut rng = rng();
         let num_packages = rng.random_range(10..100);
         // Choose `num_packages` packages, non-repeating and in random order
-        let chosen_names: Vec<_> = COMPOSERS_LIST
-            .choose_multiple(&mut rng, num_packages)
-            .collect();
+        let chosen_names: Vec<_> = COMPOSERS_LIST.sample(&mut rng, num_packages).collect();
         let chosen_packages: Vec<_> = chosen_names
             .iter()
             .map(|name| (name, gen_package_version(&mut rng)))

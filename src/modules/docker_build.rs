@@ -1,6 +1,6 @@
 //! Module that pretends to build Docker images
 use async_trait::async_trait;
-use rand::Rng;
+use rand::RngExt;
 use rand::rng;
 use rand::seq::IndexedRandom;
 use rand::seq::IteratorRandom;

@@ -2,7 +2,7 @@
 use async_trait::async_trait;
 use instant::Instant;
 use rand::seq::IndexedRandom;
-use rand::{Rng, rng};
+use rand::{RngExt, rng};
 use yansi::Paint;
 
 use crate::args::AppConfig;
@@ -27,9 +27,7 @@ impl Module for Cargo {
         let mut rng = rng();
         let num_packages = rng.random_range(10..100);
         // Choose `num_packages` packages, non-repeating and in random order
-        let chosen_names: Vec<_> = PACKAGES_LIST
-            .choose_multiple(&mut rng, num_packages)
-            .collect();
+        let chosen_names: Vec<_> = PACKAGES_LIST.sample(&mut rng, num_packages).collect();
         let chosen_packages: Vec<_> = chosen_names
             .iter()
             .map(|name| (name, gen_package_version(&mut rng)))

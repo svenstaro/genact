@@ -3,7 +3,7 @@ use async_trait::async_trait;
 use fake::Fake;
 use fake::faker::internet::en::*;
 use rand::seq::{IndexedRandom, SliceRandom};
-use rand::{Rng, rng};
+use rand::{RngExt, rng};
 use rand_distr::{Distribution, Normal};
 use yansi::Paint;
 

@@ -4,7 +4,7 @@ use std::fmt::Display;
 use async_trait::async_trait;
 use instant::Instant;
 use rand::seq::IndexedRandom;
-use rand::{Rng, rng};
+use rand::{RngExt, rng};
 use yansi::Paint;
 
 use crate::args::AppConfig;
@@ -40,7 +40,7 @@ impl Module for Julia {
         let num_packages = rng.random_range(10..150);
         let num_artifacts = rng.random_range(1..10);
         let all_packages: Vec<&Package> = JULIA_PACKAGES_LIST
-            .choose_multiple(&mut rng, num_packages + num_artifacts)
+            .sample(&mut rng, num_packages + num_artifacts)
             .collect();
         let (packages, artifacts) = all_packages.split_at(num_packages);
 

@@ -3,7 +3,8 @@ use async_trait::async_trait;
 use chrono::Duration;
 use chrono::prelude::*;
 use instant::Instant;
-use rand::{Rng, rng};
+use rand::RngExt;
+use rand::rng;
 use rand_distr::{Distribution, Normal};
 use yansi::Paint;
 

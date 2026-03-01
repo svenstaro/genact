@@ -5,7 +5,7 @@ use fake::Fake;
 use fake::faker::internet::en::*;
 use fake::faker::lorem::en::*;
 use rand::seq::IndexedRandom;
-use rand::{Rng, rng};
+use rand::{RngExt, rng};
 
 use crate::args::AppConfig;
 use crate::data::{EXTENSIONS_LIST, PACKAGES_LIST};

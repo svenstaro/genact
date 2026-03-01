@@ -1,7 +1,7 @@
 //! Pretend to run Terraform
 use async_trait::async_trait;
 use instant::Instant;
-use rand::Rng;
+use rand::RngExt;
 use rand::rng;
 use rand::seq::IteratorRandom;
 use rand_distr::Distribution;

@@ -2,7 +2,7 @@
 use async_trait::async_trait;
 use chrono::Utc;
 use rand::seq::{IndexedRandom, IteratorRandom};
-use rand::{Rng, rng};
+use rand::{RngExt, rng};
 use yansi::Paint;
 
 use crate::args::AppConfig;
@@ -84,9 +84,8 @@ impl Module for RkHunter {
 
             let mut rootkit_found = false;
             let num_checks = rng.random_range(2..30);
-            let mut checks: Vec<&&str> = RKHUNTER_CHECKS_LIST
-                .choose_multiple(&mut rng, num_checks)
-                .collect();
+            let mut checks: Vec<&&str> =
+                RKHUNTER_CHECKS_LIST.sample(&mut rng, num_checks).collect();
 
             checks.sort();
 

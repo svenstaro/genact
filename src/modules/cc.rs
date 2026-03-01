@@ -4,7 +4,7 @@ use std::path::Path;
 use async_trait::async_trait;
 use rand::rngs::ThreadRng;
 use rand::seq::IndexedRandom;
-use rand::{Rng, rng};
+use rand::{RngExt, rng};
 
 use crate::args::AppConfig;
 use crate::data::{CFILES_LIST, PACKAGES_LIST};
@@ -30,7 +30,7 @@ fn generate_includes(file_list: &[&str], max: u32, rng: &mut ThreadRng) -> Strin
 
 /// Generate a list of `n` random linker flags given a list of `candidates`.
 fn generate_linker_flags(candidates: &[&str], n: usize, rng: &mut ThreadRng) -> String {
-    let libraries = candidates.choose_multiple(rng, n);
+    let libraries = candidates.sample(rng, n);
     libraries.fold(String::new(), |acc, &x| acc + "-l" + x + " ")
 }
 
@@ -80,10 +80,8 @@ impl Module for Cc {
         let compiler = COMPILERS.choose(&mut rng).unwrap();
 
         let num_cfiles = rng.random_range(100..1000);
-        let mut chosen_files: Vec<&str> = CFILES_LIST
-            .choose_multiple(&mut rng, num_cfiles)
-            .cloned()
-            .collect();
+        let mut chosen_files: Vec<&str> =
+            CFILES_LIST.sample(&mut rng, num_cfiles).cloned().collect();
         chosen_files.sort_unstable();
 
         let opt = FLAGS_OPT.choose(&mut rng).unwrap();

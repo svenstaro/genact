@@ -5,7 +5,7 @@ use async_trait::async_trait;
 use colorgrad::Gradient;
 use fake::{Fake, faker::name::raw::FirstName, locales::EN};
 use rand::rngs::ThreadRng;
-use rand::{Rng, rng};
+use rand::{Rng, RngExt, rng};
 use sha2::{Digest, Sha256};
 use yansi::Paint;
 

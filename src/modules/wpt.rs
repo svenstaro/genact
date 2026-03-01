@@ -1,7 +1,7 @@
 //! Pretend to do a full WPT run
 use async_trait::async_trait;
 use rand::prelude::IndexedRandom;
-use rand::{Rng, rng};
+use rand::{RngExt, rng};
 
 use crate::args::AppConfig;
 use crate::data::{CSS_PROPERTIES_LIST, WEB_APIS_LIST, WPT_CATEGORIES_LIST};

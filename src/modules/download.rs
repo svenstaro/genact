@@ -6,7 +6,7 @@ use async_trait::async_trait;
 use humansize::{FormatSizeOptions, format_size};
 use humantime::format_duration;
 use rand::seq::IndexedRandom;
-use rand::{Rng, rng};
+use rand::{RngExt, rng};
 
 use crate::args::AppConfig;
 use crate::data::{CFILES_LIST, EXTENSIONS_LIST};
