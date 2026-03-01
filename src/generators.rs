@@ -3,10 +3,10 @@ use std::cmp;
 use std::path::{Path, PathBuf};
 use std::str;
 
+use rand::RngExt;
 use rand::distr::Uniform;
 use rand::rngs::ThreadRng;
 use rand::seq::IndexedRandom;
-use rand::RngExt;
 use rand_distr::{ChiSquared, Distribution, Exp};
 
 /// Generate a string of `length` with characters randomly sampled
