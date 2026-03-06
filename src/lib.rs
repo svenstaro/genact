@@ -4,6 +4,7 @@ mod generators;
 mod io;
 pub mod modules;
 
+use std::sync::LazyLock;
 use std::sync::atomic::{AtomicBool, AtomicU32};
 
 use async_std::sync::Mutex;
@@ -14,17 +15,15 @@ use rand::seq::IndexedRandom;
 use crate::args::AppConfig;
 use crate::modules::{ALL_MODULES, Module};
 
-lazy_static::lazy_static! {
-    pub static ref CTRLC_PRESSED: AtomicBool = AtomicBool::new(false);
-    pub static ref SPEED_FACTOR: Mutex<f32> = Mutex::new(1.0);
-    pub static ref INSTANT_PRINT_LINES: AtomicU32 = AtomicU32::new(0);
-    pub static ref STARTED_AT: Instant = Instant::now();
-    pub static ref MODULES_RAN: AtomicU32 = AtomicU32::new(0);
-}
+pub static CTRLC_PRESSED: LazyLock<AtomicBool> = LazyLock::new(|| AtomicBool::new(false));
+pub static SPEED_FACTOR: LazyLock<Mutex<f32>> = LazyLock::new(|| Mutex::new(1.0));
+pub static INSTANT_PRINT_LINES: LazyLock<AtomicU32> = LazyLock::new(|| AtomicU32::new(0));
+pub static STARTED_AT: LazyLock<Instant> = LazyLock::new(Instant::now);
+pub static MODULES_RAN: LazyLock<AtomicU32> = LazyLock::new(|| AtomicU32::new(0));
 
 pub async fn run(appconfig: AppConfig) {
     let mut rng = rng();
-    let selected_modules: Vec<&Box<dyn Module>> = appconfig
+    let selected_modules: Vec<&Box<dyn Module + Send + 'static>> = appconfig
         .modules
         .iter()
         .map(|m| &ALL_MODULES[m.as_str()])
