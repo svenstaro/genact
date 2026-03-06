@@ -1,0 +1,12 @@
+llama-3-8b-base
+llama-3-70b-base
+mistral-7b-v0.3
+mistral-nemo-12b
+mixtral-8x7b
+qwen2.5-7b
+qwen2.5-72b
+qwen2-vl-7b
+gemma-2-9b
+gemma-2-27b
+phi-3.5-mini
+deepseek-r1-7b

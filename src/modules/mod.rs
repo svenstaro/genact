@@ -11,6 +11,7 @@ pub mod docker_image_rm;
 pub mod download;
 pub mod julia;
 pub mod kernel_compile;
+pub mod llm_training;
 pub mod memdump;
 pub mod mkinitcpio;
 pub mod rkhunter;
@@ -47,6 +48,7 @@ lazy_static::lazy_static! {
         all_modules.insert("download", Box::new(download::Download));
         all_modules.insert("julia", Box::new(julia::Julia));
         all_modules.insert("kernel_compile", Box::new(kernel_compile::KernelCompile));
+        all_modules.insert("llm_training", Box::new(llm_training::LlmTraining));
         all_modules.insert("memdump", Box::new(memdump::Memdump));
         all_modules.insert("mkinitcpio", Box::new(mkinitcpio::Mkinitcpio));
         all_modules.insert("rkhunter", Box::new(rkhunter::RkHunter));
