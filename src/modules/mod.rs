@@ -19,21 +19,24 @@ pub mod terraform;
 pub mod weblog;
 pub mod wpt;
 
-use async_trait::async_trait;
 use std::collections::BTreeMap;
+use std::sync::LazyLock;
+
+use async_trait::async_trait;
 
 use crate::args::AppConfig;
 
 #[async_trait(?Send)]
-pub trait Module: Sync {
+pub trait Module: Sync + Send {
     fn name(&self) -> &'static str;
     fn signature(&self) -> String;
     async fn run(&self, app_config: &AppConfig);
 }
 
-lazy_static::lazy_static! {
-    pub static ref ALL_MODULES: BTreeMap<&'static str, Box<dyn Module>> = {
-        let mut all_modules: BTreeMap<&'static str, Box<dyn Module>> = BTreeMap::new();
+pub static ALL_MODULES: LazyLock<BTreeMap<&'static str, Box<dyn Module + Send + 'static>>> =
+    LazyLock::new(|| {
+        let mut all_modules: BTreeMap<&'static str, Box<dyn Module + Send + 'static>> =
+            BTreeMap::new();
         all_modules.insert("ansible", Box::new(ansible::Ansible));
         all_modules.insert("bootlog", Box::new(bootlog::Bootlog));
         all_modules.insert("botnet", Box::new(botnet::Botnet));
@@ -55,5 +58,4 @@ lazy_static::lazy_static! {
         all_modules.insert("weblog", Box::new(weblog::Weblog));
         all_modules.insert("wpt", Box::new(wpt::WPT));
         all_modules
-    };
-}
+    });

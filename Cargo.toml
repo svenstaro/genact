@@ -32,7 +32,6 @@ colorgrad = { version = "0.8", features = ["preset"] }
 humansize = "2"
 humantime = "2"
 instant = { version = "0.1", features = ["now", "wasm-bindgen"] }
-lazy_static = "1.5"
 progress_string = "0.2"
 getrandom = { version = "0.4", features = ["wasm_js"] }
 rand = "0.10"
