@@ -1,19 +1,17 @@
-#[cfg(not(target_arch = "wasm32"))]
-use anyhow::Result;
-
 use genact::args::parse_args;
-use genact::{INSTANT_PRINT_LINES, SPEED_FACTOR, run};
+#[cfg(not(target_arch = "wasm32"))]
+use genact::{run, INSTANT_PRINT_LINES, SPEED_FACTOR};
+#[cfg(target_arch = "wasm32")]
+use genact::{INSTANT_PRINT_LINES, SPEED_FACTOR};
 
 use std::sync::atomic::Ordering;
 
 #[cfg(not(target_arch = "wasm32"))]
-use genact::exit_handler;
-
-#[cfg(not(target_arch = "wasm32"))]
-#[async_std::main]
-async fn main() -> Result<()> {
+#[tokio::main(flavor = "current_thread")]
+async fn main() -> anyhow::Result<()> {
     use clap::CommandFactory;
     use genact::args::AppConfig;
+    use genact::exit_handler;
 
     let appconfig = parse_args();
 
@@ -49,16 +47,21 @@ async fn main() -> Result<()> {
     Ok(())
 }
 
-// Called when the wasm module is instantiated
 #[cfg(target_arch = "wasm32")]
-#[async_std::main]
-async fn main() {
-    use std::panic;
-    panic::set_hook(Box::new(console_error_panic_hook::hook));
+fn main() {
+    use wasm_bindgen::prelude::*;
 
-    let appconfig = parse_args();
-    *SPEED_FACTOR.lock().await = appconfig.speed_factor;
-    INSTANT_PRINT_LINES.store(appconfig.instant_print_lines, Ordering::SeqCst);
+    #[wasm_bindgen(start)]
+    pub fn wasm_main() {
+        std::panic::set_hook(Box::new(console_error_panic_hook::hook));
+        wasm_bindgen_futures::spawn_local(async_main());
+    }
 
-    run(appconfig).await;
+    async fn async_main() {
+        let appconfig = parse_args();
+        *SPEED_FACTOR.lock().await = appconfig.speed_factor;
+        INSTANT_PRINT_LINES.store(appconfig.instant_print_lines, Ordering::SeqCst);
+
+        genact::run(appconfig).await;
+    }
 }
