@@ -82,8 +82,8 @@ or (on Docker)
     Options:
       -l, --list-modules                               List available modules
       -m, --modules <MODULES>                          Run only these modules [possible values: ansible, bootlog, botnet, bruteforce, cargo, cc,
-                                                       composer, cryptomining, docker_build, docker_image_rm, download, julia, kernel_compile, memdump,
-                                                       mkinitcpio, rkhunter, simcity, terraform, weblog]
+                                                       composer, cryptomining, docker_build, docker_image_rm, download, julia, kernel_compile,
+                                                       llm_training, memdump, mkinitcpio, rkhunter, simcity, terraform, weblog, wpt]
       -s, --speed-factor <SPEED_FACTOR>                Global speed factor [default: 1]
       -i, --instant-print-lines <INSTANT_PRINT_LINES>  Instantly print this many lines [default: 0]
           --exit-after-time <EXIT_AFTER_TIME>          Exit after running for this long (format example: 2h10min)
