@@ -118,6 +118,10 @@ pub async fn erase_line() {
     print("\x1b[2K\x1b[0G").await;
 }
 
+pub async fn rewrite_line<S: Into<String>>(s: S) {
+    print(format!("\x1b[2K\r{}", s.into().to_string())).await;
+}
+
 #[cfg(not(target_arch = "wasm32"))]
 pub fn get_terminal_width() -> usize {
     if let Some((width, _)) = terminal_size::terminal_size() {

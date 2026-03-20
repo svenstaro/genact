@@ -16,9 +16,9 @@ pub mod mkinitcpio;
 pub mod rkhunter;
 pub mod simcity;
 pub mod terraform;
+pub mod uv;
 pub mod weblog;
 pub mod wpt;
-
 use std::collections::BTreeMap;
 use std::sync::LazyLock;
 
@@ -57,5 +57,6 @@ pub static ALL_MODULES: LazyLock<BTreeMap<&'static str, Box<dyn Module + Send + 
         all_modules.insert("terraform", Box::new(terraform::Terraform));
         all_modules.insert("weblog", Box::new(weblog::Weblog));
         all_modules.insert("wpt", Box::new(wpt::WPT));
+        all_modules.insert("uv", Box::new(uv::Uv));
         all_modules
     });
