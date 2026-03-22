@@ -36,7 +36,7 @@ fn format_size(kib: f32) -> String {
 
 // Rewrite the current line with the given string
 async fn rewrite_line<S: Into<String>>(s: S) {
-    print(format!("\x1b[2K\r{}", s.into().to_string())).await;
+    print(format!("\r\x1b[2K{}", s.into())).await;
 }
 
 pub struct Uv;
