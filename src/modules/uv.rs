@@ -2,7 +2,7 @@
 use crate::args::AppConfig;
 use crate::data::PACKAGES_LIST;
 use crate::generators::gen_package_version;
-use crate::io::{csleep, cursor_up, erase_line, newline, print, rewrite_line};
+use crate::io::{csleep, cursor_up, erase_line, newline, print};
 use crate::modules::Module;
 use async_trait::async_trait;
 use rand::seq::IndexedRandom;
@@ -34,6 +34,11 @@ fn format_size(kib: f32) -> String {
     }
 }
 
+// Rewrite the current line with the given string
+async fn rewrite_line<S: Into<String>>(s: S) {
+    print(format!("\x1b[2K\r{}", s.into().to_string())).await;
+}
+
 pub struct Uv;
 
 #[async_trait(?Send)]
@@ -47,8 +52,9 @@ impl Module for Uv {
     }
 
     async fn run(&self, appconfig: &AppConfig) {
-        let mut rng = rng();
         const SPINNER_FRAME: &[&str] = &["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
+
+        let mut rng = rng();
         let num_resolved_pkgs = rng.random_range(128..256);
         let pkgs: Vec<PackageInfo> = PACKAGES_LIST
             .sample(&mut rng, num_resolved_pkgs)
