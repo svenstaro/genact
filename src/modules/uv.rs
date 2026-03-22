@@ -7,6 +7,7 @@ use crate::modules::Module;
 use async_trait::async_trait;
 use rand::seq::IndexedRandom;
 use rand::{RngExt, rng};
+use std::time::Instant;
 use yansi::Paint;
 
 struct PackageInfo {
@@ -16,21 +17,12 @@ struct PackageInfo {
     download_speed: f32,
 }
 
-// Format milliseconds to seconds if exceeding 1000ms
-fn format_duration(ms: u64) -> String {
-    if ms >= 1000 {
-        format!("{:.2}s", ms as f32 / 1000.0)
-    } else {
-        format!("{}ms", ms)
-    }
-}
-
 // Convert KiB to MiB for better readability
 fn format_size(kib: f32) -> String {
     if kib >= 1024.0 {
-        format!("{:.2} MiB", kib / 1024.0)
+        format!("{:>7.2} MiB", kib / 1024.0)
     } else {
-        format!("{:.2} KiB", kib)
+        format!("{:>7.2} KiB", kib)
     }
 }
 
@@ -72,7 +64,7 @@ impl Module for Uv {
         csleep(512).await;
 
         // Resolve dependencies: Simulates the look-up process of multiple package versions
-        let resolve_ms = rng.random_range(512..1024);
+        let start_resolve = Instant::now();
         for (idx, pkg) in pkgs.iter().enumerate() {
             let frame = SPINNER_FRAME[idx % SPINNER_FRAME.len()];
             rewrite_line(format!(
@@ -81,19 +73,20 @@ impl Module for Uv {
                 format!("{}=={}", pkg.name, pkg.version)
             ))
             .await;
-            csleep(64).await;
+            csleep(rng.random_range(32..64)).await;
         }
+        let resolve_duration = start_resolve.elapsed();
         rewrite_line(format!(
-            "Resolved {} in {}ms\n",
+            "Resolved {} in {:.2?}\n",
             Paint::new(format!("{} packages", num_resolved_pkgs).bold()),
-            resolve_ms
+            resolve_duration
         ))
         .await;
         csleep(512).await;
 
         // Package Preparation
         let num_prepared_pkgs = rng.random_range(64..num_resolved_pkgs);
-        let prepared_ms = rng.random_range(64..128) * num_prepared_pkgs;
+        let start_prepare = Instant::now();
         for i in 0..num_prepared_pkgs {
             rewrite_line(format!(
                 "{} Preparing packages... ({}/{})",
@@ -102,12 +95,13 @@ impl Module for Uv {
                 num_prepared_pkgs
             ))
             .await;
-            csleep(32).await;
+            csleep(rng.random_range(64..128)).await;
         }
+        let prepare_duration = start_prepare.elapsed();
         rewrite_line(format!(
-            "Prepared {} in {}\n",
+            "Prepared {} in {:.2?}\n",
             Paint::new(format!("{} packages", num_prepared_pkgs).bold()),
-            format_duration(prepared_ms as u64)
+            prepare_duration
         ))
         .await;
         csleep(512).await;
@@ -115,6 +109,7 @@ impl Module for Uv {
         // Download packages Chunked Download, Using chunks prevents the terminal from scrolling past the viewport
         let chunk_size: usize = 8;
         let time_step: f32 = 0.1;
+        let start_install = Instant::now();
         for chunk in pkgs.chunks(chunk_size) {
             if appconfig.should_exit() {
                 return;
@@ -142,12 +137,12 @@ impl Module for Uv {
                     }
 
                     let progress_ratio = downloaded / pkg.size;
-                    let bar_len = (progress_ratio * 20.0) as usize;
+                    let bar_len = (progress_ratio * 30.0) as usize;
                     let bar = Paint::new("-".repeat(bar_len)).green();
 
                     // Fixed width formatting ensures the bars don't jump around
                     rewrite_line(format!(
-                        "{:40} {:20} {}/{}\n",
+                        "{:40} {:30} {:>11}/{:<11}\n",
                         pkg.name,
                         bar,
                         format_size(downloaded),
@@ -180,17 +175,18 @@ impl Module for Uv {
             let progress = "█".repeat(i);
             let empty = "░".repeat(pb_width - i);
             rewrite_line(format!(
-                "{}{} [{}/{}] Installing wheels..",
+                "{}{} [{}/{}] Installing wheels...",
                 progress, empty, progress_count, num_prepared_pkgs,
             ))
             .await;
             csleep(64).await;
         }
-        let install_ms = rng.random_range(128..256) * num_prepared_pkgs;
+
+        let install_duration = start_install.elapsed();
         rewrite_line(format!(
-            "Installed {} in {}\n",
+            "Installed {} in {:.2?}\n",
             Paint::new(format!("{} packages", num_prepared_pkgs)).bold(),
-            format_duration(install_ms as u64)
+            install_duration
         ))
         .await;
 
@@ -204,8 +200,8 @@ impl Module for Uv {
                 format!("{}=={}", Paint::new(pkg.name).bold(), pkg.version),
             ))
             .await;
-            csleep(30).await;
+            csleep(32).await;
         }
-        csleep(200).await;
+        csleep(512).await;
     }
 }
