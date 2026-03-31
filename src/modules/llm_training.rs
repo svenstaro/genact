@@ -16,7 +16,8 @@ pub struct Gpu<'a> {
 
 pub struct LlmTraining;
 
-fn fmt_time(secs: u64) -> String {
+// formats a time duration in seconds as MM:SS
+fn format_secs_as_mm_ss(secs: u64) -> String {
     format!("{:02}:{:02}", secs / 60, secs % 60)
 }
 
@@ -30,6 +31,15 @@ impl Module for LlmTraining {
         "python train.py --model gpt2 --dataset wikitext".to_string()
     }
 
+    // selects a random GPU and logs the device details
+    // chooses mixed precision training using either "bf16" or "fp16"
+    // configures gradient accumulation steps, micro-batch size, and calculates the total batch size
+    // initializes weights from a randomly selected model
+    // simulates file downloads
+    // logs the number of instances in the training dataset
+    // simulates the training process over a random number of epochs with progress bars
+    // randomly triggers checkpoint saves to persist the model state
+    // simulates a validation step after training with progress bar updates
     async fn run(&self, appconfig: &AppConfig) {
         let mut rng = rng();
 
@@ -73,6 +83,7 @@ impl Module for LlmTraining {
         let bar_steps = 12u64;
         let step_ms = 100u64;
 
+        // simulate downloading each file one by one with a fake progress bar
         for &file_size in &file_sizes {
             let speed: u64 = rng.random_range(1_000_000..80_000_000);
             let simulated_total_secs = file_size / speed;
@@ -109,8 +120,8 @@ impl Module for LlmTraining {
                         bar = bar,
                         downloaded = format_size(downloaded, size_opts),
                         total = format_size(file_size, size_opts),
-                        elapsed = fmt_time(elapsed_secs),
-                        eta = fmt_time(remaining_secs),
+                        elapsed = format_secs_as_mm_ss(elapsed_secs),
+                        eta = format_secs_as_mm_ss(remaining_secs),
                         speed = format_size(speed, speed_opts),
                     ))
                     .await;
@@ -142,7 +153,7 @@ impl Module for LlmTraining {
         let epoch_step_ms = 80u64;
 
         let simulated_epoch_secs: u64 = rng.random_range(60..300);
-
+        // simulate training over multiple epochs with fake progress updates.
         for epoch in 1..=num_epochs {
             let mut epoch_bar = progress_string::BarBuilder::new()
                 .total(steps_per_epoch as usize)
@@ -155,10 +166,10 @@ impl Module for LlmTraining {
 
                 let step = (steps_per_epoch * i / epoch_bar_steps).min(steps_per_epoch);
                 let pct = step as f64 / steps_per_epoch as f64 * 100.0;
+                // gradually lowers the displayed loss over time to make training progress look realistic
                 let step_loss =
                     loss - rng.random_range(0.0_f64..0.2) * i as f64 / epoch_bar_steps as f64;
                 epoch_bar.replace(step as usize);
-
                 if i == 0 {
                     print(format!(
                         "Epoch {epoch}/{num_epochs}:   0%|          | 0/{steps_per_epoch} [00:00<?, ?it/s]"
@@ -172,8 +183,8 @@ impl Module for LlmTraining {
                     print(format!(
                         "Epoch {epoch}/{num_epochs}: {pct:>3.0}%|{bar}| {step}/{steps_per_epoch} [{elapsed}<{eta}, {it:.2}it/s, loss={loss:.4}]",
                         bar = epoch_bar,
-                        elapsed = fmt_time(elapsed_secs),
-                        eta = fmt_time(remaining_secs),
+                        elapsed = format_secs_as_mm_ss(elapsed_secs),
+                        eta = format_secs_as_mm_ss(remaining_secs),
                         it = it_per_s,
                         loss = step_loss,
                     ))
@@ -194,6 +205,7 @@ impl Module for LlmTraining {
             loss = loss.max(0.05);
             newline().await;
 
+            // once in a while, simulate a checkpoint to save model to file system
             if rng.random_bool(0.4) {
                 let checkpoint_step = epoch * steps_per_epoch;
                 print(format!(
@@ -224,7 +236,7 @@ impl Module for LlmTraining {
             .full_char('█')
             .width(10)
             .build();
-
+        // simulate validation progress in small steps with a fake progress bar.
         for i in 0..=val_bar_steps {
             erase_line().await;
 
@@ -245,8 +257,8 @@ impl Module for LlmTraining {
                 print(format!(
                     "Validating: {pct:>3.0}%|{bar}| {step}/{val_steps} [{elapsed}<{eta}, {it:.2}it/s]",
                     bar = val_bar,
-                    elapsed = fmt_time(elapsed_secs),
-                    eta = fmt_time(remaining_secs),
+                    elapsed = format_secs_as_mm_ss(elapsed_secs),
+                    eta = format_secs_as_mm_ss(remaining_secs),
                     it = it_per_s,
                 ))
                 .await;
