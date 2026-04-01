@@ -37,13 +37,13 @@ getrandom = { version = "0.4", features = ["wasm_js"] }
 rand = "0.10"
 rand_distr = "0.6"
 regex = "1.12"
-sha2 = "0.10.9"
+sha2 = "0.11.0"
 yansi = "1"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
-clap = { version = "4.5", features = ["derive", "cargo", "wrap_help"] }
+clap = { version = "4.6", features = ["derive", "cargo", "wrap_help"] }
 clap_complete = "4"
-clap_mangen = "0.2"
+clap_mangen = "0.3"
 ctrlc = { version = "3.5", features = ["termination"] }
 terminal_size = "0.4"
 
