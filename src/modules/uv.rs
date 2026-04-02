@@ -1,34 +1,28 @@
 //! Pretend to set uv environment
+use async_trait::async_trait;
+use humansize::{BINARY, format_size};
+use instant::Instant;
+use rand::seq::IndexedRandom;
+use rand::{RngExt, rng};
+use yansi::Paint;
+
 use crate::args::AppConfig;
 use crate::data::PACKAGES_LIST;
 use crate::generators::gen_package_version;
 use crate::io::{csleep, cursor_up, erase_line, newline, print};
 use crate::modules::Module;
-use async_trait::async_trait;
-use rand::seq::IndexedRandom;
-use rand::{RngExt, rng};
-use std::time::Instant;
-use yansi::Paint;
 
 struct PackageInfo {
     name: String,
     version: String,
-    size: f32,
-    download_speed: f32,
-}
-
-// Convert KiB to MiB for better readability
-fn format_size(kib: f32) -> String {
-    if kib >= 1024.0 {
-        format!("{:>7.2} MiB", kib / 1024.0)
-    } else {
-        format!("{:>7.2} KiB", kib)
-    }
+    size: u32,
+    download_speed: u32,
 }
 
 // Rewrite the current line with the given string
 async fn rewrite_line<S: Into<String>>(s: S) {
-    print(format!("\r\x1b[2K{}", s.into())).await;
+    erase_line().await;
+    print(s).await;
 }
 
 pub struct Uv;
@@ -53,13 +47,20 @@ impl Module for Uv {
             .map(|&name| PackageInfo {
                 name: name.to_string(),
                 version: gen_package_version(&mut rng),
-                size: rng.random_range(64.0..2048.0),
-                download_speed: rng.random_range(1024.0..2048.0),
+                size: rng.random_range(1 << 6..1 << 22),
+                download_speed: rng.random_range(1 << 18..1 << 22),
             })
             .collect();
 
         // Initialize virtualenv: Environment Setup
-        print("Using CPython 3.12.2\n").await;
+        let python_versions = [
+            "3.8.20", "3.9.25", "3.10.20", "3.11.15", "3.12.13", "3.13.16", "3.14.13",
+        ];
+        print(format!(
+            "Using CPython {}\n",
+            python_versions.choose(&mut rng).unwrap()
+        ))
+        .await;
         print("Creating virtualenv at: .venv\n").await;
         csleep(512).await;
 
@@ -76,11 +77,14 @@ impl Module for Uv {
             csleep(rng.random_range(32..64)).await;
         }
         let resolve_duration = start_resolve.elapsed();
-        rewrite_line(format!(
-            "Resolved {} in {:.2?}\n",
-            Paint::new(format!("{} packages", num_resolved_pkgs).bold()),
-            resolve_duration
-        ))
+        rewrite_line(
+            Paint::new(format!(
+                "Resolved {} packages in {:.2?}",
+                num_resolved_pkgs, resolve_duration
+            ))
+            .dim()
+            .to_string(),
+        )
         .await;
         csleep(512).await;
 
@@ -88,21 +92,28 @@ impl Module for Uv {
         let num_prepared_pkgs = rng.random_range(64..num_resolved_pkgs);
         let start_prepare = Instant::now();
         for i in 0..num_prepared_pkgs {
-            rewrite_line(format!(
-                "{} Preparing packages... ({}/{})",
-                SPINNER_FRAME[i % SPINNER_FRAME.len()],
-                i + 1,
-                num_prepared_pkgs
-            ))
+            rewrite_line(
+                Paint::new(format!(
+                    "{} Preparing packages... ({}/{})",
+                    SPINNER_FRAME[i % SPINNER_FRAME.len()],
+                    i + 1,
+                    num_prepared_pkgs
+                ))
+                .dim()
+                .to_string(),
+            )
             .await;
             csleep(rng.random_range(64..128)).await;
         }
         let prepare_duration = start_prepare.elapsed();
-        rewrite_line(format!(
-            "Prepared {} in {:.2?}\n",
-            Paint::new(format!("{} packages", num_prepared_pkgs).bold()),
-            prepare_duration
-        ))
+        rewrite_line(
+            Paint::new(format!(
+                "Prepared {} packages in {:.2?}\n",
+                num_prepared_pkgs, prepare_duration
+            ))
+            .dim()
+            .to_string(),
+        )
         .await;
         csleep(512).await;
 
@@ -129,24 +140,24 @@ impl Module for Uv {
                 let mut chunk_finished = true;
                 for i in 0..current_chunk_len {
                     let pkg = &chunk[i];
-                    let mut downloaded = elapsed_time * pkg.download_speed;
-                    if downloaded > pkg.size {
-                        downloaded = pkg.size;
+                    let mut downloaded = elapsed_time * pkg.download_speed as f32;
+                    if downloaded > pkg.size as f32 {
+                        downloaded = pkg.size as f32;
                     } else {
                         chunk_finished = false;
                     }
 
-                    let progress_ratio = downloaded / pkg.size;
+                    let progress_ratio = downloaded / pkg.size as f32;
                     let bar_len = (progress_ratio * 30.0) as usize;
                     let bar = Paint::new("-".repeat(bar_len)).green();
 
                     // Fixed width formatting ensures the bars don't jump around
                     rewrite_line(format!(
                         "{:40} {:30} {:>11}/{:<11}\n",
-                        pkg.name,
+                        Paint::new(&pkg.name).dim().to_string(),
                         bar,
-                        format_size(downloaded),
-                        format_size(pkg.size)
+                        format_size(downloaded as u32, BINARY),
+                        format_size(pkg.size as u32, BINARY)
                     ))
                     .await;
                 }
@@ -183,11 +194,14 @@ impl Module for Uv {
         }
 
         let install_duration = start_install.elapsed();
-        rewrite_line(format!(
-            "Installed {} in {:.2?}\n",
-            Paint::new(format!("{} packages", num_prepared_pkgs)).bold(),
-            install_duration
-        ))
+        rewrite_line(
+            Paint::new(format!(
+                "Installed {} packages in {:.2?}\n",
+                num_prepared_pkgs, install_duration
+            ))
+            .dim()
+            .to_string(),
+        )
         .await;
 
         for pkg in pkgs {
@@ -197,7 +211,11 @@ impl Module for Uv {
             print(format!(
                 " {} {}\n",
                 Paint::new("+").green(),
-                format!("{}=={}", Paint::new(pkg.name).bold(), pkg.version),
+                format!(
+                    "{}{}",
+                    Paint::new(pkg.name).bold(),
+                    Paint::new(format!("=={}", pkg.version)).dim()
+                ),
             ))
             .await;
             csleep(32).await;
