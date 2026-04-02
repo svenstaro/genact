@@ -68,12 +68,7 @@ impl Module for Uv {
         let start_resolve = Instant::now();
         for (idx, pkg) in pkgs.iter().enumerate() {
             let frame = SPINNER_FRAME[idx % SPINNER_FRAME.len()];
-            rewrite_line(format!(
-                "{} {}",
-                frame,
-                format!("{}=={}", pkg.name, pkg.version)
-            ))
-            .await;
+            rewrite_line(format!("{} {}=={}", frame, pkg.name, pkg.version)).await;
             csleep(rng.random_range(32..64)).await;
         }
         let resolve_duration = start_resolve.elapsed();
@@ -140,8 +135,7 @@ impl Module for Uv {
                 }
                 cursor_up(current_chunk_len as u64).await;
                 let mut chunk_finished = true;
-                for i in 0..current_chunk_len {
-                    let pkg = &chunk[i];
+                for pkg in chunk.iter().take(current_chunk_len) {
                     let mut downloaded = elapsed_time * pkg.download_speed as f32;
                     if downloaded > pkg.size as f32 {
                         downloaded = pkg.size as f32;
@@ -159,7 +153,7 @@ impl Module for Uv {
                         Paint::new(&pkg.name).dim().to_string(),
                         bar,
                         format_size(downloaded as u32, BINARY),
-                        format_size(pkg.size as u32, BINARY)
+                        format_size(pkg.size, BINARY)
                     ))
                     .await;
                 }
@@ -215,13 +209,11 @@ impl Module for Uv {
                 return;
             }
             print(format!(
-                " {} {}\n",
+                " {} {}{}{}\n",
                 Paint::new("+").green(),
-                format!(
-                    "{}{}",
-                    Paint::new(pkg.name).bold(),
-                    Paint::new(format!("=={}", pkg.version)).dim()
-                ),
+                Paint::new(pkg.name).bold(),
+                Paint::new("==").dim(),
+                Paint::new(pkg.version).dim()
             ))
             .await;
             csleep(32).await;
