@@ -47,8 +47,8 @@ impl Module for Uv {
             .map(|&name| PackageInfo {
                 name: name.to_string(),
                 version: gen_package_version(&mut rng),
-                size: rng.random_range(1 << 6..1 << 22),
-                download_speed: rng.random_range(1 << 18..1 << 22),
+                size: rng.random_range(50_000..20_000_000),
+                download_speed: rng.random_range(500_0000..100_000_000),
             })
             .collect();
 
@@ -117,8 +117,10 @@ impl Module for Uv {
         .await;
         csleep(512).await;
 
-        // Download packages Chunked Download, Using chunks prevents the terminal from scrolling past the viewport
-        let chunk_size: usize = 8;
+        // Download packages Chunked Download
+        let chunk_size = terminal_size::terminal_size()
+            .map(|(_, h)| (h.0 / 3 * 2).max(1))
+            .unwrap_or(1) as usize;
         let time_step: f32 = 0.1;
         let start_install = Instant::now();
         for chunk in pkgs.chunks(chunk_size) {
@@ -178,16 +180,20 @@ impl Module for Uv {
 
         // Install wheels
         let pb_width = 30;
-        for i in 0..=pb_width {
+        let mut progress_bar = progress_string::BarBuilder::new()
+            .total(num_prepared_pkgs)
+            .width(pb_width)
+            .empty_char('░')
+            .build();
+
+        for i in 0..=num_prepared_pkgs {
             if appconfig.should_exit() {
                 return;
             }
-            let progress_count = (i as f32 / pb_width as f32 * num_prepared_pkgs as f32) as usize;
-            let progress = "█".repeat(i);
-            let empty = "░".repeat(pb_width - i);
+            progress_bar.replace(i);
             rewrite_line(format!(
-                "{}{} [{}/{}] Installing wheels...",
-                progress, empty, progress_count, num_prepared_pkgs,
+                "{} [{}/{}] Installing wheels...",
+                progress_bar, i, num_prepared_pkgs,
             ))
             .await;
             csleep(64).await;
