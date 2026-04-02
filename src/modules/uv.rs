@@ -19,12 +19,6 @@ struct PackageInfo {
     download_speed: u32,
 }
 
-// Rewrite the current line with the given string
-async fn rewrite_line<S: Into<String>>(s: S) {
-    erase_line().await;
-    print(s).await;
-}
-
 pub struct Uv;
 
 #[async_trait(?Send)]
@@ -68,11 +62,13 @@ impl Module for Uv {
         let start_resolve = Instant::now();
         for (idx, pkg) in pkgs.iter().enumerate() {
             let frame = SPINNER_FRAME[idx % SPINNER_FRAME.len()];
-            rewrite_line(format!("{} {}=={}", frame, pkg.name, pkg.version)).await;
+            erase_line().await;
+            print(format!("{} {}=={}", frame, pkg.name, pkg.version)).await;
             csleep(rng.random_range(32..64)).await;
         }
         let resolve_duration = start_resolve.elapsed();
-        rewrite_line(
+        erase_line().await;
+        print(
             Paint::new(format!(
                 "Resolved {} packages in {:.2?}",
                 num_resolved_pkgs, resolve_duration
@@ -87,7 +83,8 @@ impl Module for Uv {
         let num_prepared_pkgs = rng.random_range(64..num_resolved_pkgs);
         let start_prepare = Instant::now();
         for i in 0..num_prepared_pkgs {
-            rewrite_line(
+            erase_line().await;
+            print(
                 Paint::new(format!(
                     "{} Preparing packages... ({}/{})",
                     SPINNER_FRAME[i % SPINNER_FRAME.len()],
@@ -101,7 +98,8 @@ impl Module for Uv {
             csleep(rng.random_range(64..128)).await;
         }
         let prepare_duration = start_prepare.elapsed();
-        rewrite_line(
+        erase_line().await;
+        print(
             Paint::new(format!(
                 "Prepared {} packages in {:.2?}\n",
                 num_prepared_pkgs, prepare_duration
@@ -157,7 +155,8 @@ impl Module for Uv {
                     let bar = Paint::new("-".repeat(bar_len)).green();
 
                     // Fixed width formatting ensures the bars don't jump around
-                    rewrite_line(format!(
+                    erase_line().await;
+                    print(format!(
                         "{:40} {:30} {:>11}/{:<11}\n",
                         Paint::new(&pkg.name).dim().to_string(),
                         bar,
@@ -194,7 +193,8 @@ impl Module for Uv {
                 return;
             }
             progress_bar.replace(i);
-            rewrite_line(format!(
+            erase_line().await;
+            print(format!(
                 "{} [{}/{}] Installing wheels...",
                 progress_bar, i, num_prepared_pkgs,
             ))
@@ -203,7 +203,8 @@ impl Module for Uv {
         }
 
         let install_duration = start_install.elapsed();
-        rewrite_line(
+        erase_line().await;
+        print(
             Paint::new(format!(
                 "Installed {} packages in {:.2?}\n",
                 num_prepared_pkgs, install_duration
