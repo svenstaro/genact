@@ -48,7 +48,7 @@ impl Module for Uv {
                 name: name.to_string(),
                 version: gen_package_version(&mut rng),
                 size: rng.random_range(50_000..20_000_000),
-                download_speed: rng.random_range(500_0000..100_000_000),
+                download_speed: rng.random_range(1_000_000..10_000_000),
             })
             .collect();
 
