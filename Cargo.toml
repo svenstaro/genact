@@ -18,16 +18,12 @@ codegen-units = 1
 # We can't set strip = true because of https://github.com/rust-lang/rust/issues/93294
 strip = "debuginfo"
 
-[patch.crates-io]
-# TODO: Remove once we get a new fake-rs release
-fake = { git = "https://github.com/cksac/fake-rs.git" }
-
 [dependencies]
 anyhow = "1"
 async-std = { version = "1", features = ["attributes"] }
 async-trait = "0.1"
 chrono = { version = "0.4", features = ["clock", "wasmbind"], default-features = false }
-fake = { version = "4.3", features = ["chrono"] }
+fake = { version = "5.0", features = ["chrono"] }
 colorgrad = { version = "0.8", features = ["preset"] }
 humansize = "2"
 humantime = "2"
@@ -37,13 +33,14 @@ getrandom = { version = "0.4", features = ["wasm_js"] }
 rand = "0.10"
 rand_distr = "0.6"
 regex = "1.12"
-sha2 = "0.10.9"
+sha2 = "0.11.0"
+hex = "0.4"
 yansi = "1"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 clap = { version = "4.5", features = ["derive", "cargo", "wrap_help"] }
 clap_complete = "4"
-clap_mangen = "0.2"
+clap_mangen = "0.3"
 ctrlc = { version = "3.5", features = ["termination"] }
 terminal_size = "0.4"
 
