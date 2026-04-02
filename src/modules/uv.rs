@@ -113,9 +113,18 @@ impl Module for Uv {
         csleep(512).await;
 
         // Download packages Chunked Download
-        let chunk_size = terminal_size::terminal_size()
-            .map(|(_, h)| (h.0 / 3 * 2).max(1))
-            .unwrap_or(1) as usize;
+        let chunk_size = {
+            #[cfg(not(target_arch = "wasm32"))]
+            {
+                terminal_size::terminal_size()
+                    .map(|(_, h)| (h.0 * 2 / 3).max(1))
+                    .unwrap_or(1) as usize
+            }
+            #[cfg(target_arch = "wasm32")]
+            {
+                8
+            }
+        };
         let time_step: f32 = 0.1;
         let start_install = Instant::now();
         for chunk in pkgs.chunks(chunk_size) {
