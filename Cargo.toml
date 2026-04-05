@@ -20,8 +20,8 @@ strip = "debuginfo"
 
 [dependencies]
 anyhow = "1"
-async-std = { version = "1", features = ["attributes"] }
 async-trait = "0.1"
+tokio = { version = "1", features = ["rt", "macros", "sync", "time"] }
 chrono = { version = "0.4", features = ["clock", "wasmbind"], default-features = false }
 fake = { version = "5.0", features = ["chrono"] }
 colorgrad = { version = "0.8", features = ["preset"] }

@@ -7,7 +7,8 @@ pub mod modules;
 use std::sync::LazyLock;
 use std::sync::atomic::{AtomicBool, AtomicU32};
 
-use async_std::sync::Mutex;
+use tokio::sync::Mutex;
+
 use instant::Instant;
 use rand::rng;
 use rand::seq::IndexedRandom;
