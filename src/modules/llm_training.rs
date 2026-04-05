@@ -31,24 +31,17 @@ impl Module for LlmTraining {
         "python train.py --model gpt2 --dataset wikitext".to_string()
     }
 
-    // selects a random GPU and logs the device details
-    // chooses mixed precision training using either "bf16" or "fp16"
-    // configures gradient accumulation steps, micro-batch size, and calculates the total batch size
-    // initializes weights from a randomly selected model
-    // simulates file downloads
-    // logs the number of instances in the training dataset
-    // simulates the training process over a random number of epochs with progress bars
-    // randomly triggers checkpoint saves to persist the model state
-    // simulates a validation step after training with progress bar updates
     async fn run(&self, appconfig: &AppConfig) {
         let mut rng = rng();
 
+        // selects a random GPU and logs the device details
         let gpu = LLM_GPUS_LIST.choose(&mut rng).unwrap();
         let (gpu_name, gpu_vram) = (gpu.name, gpu.vram);
         print(format!("[INFO] Device found: {gpu_name} ({gpu_vram}MB)")).await;
         newline().await;
         csleep(300).await;
 
+        // chooses mixed precision training using either "bf16" or "fp16"
         let precision = if rng.random_bool(0.6) { "bf16" } else { "fp16" };
         print(format!(
             "[INFO] Using mixed precision training ({precision})."
@@ -56,6 +49,7 @@ impl Module for LlmTraining {
         .await;
         newline().await;
 
+        // configures gradient accumulation steps, micro-batch size, and calculates the total batch size
         let grad_acc_steps = [2u32, 4, 8, 16].choose(&mut rng).unwrap();
         let micro_batch = [8u32, 16, 32].choose(&mut rng).unwrap();
         let total_batch = grad_acc_steps * micro_batch;
@@ -65,6 +59,7 @@ impl Module for LlmTraining {
         .await;
         newline().await;
 
+        // initializes weights from a randomly selected model
         let model = LLM_MODELS_LIST.choose(&mut rng).unwrap();
         print(format!(
             "[INFO] Initializing model weights from '{model}'... Done."
@@ -73,6 +68,7 @@ impl Module for LlmTraining {
         newline().await;
         csleep(500).await;
 
+        // simulates file downloads
         let file_sizes: Vec<u64> = vec![
             rng.random_range(400_000..3_000_000),
             rng.random_range(10_000..80_000),
@@ -83,7 +79,6 @@ impl Module for LlmTraining {
         let bar_steps = 12u64;
         let step_ms = 100u64;
 
-        // simulate downloading each file one by one with a fake progress bar
         for &file_size in &file_sizes {
             let speed: u64 = rng.random_range(1_000_000..80_000_000);
             let simulated_total_secs = file_size / speed;
@@ -106,6 +101,7 @@ impl Module for LlmTraining {
                     .space_after_value(false)
                     .suffix("/s");
 
+                // displays the progress bar and time remaining
                 if step == 0 {
                     print(format!(
                         "  0%|          | 0.00/{} [00:00<?, ?/s]",
@@ -137,9 +133,9 @@ impl Module for LlmTraining {
             }
 
             newline().await;
-            newline().await;
         }
 
+        // logs the number of instances in the training dataset
         let num_instances: u32 = rng.random_range(10_000..100_000);
         print(format!("Training set has {num_instances} instances")).await;
         newline().await;
@@ -153,7 +149,8 @@ impl Module for LlmTraining {
         let epoch_step_ms = 80u64;
 
         let simulated_epoch_secs: u64 = rng.random_range(60..300);
-        // simulate training over multiple epochs with fake progress updates.
+
+        // do the training process over a random number of epochs with progress bars
         for epoch in 1..=num_epochs {
             let mut epoch_bar = progress_string::BarBuilder::new()
                 .total(steps_per_epoch as usize)
@@ -166,7 +163,7 @@ impl Module for LlmTraining {
 
                 let step = (steps_per_epoch * i / epoch_bar_steps).min(steps_per_epoch);
                 let pct = step as f64 / steps_per_epoch as f64 * 100.0;
-                // gradually lowers the displayed loss over time to make training progress look realistic
+                // gradually lowers the displayed loss over time to show the training is working
                 let step_loss =
                     loss - rng.random_range(0.0_f64..0.2) * i as f64 / epoch_bar_steps as f64;
                 epoch_bar.replace(step as usize);
@@ -205,7 +202,7 @@ impl Module for LlmTraining {
             loss = loss.max(0.05);
             newline().await;
 
-            // once in a while, simulate a checkpoint to save model to file system
+            // randomly triggers checkpoint saves to persist the model state
             if rng.random_bool(0.4) {
                 let checkpoint_step = epoch * steps_per_epoch;
                 print(format!(
@@ -236,7 +233,8 @@ impl Module for LlmTraining {
             .full_char('█')
             .width(10)
             .build();
-        // simulate validation progress in small steps with a fake progress bar.
+
+        // we do a validation step after training
         for i in 0..=val_bar_steps {
             erase_line().await;
 
@@ -275,6 +273,7 @@ impl Module for LlmTraining {
 
         newline().await;
 
+        // displays the validation results
         let val_loss = loss + rng.random_range(0.05_f64..0.3);
         let perplexity = val_loss.exp();
         print(format!(
