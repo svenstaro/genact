@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+- Fix getting stuck in rkhunter module [#704](https://github.com/svenstaro/genact/issues/704)
+- Add uv module [#710](https://github.com/svenstaro/genact/pull/710) (thanks @RektPunk)
 
 ## [1.5.1] - 2026-01-26
 - Add idle inhibition feature via `--inhibit` [#698](https://github.com/svenstaro/genact/pull/698) (thanks @cyqsimon)

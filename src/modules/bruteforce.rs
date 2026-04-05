@@ -129,7 +129,7 @@ fn sha256(s: &str) -> String {
     let mut hasher = Sha256::default();
     hasher.update(s);
     let result_bytes = hasher.finalize();
-    format!("{result_bytes:x}")
+    hex::encode(result_bytes)
 }
 
 // Color a string rainbow
