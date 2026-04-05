@@ -34,7 +34,7 @@ impl Module for Uv {
     }
 
     fn signature(&self) -> String {
-        "uv add".to_string()
+        "uv sync".to_string()
     }
 
     async fn run(&self, appconfig: &AppConfig) {
