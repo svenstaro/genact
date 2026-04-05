@@ -1,14 +1,14 @@
-use genact::args::parse_args;
-#[cfg(target_arch = "wasm32")]
-use genact::{INSTANT_PRINT_LINES, SPEED_FACTOR};
 #[cfg(not(target_arch = "wasm32"))]
+use anyhow::Result;
+
+use genact::args::parse_args;
 use genact::{INSTANT_PRINT_LINES, SPEED_FACTOR, run};
 
 use std::sync::atomic::Ordering;
 
 #[cfg(not(target_arch = "wasm32"))]
 #[tokio::main(flavor = "current_thread")]
-async fn main() -> anyhow::Result<()> {
+async fn main() -> Result<()> {
     use clap::CommandFactory;
     use genact::args::AppConfig;
     use genact::exit_handler;
@@ -62,6 +62,6 @@ fn main() {
         *SPEED_FACTOR.lock().await = appconfig.speed_factor;
         INSTANT_PRINT_LINES.store(appconfig.instant_print_lines, Ordering::SeqCst);
 
-        genact::run(appconfig).await;
+        run(appconfig).await;
     }
 }

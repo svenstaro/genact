@@ -17,6 +17,8 @@ pub async fn csleep(length: u64) {
     let speed_factor = *SPEED_FACTOR.lock().await;
     let count = COUNTER.fetch_add(1, Ordering::SeqCst);
     let sleep_length = if count < INSTANT_PRINT_LINES.load(Ordering::SeqCst) {
+        // If user passed `--instant-print-lines`, there should be
+        // no pauses in first `INSTANT_PRINT_LINES` number of lines
         time::Duration::new(0, 0)
     } else {
         time::Duration::from_millis((1.0 / speed_factor * length as f32) as u64)
