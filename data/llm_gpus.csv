@@ -1,23 +1,18 @@
-GLM-5
-Kimi-K2.5
-K2-Think-V2
-Qwen3.5-27b
-Qwen3.5-397b
-Quen3-Coder-Next
-DeepSeek-R1-7b
-DeepSeek-V3.2
-MiMo-V2-Flash
-Step-3.5-Flash
-nvidia-nemotron-3-Super
-K-EXAONE
-mistral-Small-4
-mistral-7b-v0.3
-mistral-nemo-12b
-mixtral-Large-3
-devstral-2
-gpt-oss-120b
-llama-nemotron
-llama-3.1-408b
-llama-3-8b-base
-llama-3-70b-base
-gemma-2-9b
+NVIDIA RTX 5090,32768
+NVIDIA RTX 5080,16384
+NVIDIA RTX 4090,24576
+NVIDIA RTX 4080 SUPER,16384
+NVIDIA RTX 3090,24576
+NVIDIA H200 SXM,144384
+NVIDIA H100 SXM,81920
+NVIDIA A100 SXM,81920
+NVIDIA RTX A6000,49152
+AMD Instinct MI300X,196608
+AMD Instinct MI250X,131072
+AMD Radeon RX 7900 XTX,24576
+AMD Instinct MI300X,196608
+AMD Instinct MI250X,131072
+AMD Radeon Stryx Halo 2,196608
+Intel Data Center GPU Max 1550,16384
+Apple M3 Max,131072
+Apple M2 Ultra,196608
