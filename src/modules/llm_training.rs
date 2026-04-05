@@ -16,7 +16,9 @@ pub struct Gpu<'a> {
 
 pub struct LlmTraining;
 
-// formats a time duration in seconds as MM:SS
+/// Formats a time duration in seconds as MM:SS
+///
+/// Example: 345 seconds -> "05:45"
 fn format_secs_as_mm_ss(secs: u64) -> String {
     format!("{:02}:{:02}", secs / 60, secs % 60)
 }
@@ -68,7 +70,7 @@ impl Module for LlmTraining {
         newline().await;
         csleep(500).await;
 
-        // simulates file downloads
+        // downloads model files
         let file_sizes: Vec<u64> = vec![
             rng.random_range(400_000..3_000_000),
             rng.random_range(10_000..80_000),
@@ -83,6 +85,7 @@ impl Module for LlmTraining {
             let speed: u64 = rng.random_range(1_000_000..80_000_000);
             let simulated_total_secs = file_size / speed;
 
+            // displays download progress bar
             let mut bar = progress_string::BarBuilder::new()
                 .total(file_size as usize)
                 .full_char('█')
@@ -101,7 +104,6 @@ impl Module for LlmTraining {
                     .space_after_value(false)
                     .suffix("/s");
 
-                // displays the progress bar and time remaining
                 if step == 0 {
                     print(format!(
                         "  0%|          | 0.00/{} [00:00<?, ?/s]",
