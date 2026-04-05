@@ -19,6 +19,12 @@ struct PackageInfo {
     download_speed: u32,
 }
 
+struct ActiveDownload {
+    pkg: PackageInfo,
+    downloaded: f32,
+    finished: bool,
+}
+
 pub struct Uv;
 
 #[async_trait(?Send)]
@@ -36,7 +42,7 @@ impl Module for Uv {
 
         let mut rng = rng();
         let num_resolved_pkgs = rng.random_range(128..256);
-        let pkgs: Vec<PackageInfo> = PACKAGES_LIST
+        let mut pkgs: Vec<PackageInfo> = PACKAGES_LIST
             .sample(&mut rng, num_resolved_pkgs)
             .map(|&name| PackageInfo {
                 name: name.to_string(),
@@ -79,7 +85,7 @@ impl Module for Uv {
         .await;
         csleep(512).await;
 
-        // Package Preparation
+        // Prepare packages for installation
         let num_prepared_pkgs = rng.random_range(64..num_resolved_pkgs);
         let start_prepare = Instant::now();
         for i in 0..num_prepared_pkgs {
@@ -110,8 +116,8 @@ impl Module for Uv {
         .await;
         csleep(512).await;
 
-        // Download packages Chunked Download
-        let chunk_size = {
+        // Set max slots for concurrent download packages
+        let max_slots = {
             #[cfg(not(target_arch = "wasm32"))]
             {
                 terminal_size::terminal_size()
@@ -123,61 +129,74 @@ impl Module for Uv {
                 8
             }
         };
-        let time_step: f32 = 0.1;
+
+        // Pre-allocate empty lines to avoid flickering during first 'cursor_up'
+        for _ in 0..max_slots {
+            newline().await;
+        }
+
+        // Initialize download tracking variables
+        let mut active_downloads: Vec<ActiveDownload> = Vec::new();
+        let mut completed_count = 0;
+        let total_pkgs = pkgs.len();
+        let time_step: f32 = 0.2;
+
         let start_install = Instant::now();
-        for chunk in pkgs.chunks(chunk_size) {
+        while completed_count < total_pkgs {
             if appconfig.should_exit() {
                 return;
             }
-            let mut elapsed_time: f32 = 0.0; // Reset download time for each chunk
-            let current_chunk_len = chunk.len();
-
-            // Pre-allocate empty lines to avoid flickering during first 'cursor_up'
-            for _ in 0..current_chunk_len {
-                newline().await;
+            // Fill empty slots with pending downloads
+            while active_downloads.len() < max_slots && !pkgs.is_empty() {
+                active_downloads.push(ActiveDownload {
+                    pkg: pkgs.remove(0),
+                    downloaded: 0.0,
+                    finished: false,
+                });
             }
-            loop {
-                if appconfig.should_exit() {
-                    return;
-                }
-                cursor_up(current_chunk_len as u64).await;
-                let mut chunk_finished = true;
-                for pkg in chunk.iter().take(current_chunk_len) {
-                    let mut downloaded = elapsed_time * pkg.download_speed as f32;
-                    if downloaded > pkg.size as f32 {
-                        downloaded = pkg.size as f32;
-                    } else {
-                        chunk_finished = false;
+
+            // Move cursor to the top of the download area
+            cursor_up(max_slots as u64).await;
+
+            // Update and render progress for each active download slot
+            for i in 0..max_slots {
+                erase_line().await;
+                if let Some(download) = active_downloads.get_mut(i) {
+                    if !download.finished {
+                        download.downloaded += download.pkg.download_speed as f32 * time_step;
+                        if download.downloaded >= download.pkg.size as f32 {
+                            download.downloaded = download.pkg.size as f32;
+                            download.finished = true;
+                        }
                     }
 
-                    let progress_ratio = downloaded / pkg.size as f32;
+                    let progress_ratio = download.downloaded / download.pkg.size as f32;
                     let bar_len = (progress_ratio * 30.0) as usize;
-                    let bar = Paint::new("-".repeat(bar_len)).green();
-
-                    // Fixed width formatting ensures the bars don't jump around
-                    erase_line().await;
                     print(format!(
                         "{:40} {:30} {:>11}/{:<11}\n",
-                        Paint::new(&pkg.name).dim().to_string(),
-                        bar,
-                        format_size(downloaded as u32, BINARY),
-                        format_size(pkg.size, BINARY)
+                        Paint::new(&download.pkg.name).dim().to_string(),
+                        Paint::new("-".repeat(bar_len)).green(),
+                        format_size(download.downloaded as u32, BINARY),
+                        format_size(download.pkg.size, BINARY)
                     ))
                     .await;
+                } else {
+                    // Render empty line for unused slots
+                    print("\n").await;
                 }
-
-                if chunk_finished {
-                    break;
-                }
-                elapsed_time += time_step;
-                csleep(64).await;
             }
 
-            // Clean up the chunk UI to prepare for the next set or next phase
-            for _ in 0..current_chunk_len {
-                cursor_up(1).await;
-                erase_line().await;
-            }
+            // Clean up finished downloads and track total completion
+            let before_len = active_downloads.len();
+            active_downloads.retain(|d| !d.finished);
+            completed_count += before_len - active_downloads.len();
+            csleep(50).await;
+        }
+
+        // Clear the download display area
+        for _ in 0..max_slots {
+            cursor_up(1).await;
+            erase_line().await;
         }
 
         // Install wheels
