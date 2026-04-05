@@ -57,11 +57,14 @@ impl Module for Uv {
             "3.8.20", "3.9.25", "3.10.20", "3.11.15", "3.12.13", "3.13.16", "3.14.13",
         ];
         print(format!(
-            "Using CPython {}\n",
+            "Using CPython {}",
             python_versions.choose(&mut rng).unwrap()
         ))
         .await;
-        print("Creating virtualenv at: .venv\n").await;
+        newline().await;
+
+        print("Creating virtualenv at: .venv").await;
+        newline().await;
         csleep(512).await;
 
         // Resolve dependencies: Simulates the look-up process of multiple package versions
@@ -107,13 +110,14 @@ impl Module for Uv {
         erase_line().await;
         print(
             Paint::new(format!(
-                "Prepared {} packages in {:.2?}\n",
+                "Prepared {} packages in {:.2?}",
                 num_prepared_pkgs, prepare_duration
             ))
             .dim()
             .to_string(),
         )
         .await;
+        newline().await;
         csleep(512).await;
 
         // Set max slots for concurrent download packages
@@ -173,16 +177,17 @@ impl Module for Uv {
                     let progress_ratio = download.downloaded / download.pkg.size as f32;
                     let bar_len = (progress_ratio * 30.0) as usize;
                     print(format!(
-                        "{:40} {:30} {:>11}/{:<11}\n",
+                        "{:40} {:30} {:>11}/{:<11}",
                         Paint::new(&download.pkg.name).dim().to_string(),
                         Paint::new("-".repeat(bar_len)).green(),
                         format_size(download.downloaded as u32, BINARY),
                         format_size(download.pkg.size, BINARY)
                     ))
                     .await;
+                    newline().await;
                 } else {
                     // Render empty line for unused slots
-                    print("\n").await;
+                    newline().await;
                 }
             }
 
@@ -225,26 +230,28 @@ impl Module for Uv {
         erase_line().await;
         print(
             Paint::new(format!(
-                "Installed {} packages in {:.2?}\n",
+                "Installed {} packages in {:.2?}",
                 num_prepared_pkgs, install_duration
             ))
             .dim()
             .to_string(),
         )
         .await;
+        newline().await;
 
         for pkg in pkgs {
             if appconfig.should_exit() {
                 return;
             }
             print(format!(
-                " {} {}{}{}\n",
+                " {} {}{}{}",
                 Paint::new("+").green(),
                 Paint::new(pkg.name).bold(),
                 Paint::new("==").dim(),
                 Paint::new(pkg.version).dim()
             ))
             .await;
+            newline().await;
             csleep(32).await;
         }
         csleep(512).await;
