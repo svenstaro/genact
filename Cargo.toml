@@ -38,7 +38,7 @@ hex = "0.4"
 yansi = "1"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
-clap = { version = "4.5", features = ["derive", "cargo", "wrap_help"] }
+clap = { version = "4.6", features = ["derive", "cargo", "wrap_help"] }
 clap_complete = "4"
 clap_mangen = "0.3"
 ctrlc = { version = "3.5", features = ["termination"] }
