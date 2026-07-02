@@ -4,6 +4,7 @@ pub mod botnet;
 pub mod bruteforce;
 pub mod cargo;
 pub mod cc;
+pub mod codex;
 pub mod composer;
 pub mod cryptomining;
 pub mod docker_build;
@@ -43,6 +44,7 @@ pub static ALL_MODULES: LazyLock<BTreeMap<&'static str, Box<dyn Module + Send + 
         all_modules.insert("bruteforce", Box::new(bruteforce::Bruteforce));
         all_modules.insert("cargo", Box::new(cargo::Cargo));
         all_modules.insert("cc", Box::new(cc::Cc));
+        all_modules.insert("codex", Box::new(codex::Codex));
         all_modules.insert("composer", Box::new(composer::Composer));
         all_modules.insert("cryptomining", Box::new(cryptomining::Crytomining));
         all_modules.insert("docker_build", Box::new(docker_build::DockerBuild));
