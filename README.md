@@ -81,7 +81,7 @@ or (on Docker)
 
     Options:
       -l, --list-modules                               List available modules
-      -m, --modules <MODULES>                          Run only these modules [possible values: ansible, bootlog, botnet, bruteforce, cargo, cc, composer,
+      -m, --modules <MODULES>                          Run only these modules [possible values: ansible, bootlog, botnet, bruteforce, cargo, cc, codex, composer,
                                                        cryptomining, docker_build, docker_image_rm, download, julia, kernel_compile, memdump, mkinitcpio,
                                                        rkhunter, simcity, terraform, uv, weblog, wpt]
       -s, --speed-factor <SPEED_FACTOR>                Global speed factor [default: 1]
