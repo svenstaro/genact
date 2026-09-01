@@ -198,9 +198,9 @@ checksum = "8b75356056920673b02621b35afd0f7dda9306d03c79a30f5c56c44cf256e3de"
 
 [[package]]
 name = "async-trait"
-version = "0.1.91"
+version = "0.1.92"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ae36dc4177970ef04fde5178d3e2429882def40e57a451f919c098f72baa6cec"
+checksum = "82f6aeea286b8eb4dd3431a1be1b59d290ace00f5bfd8e2a159bc2a05e2c1667"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -310,9 +310,9 @@ dependencies = [
 
 [[package]]
 name = "clap"
-version = "4.6.4"
+version = "4.6.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d91e0c145792ef73a6ad36d27c75ac09f1832222a3c209689d90f534685ee5b7"
+checksum = "473c7e07f409a8d772161724aa8db6a765a2532a70f9667eeb7b49d3d02fbdca"
 dependencies = [
  "clap_builder",
  "clap_derive",
@@ -320,9 +320,9 @@ dependencies = [
 
 [[package]]
 name = "clap_builder"
-version = "4.6.2"
+version = "4.6.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f09628afdcc538b57f3c6341e9c8e9970f18e4a481690a64974d7023bd33548b"
+checksum = "7b48fea5a88e9ae728a2dcbedbfc0e730f7d60da42e1cb049a83c9fb8b789889"
 dependencies = [
  "anstream",
  "anstyle",
@@ -333,9 +333,9 @@ dependencies = [
 
 [[package]]
 name = "clap_complete"
-version = "4.6.8"
+version = "4.6.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b1f84a88507dbd05c695f2cb5e8558e747179134005e9893882dec964190ed89"
+checksum = "3be2ad0423bdbbb0e25bc89add796f3559706d4a95e1bc98e4d9662a957b6a19"
 dependencies = [
  "clap",
 ]
@@ -360,9 +360,9 @@ checksum = "c8d4a3bb8b1e0c1050499d1815f5ab16d04f0959b233085fb31653fbfc9d98f9"
 
 [[package]]
 name = "clap_mangen"
-version = "0.3.0"
+version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d82842b45bf9f6a3be090dd860095ac30728042c08e0d6261ca7259b5d850f07"
+checksum = "211d617eaa4b735c96c9e0228fcbdb5120ef623f2b8cb67ffb84c3e02dbc28a4"
 dependencies = [
  "clap",
  "roff",
@@ -991,9 +991,9 @@ dependencies = [
 
 [[package]]
 name = "keepawake"
-version = "0.6.0"
+version = "0.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5521b450ec179362595d5cbda7c3abd5da3af3dff58456434ad3ca33c95226b7"
+checksum = "0d950f8c457c023d71a2b7fa0a3550e8eb5127811895b666086ff10304911d9a"
 dependencies = [
  "cfg-if",
  "derive_builder",
