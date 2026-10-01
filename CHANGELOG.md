@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+
+## [1.6.0] - 2026-10-01
 - Fix getting stuck in rkhunter module [#704](https://github.com/svenstaro/genact/issues/704)
 - Add uv module [#710](https://github.com/svenstaro/genact/pull/710) (thanks @RektPunk)
 - Switch from async-std to tokio [#707](https://github.com/svenstaro/genact/pull/707)
@@ -87,7 +89,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Rewrite web version using wasm-bindgen
 
 <!-- next-url -->
-[Unreleased]: https://github.com/svenstaro/genact/compare/v1.5.1...HEAD
+[Unreleased]: https://github.com/svenstaro/genact/compare/v1.6.0...HEAD
+[1.6.0]: https://github.com/svenstaro/genact/compare/v1.5.1...v1.6.0
 [1.5.1]: https://github.com/svenstaro/genact/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/svenstaro/genact/compare/v1.4.2...v1.5.0
 [1.4.2]: https://github.com/svenstaro/genact/compare/v1.4.1...v1.4.2
