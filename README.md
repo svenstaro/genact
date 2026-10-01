@@ -13,6 +13,30 @@
 ![](gifs/memdump.gif)
 ![](gifs/cargo.gif)
 
+## Modules
+
+- `ansible`
+- `bootlog`
+- `botnet`
+- `bruteforce`
+- `cargo`
+- `cc`
+- `composer`
+- `cryptomining`
+- `docker_build`
+- `docker_image_rm`
+- `download`
+- `julia`
+- `kernel_compile`
+- `memdump`
+- `mkinitcpio`
+- `rkhunter`
+- `simcity`
+- `terraform`
+- `uv`
+- `weblog`
+- `wpt`
+
 ## Installation
 
 <a href="https://repology.org/project/genact/versions"><img align="right" src="https://repology.org/badge/vertical-allrepos/genact.svg" alt="Packaging status"></a>
