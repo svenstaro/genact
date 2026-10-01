@@ -24,7 +24,7 @@ async-trait = "0.1"
 tokio = { version = "1", features = ["rt", "macros", "sync", "time"] }
 chrono = { version = "0.4", features = ["clock", "wasmbind"], default-features = false }
 fake = { version = "5.0", features = ["chrono"] }
-colorgrad = { version = "0.8", features = ["preset"] }
+colorgrad = { version = "0.9", features = ["preset"] }
 humansize = "2"
 humantime = "2"
 instant = { version = "0.1", features = ["now", "wasm-bindgen"] }
