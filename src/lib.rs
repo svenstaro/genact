@@ -67,6 +67,9 @@ pub async fn run(appconfig: AppConfig) {
 
 #[cfg(not(target_arch = "wasm32"))]
 pub fn exit_handler() {
+    // Agent modules hide the terminal cursor while they are rendering. Make
+    // sure Ctrl-C and timed exits never leave the user's terminal cursor hidden.
+    crate::io::show_cursor_now();
     println!("Saving work to disk...");
     std::process::exit(0);
 }

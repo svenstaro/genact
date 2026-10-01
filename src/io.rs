@@ -87,6 +87,23 @@ pub async fn print<S: Into<String>>(s: S) {
     }
 }
 
+/// Hide the terminal cursor.
+pub async fn hide_cursor() {
+    print("\x1b[?25l").await;
+}
+
+/// Show the terminal cursor.
+pub async fn show_cursor() {
+    print("\x1b[?25h").await;
+}
+
+/// Restore the terminal cursor immediately from synchronous shutdown paths.
+#[cfg(not(target_arch = "wasm32"))]
+pub fn show_cursor_now() {
+    std::print!("\x1b[?25h");
+    stdout().flush().unwrap();
+}
+
 /// Print a newline.
 pub async fn newline() {
     print("\r\n").await;

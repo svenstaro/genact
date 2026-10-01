@@ -1,3 +1,5 @@
+pub mod agent_cli;
+pub mod agent_tui;
 pub mod ansible;
 pub mod bootlog;
 pub mod botnet;
@@ -37,6 +39,7 @@ pub static ALL_MODULES: LazyLock<BTreeMap<&'static str, Box<dyn Module + Send + 
     LazyLock::new(|| {
         let mut all_modules: BTreeMap<&'static str, Box<dyn Module + Send + 'static>> =
             BTreeMap::new();
+        all_modules.insert("agent_cli", Box::new(agent_cli::AgentCli));
         all_modules.insert("ansible", Box::new(ansible::Ansible));
         all_modules.insert("bootlog", Box::new(bootlog::Bootlog));
         all_modules.insert("botnet", Box::new(botnet::Botnet));
@@ -52,6 +55,7 @@ pub static ALL_MODULES: LazyLock<BTreeMap<&'static str, Box<dyn Module + Send + 
         all_modules.insert("kernel_compile", Box::new(kernel_compile::KernelCompile));
         all_modules.insert("memdump", Box::new(memdump::Memdump));
         all_modules.insert("mkinitcpio", Box::new(mkinitcpio::Mkinitcpio));
+        all_modules.insert("agent_tui", Box::new(agent_tui::AgentTui));
         all_modules.insert("rkhunter", Box::new(rkhunter::RkHunter));
         all_modules.insert("simcity", Box::new(simcity::Simcity));
         all_modules.insert("terraform", Box::new(terraform::Terraform));
