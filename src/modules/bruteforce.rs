@@ -137,11 +137,11 @@ fn rainbow(s: &str) -> String {
     use std::fmt::Write;
 
     let len = s.len();
-    let colors = colorgrad::preset::sinebow().colors(len);
+    let sinebow = colorgrad::preset::sinebow();
     let mut ret = String::new();
 
     // apply colors to each characters
-    for (color, ch) in colors.into_iter().zip(s.chars()) {
+    for (color, ch) in sinebow.colors(len).zip(s.chars()) {
         let approx = approx_color(color);
         write!(ret, "{}", Paint::new(ch).fg(approx)).unwrap();
     }

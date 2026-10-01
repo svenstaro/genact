@@ -51,7 +51,7 @@ jobs:
       - name: Setup Rust toolchain
         uses: dtolnay/rust-toolchain@stable
 
-      - run: cargo install trunk wasm-bindgen-cli
+      - run: cargo install --locked trunk wasm-bindgen-cli
         if: matrix.target == 'wasm32-unknown-unknown'
 
       - run: sudo apt install musl-tools
