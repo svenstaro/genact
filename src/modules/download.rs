@@ -95,7 +95,7 @@ impl Module for Download {
                         file_name = file_name.chars().take(file_name_width).collect::<String>(),
                         percent = percent,
                         progress_bar = progress_bar,
-                        bytes_downloaded = format_size(bytes_incoming, size_opts),
+                        bytes_downloaded = format_size(bytes_downloaded.min(file_bytes), size_opts),
                         download_speed = format_size(actual_download_speed, speed_opts),
                         eta = format_duration(eta),
                         file_name_width = file_name_width,
