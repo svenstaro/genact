@@ -15,6 +15,8 @@ static RKHUNTER_CHECKS: &str = include_str!("../data/rkhunter_checks.txt");
 static RKHUNTER_ROOTKITS: &str = include_str!("../data/rkhunter_rootkits.txt");
 static RKHUNTER_TASKS: &str = include_str!("../data/rkhunter_tasks.txt");
 static JULIA_PACKAGES: &str = include_str!("../data/julia.csv");
+static LLM_GPUS: &str = include_str!("../data/llm_gpus.csv");
+static LLM_MODELS: &str = include_str!("../data/llm_models.txt");
 static TERRAFORM_AWS_RESOURCES: &str = include_str!("../data/terraform_aws_resources.txt");
 static TERRAFORM_AZURE_RESOURCES: &str = include_str!("../data/terraform_azure_resources.txt");
 static TERRAFORM_GCP_RESOURCES: &str = include_str!("../data/terraform_gcp_resources.txt");
@@ -69,6 +71,20 @@ pub static JULIA_PACKAGES_LIST: LazyLock<Vec<crate::modules::julia::Package<'sta
             })
             .collect()
     });
+pub static LLM_GPUS_LIST: LazyLock<Vec<crate::modules::llm_training::Gpu<'static>>> =
+    LazyLock::new(|| {
+        LLM_GPUS
+            .lines()
+            .map(|line| {
+                let mut split = line.split(',');
+                let name = split.next().unwrap_or("NVIDIA GPU");
+                let vram = split.next().and_then(|v| v.parse().ok()).unwrap_or(8192);
+                crate::modules::llm_training::Gpu { name, vram }
+            })
+            .collect()
+    });
+pub static LLM_MODELS_LIST: LazyLock<Vec<&'static str>> =
+    LazyLock::new(|| LLM_MODELS.lines().collect());
 pub static CSS_PROPERTIES_LIST: LazyLock<Vec<&'static str>> =
     LazyLock::new(|| CSS_PROPERTIES.lines().collect());
 pub static WEB_APIS_LIST: LazyLock<Vec<&'static str>> =
