@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+- Provide .deb and .rpm packages for x86_64 and aarch64 in releases [#727](https://github.com/svenstaro/genact/issues/727)
 
 ## [1.6.0] - 2026-10-01
 - Fix getting stuck in rkhunter module [#704](https://github.com/svenstaro/genact/issues/704)

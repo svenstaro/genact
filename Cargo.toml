@@ -55,3 +55,29 @@ web-sys = { version = "0.3", features = ["Window", "Location", "console"] }
 # `keepawake` only supports these platforms
 [target.'cfg(any(target_os = "linux", target_os = "macos", target_os = "windows"))'.dependencies]
 keepawake = "0.6.0"
+
+# `cargo deb --no-build` and `cargo generate-rpm` are run in CI after `target/assets/` is filled with
+# the man page and shell completions (see .github/workflows/build-release.yml)
+[package.metadata.deb]
+section = "utils"
+extended-description = "Pretend to be busy or waiting for your computer when you should actually be doing real work!"
+assets = [
+    ["target/release/genact", "usr/bin/", "755"],
+    ["README.md", "usr/share/doc/genact/", "644"],
+    ["target/assets/genact.1.gz", "usr/share/man/man1/", "644"],
+    ["target/assets/genact.bash", "usr/share/bash-completion/completions/genact", "644"],
+    ["target/assets/_genact", "usr/share/zsh/vendor-completions/", "644"],
+    ["target/assets/genact.fish", "usr/share/fish/vendor_completions.d/", "644"],
+]
+
+[package.metadata.generate-rpm]
+auto-req = "no"
+assets = [
+    { source = "target/release/genact", dest = "/usr/bin/genact", mode = "755" },
+    { source = "LICENSE", dest = "/usr/share/licenses/genact/LICENSE", mode = "644", doc = true },
+    { source = "README.md", dest = "/usr/share/doc/genact/README.md", mode = "644", doc = true },
+    { source = "target/assets/genact.1.gz", dest = "/usr/share/man/man1/genact.1.gz", mode = "644", doc = true },
+    { source = "target/assets/genact.bash", dest = "/usr/share/bash-completion/completions/genact", mode = "644" },
+    { source = "target/assets/_genact", dest = "/usr/share/zsh/site-functions/_genact", mode = "644" },
+    { source = "target/assets/genact.fish", dest = "/usr/share/fish/vendor_completions.d/genact.fish", mode = "644" },
+]
