@@ -130,6 +130,67 @@ jobs:
           publish_dir: ./dist
         if: startsWith(github.ref_name, 'v') && github.ref_type == 'tag' && matrix.target == 'wasm32-unknown-unknown'
 
+  linux-packages:
+    name: deb/rpm packages ${{ matrix.target }}
+    runs-on: ubuntu-latest
+    needs: publish
+    strategy:
+      matrix:
+        target:
+          - x86_64-unknown-linux-musl
+          - aarch64-unknown-linux-musl
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - run: sudo apt install musl-tools
+
+      - name: cargo build
+        uses: houseabsolute/actions-rust-cross@v0
+        with:
+          command: build
+          args: --release --locked
+          target: ${{ matrix.target }}
+
+      - name: Generate man page and shell completions
+        run: |
+          mkdir -p target/assets
+          cargo run --locked -- --print-manpage | gzip -9n > target/assets/genact.1.gz
+          cargo run --locked -- --print-completions bash > target/assets/genact.bash
+          cargo run --locked -- --print-completions zsh > target/assets/_genact
+          cargo run --locked -- --print-completions fish > target/assets/genact.fish
+
+      - name: Install cargo-deb and cargo-generate-rpm
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-deb,cargo-generate-rpm
+
+      - name: Build packages
+        run: |
+          cargo deb --no-build --no-strip --target ${{ matrix.target }}
+          cargo generate-rpm --target ${{ matrix.target }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: packages-${{ matrix.target }}
+          path: |
+            target/${{ matrix.target }}/debian/*.deb
+            target/${{ matrix.target }}/generate-rpm/*.rpm
+
+      - name: Release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: target/${{ matrix.target }}/{debian/*.deb,generate-rpm/*.rpm}
+          file_glob: true
+          tag: ${{ github.ref_name }}
+        if: startsWith(github.ref_name, 'v') && github.ref_type == 'tag'
+
   container-images:
     name: Publish images
     runs-on: ubuntu-latest

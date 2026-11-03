@@ -55,6 +55,18 @@ It's compatible with FreeBSD, Linux, macOS, Windows, and most modern web browser
     chmod +x genact-linux
     ./genact-linux
 
+On Debian/Ubuntu, you can instead download the `.deb` for your architecture from [the releases page](https://github.com/svenstaro/genact/releases) and run
+
+    sudo apt install ./genact_*.deb
+
+On Fedora, download the `.rpm` and run
+
+    sudo dnf install ./genact-*.rpm
+
+**On Arch Linux**: genact is in the official repositories:
+
+    sudo pacman -S genact
+
 **On macOS**: Download `genact-osx` from [the releases page](https://github.com/svenstaro/genact/releases) and run
 
     chmod +x genact-osx
